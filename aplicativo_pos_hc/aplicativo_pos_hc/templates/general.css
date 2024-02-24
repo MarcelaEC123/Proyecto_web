@@ -73,9 +73,6 @@ body {
     background-position: calc(100% - 25%) calc(100% - 50%); /* Ajusta la posición de la imagen */
 }
 
-.content h3{
-
-}
 
 /* Imagen a la derecha como línea de agua */
 .watermark {
@@ -118,6 +115,7 @@ body {
     color: #fff;
     padding: 10px;
 }
+/* Estilo para todas las cajas de la clase form-group */
 
 .form-group {
     display: flex;
@@ -143,6 +141,14 @@ input[type="text"] {
     height:30px;
 }
 
+#search-input {
+    width: 20% ;
+    height: 25px;
+    padding: 5px;
+    margin-right: 10px;
+    border: 2px solid #000000; /* Color del borde azul */
+}
+
 .caja1{
     padding: 2%;
     padding-right: 8%;
@@ -155,7 +161,8 @@ input[type="text"] {
     justify-content: space-between;
 }
 
-.modal {
+/* Estilos para la ventana modal */
+.modal, .modal2 {
     padding-top: 5%;
     font-family: serif;
     position: absolute;
@@ -168,7 +175,7 @@ input[type="text"] {
     background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
 }
 
-.modal-content {
+.modal-content, .modal2-content {
     background-color: #fdf6f6;
     margin: 1% auto;
     padding-bottom: 20px;

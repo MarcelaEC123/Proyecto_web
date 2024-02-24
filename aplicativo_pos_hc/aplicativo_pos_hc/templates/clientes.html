@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./general.css">
+    <title>Página con Menú</title>
+    <style>
+        /* Estilos para la ventana modal */
+       
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="images/logo.png" alt="Logo">
+                </div>
+                <br>
+                
+                <div class="user-icon">
+                    <img src="images/usuario-de-perfil.png" alt="User Icon">
+                </div>
+                <div class="admin-name">
+                    <span>Administrador</span>
+                </div>
+            </div>
+            <ul>
+                <li><a href="#">> Inicio</a></li>
+                <br>
+                <li><a href="#">> Caja</a></li>
+                <br>
+                <li><a href="#">> Clientes</a></li>
+                <br>
+                <li><a href="#">> Provedor</a></li>
+                <br>
+                <li><a href="#">> Productos</a></li>
+                <br>
+                <li><a href="#">>Compras</a></li>
+            </ul>
+           
+        </div>
+        <a href="#" class="logout-link">Cerrar sesión</a>
+        <div class="content">
+            <!-- Contenido principal -->
+            <h3>Clientes</h3>
+            <div class="horizontal-bar">
+                <img src="images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
+                <img src="images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
+
+                <img src="images/Eliminar.png" alt="Eliminar" class="icon">
+                <input type="text" id="search-input" placeholder="Buscar...">
+            </div>
+        </div>
+
+        <!-- Ventana modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">×</span>
+        <div class="modal-header">
+            <h2>Crear  Cliente</h2>
+           
+        </div>
+        <div class="modal-body">
+                <div class="caja1">
+                    <div class="form-group">
+                        <label for="venta_id">Cliente ID:</label>
+                        <input type="text" id="cliente_id" name="cliente_id">
+                    </div>
+                    <div class="form-group">
+                        <label for="codigo">Tipo de Identificacion:</label>
+                        <select id="codigo" name="codigo">
+                            <option value="cc">CC</option>
+                            <option value="ce">CE</option>
+                            <option value="nit">NIT</option>
+                            <option value="rc">RC</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Identificacion:</label>
+                        <input type="text" id="Identificacion" name="Identificacion">
+                    </div>
+                    <div class="form-group">
+                        <label for="valor_unitario">Nombre:</label>
+                        <input type="text" id="Nombre" name="Nombre">
+                    </div>
+                    
+                </div>
+                <div class="caja1">
+                    <div class="form-group">
+                        <label for="descuento">Direccion:</label>
+                        <input type="text" id="descuento" name="descuento">
+                    </div>
+                    <div class="form-group">
+                        <label for="medio_pago">Email:</label>
+                        <input type="text" id="Email" name="Email">
+                    </div>
+                    <div class="form-group">
+                        <label for="medio_pago">Telegono:</label>
+                        <input type="text" id="Telefono" name="Telefono">
+                    </div>
+            
+                    </div>
+       
+            </div>
+            
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default">Guardar cambios</button>
+            </div>
+    </div>
+</div >
+  <!-- Ventana modal2 -->
+<div id="myModal2" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal2()">×</span>
+        <div class="modal-header">
+            <h2>Editar Cliente</h2>
+        </div>
+        <div class="modal-body">
+            <div class="caja1">
+                <div class="form-group">
+                    <label for="venta_id">Cliente ID:</label>
+                    <input type="text" id="cliente_id" name="cliente_id">
+                </div>
+                <div class="form-group">
+                    <label for="codigo">Tipo de Identificacion:</label>
+                    <select id="codigo" name="codigo">
+                        <option value="cc">CC</option>
+                        <option value="ce">CE</option>
+                        <option value="nit">NIT</option>
+                        <option value="rc">RC</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Identificacion:</label>
+                    <input type="text" id="Identificacion" name="Identificacion">
+                </div>
+                <div class="form-group">
+                    <label for="valor_unitario">Nombre:</label>
+                    <input type="text" id="Nombre" name="Nombre">
+                </div>
+            </div>
+            <div class="caja1">
+                <div class="form-group">
+                    <label for="descuento">Direccion:</label>
+                    <input type="text" id="descuento" name="descuento">
+                </div>
+                <div class="form-group">
+                    <label for="medio_pago">Email:</label>
+                    <input type="text" id="Email" name="Email">
+                </div>
+                <div class="form-group">
+                    <label for="medio_pago">Telegono:</label>
+                    <input type="text" id="Telefono" name="Telefono">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-default">Guardar cambios</button>
+        </div>
+    </div>
+</div>
+
+    <script>
+        // Función para abrir la ventana modal
+        function openModal() {
+            document.getElementById("myModal").style.display = "block";
+        }
+        
+        // Función para cerrar la ventana modal
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";}
+
+       
+    </script>
+    <script>
+         // Función para abrir la ventana modal
+         function openModal2() {
+            document.getElementById("myModal2").style.display = "block";
+        }
+        
+        // Función para cerrar la ventana modal
+        function closeModal2() {
+            document.getElementById("myModal2").style.display = "none";}
+
+    </script>
+
+</body>
+</html>
