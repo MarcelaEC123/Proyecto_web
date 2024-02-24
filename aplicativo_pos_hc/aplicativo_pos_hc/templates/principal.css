@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #ffffff; /* Fondo blanco */
+    background-color: #f3f4f7; /* Fondo blanco */
 }
 
 .wrapper {
@@ -39,6 +39,12 @@ body {
     margin-top: 0;
 }
 
+.content h3{
+    margin-top: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;   
+    font-size: 30px; 
+}
+
 /* Imagen a la derecha como línea de agua */
 .watermark {
     position: fixed;
@@ -48,11 +54,32 @@ body {
     opacity: 0.3; /* Opacidad baja */
 }
 
+
 .horizontal-bar {
-    background-color: #f7f2f2;
+    background-color: #d8e4f0;
     height: 25px;
     width: 100%; /* Esto asegura que la barra abarque todo el ancho */
+    display: flex;
+    justify-content: flex-end;
 }   
+
+.horizontal-bar img {
+    width: 22px; /* Establece el ancho deseado */
+    height: 22px; /* Establece la altura deseada */
+    margin-right: 2%;
+}
+
+.horizontal-bar button {
+    width: 20%; 
+    height: auto; /* Altura automática para adaptarse al contenido */
+    min-width: 100px; /* Ancho mínimo para asegurar que el texto sea visible */
+    background-color: rgb(49, 48, 54); 
+    color: white; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+    padding: 5px 10px; /* Ajuste del relleno */
+}
 
 .modal-header {
     background-color: #007bff;
@@ -62,19 +89,19 @@ body {
 
 .form-group {
     display: flex;
-    align-items: center; /* Alinear verticalmente los elementos */
+    align-items: center;
     margin-bottom: 15px;    
 }
 
 .label {
-    margin-right: 80px; /* Agregar margen a la derecha del texto */
+    margin-right: 80px;
 }
 
 /* Simplificación de los estilos para las cajas de texto */
 input[type="text"] {
     display: block;
     display: flex;
-    width: 90%; /* Ancho del 100% para que las cajas de texto ocupen todo el ancho disponible */
+    width: 90%;
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -95,7 +122,7 @@ input[type="text"] {
     flex-direction: row;
     justify-content: space-between;
 }
-/* Puedes agregar más estilos según necesites */
+
 .modal {
     padding-top: 5%;
     font-family: serif;
@@ -110,19 +137,20 @@ input[type="text"] {
 }
 
 .modal-content {
-    background-color: #e6e0e0;
+    background-color: #fdf6f6;
     margin: 1% auto;
     padding-bottom: 20px;
-    border: 1px solid #888;
-    width: 80%;
+    border: 1px solid #cfcbcb;
+    width: 60%;
     max-width: 900px;
-    
 }
 
 .close {
-    color: #aaa;
+    color: #fcf8f8;
     float: right;
-    font-size: 28px;
+    padding-right: 2%;
+    padding-top: 2%;
+    font-size: 30px;
     font-weight: bold;
 }
 
@@ -132,8 +160,6 @@ input[type="text"] {
     text-decoration: none;
     cursor: pointer;
 }
-
-
 
 .btn-default {
     width: 20%; /* Ancho de cada botón */
