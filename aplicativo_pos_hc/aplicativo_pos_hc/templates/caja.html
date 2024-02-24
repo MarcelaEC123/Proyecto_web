@@ -37,13 +37,14 @@
         </div>
 
         <!-- Ventana modal -->
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <div class="modal-header">
-                    <h2>Registro de venta</h2>
-                </div>
-                <div class="modal-body">
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">×</span>
+        <div class="modal-header">
+            <h2>Registro de venta</h2>
+        </div>
+        <div class="modal-body">
+                <div class="caja1">
                     <div class="form-group">
                         <label for="venta_id">Venta ID:</label>
                         <input type="text" id="venta_id" name="venta_id">
@@ -64,6 +65,8 @@
                         <label for="medio_pago">Medio de Pago:</label>
                         <input type="text" id="medio_pago" name="medio_pago">
                     </div>
+                </div>
+                <div class="caja1">
                     <div class="form-group">
                         <label for="descuento">Descuento:</label>
                         <input type="text" id="descuento" name="descuento">
@@ -81,9 +84,15 @@
                         <input type="text" id="iva" name="iva">
                     </div>
                 </div>
-            
+       
             </div>
-        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default">Guardar cambios</button>
+            </div>
+    </div>
+</div>
+
     </div>
 
     <script>
