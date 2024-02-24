@@ -1,0 +1,47 @@
+body {
+    padding: 80;
+    /* margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column; */
+    background-color: #ecf0f1;
+}
+header {
+    background-color: #5499C7; /* Color de fondo azul */
+    padding: 50px;
+    color: white; /* Color del texto en blanco */
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 50px;
+}
+header img {
+    width: 130px; /* Tamaño de la imagen */
+    height: auto;
+}
+main {
+    text-align: center;
+}
+
+#login {
+    margin-top:1px; /* Espacio superior entre el header y el formulario de login */
+    text-align: center;
+}
+#forgot-password {
+    margin-top: 10px; /* Espacio superior entre el formulario de login y el link de olvidé mi contraseña */
+    display: block; /* Hace que el link ocupe todo el ancho disponible */
+    text-align: center; /* Centra el texto del enlace */
+}
+
+h1 {
+    font-family: "Arial", sans-serif; /* Cambia la fuente del texto */
+    font-size: 2.5em; /* Tamaño del texto */
+    font-weight: bold; /* Grosor del texto */
+    color: #000; /* Color del texto */
+    text-transform: uppercase; /* Transforma el texto a mayúsculas */
+    letter-spacing: 2px; /* Espaciado entre letras */
+    text-shadow: 4px 4px 8px rgba(0,0,0,0.8); /* Sombra del texto */
+    transform: skew(-15deg); /* Inclina el texto en 15 grados */
+}

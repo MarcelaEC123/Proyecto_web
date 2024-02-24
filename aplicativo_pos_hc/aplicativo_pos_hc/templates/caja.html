@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./principal.css">
+    <title>Página con Menú</title>
+    <style>
+        /* Estilos para la ventana modal */
+       
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Caja</a></li>
+                <li><a href="#">Clientes</a></li>
+                <li><a href="#">Provedor</a></li>
+                <li><a href="#">Productos</a></li>
+                <li><a href="#">Compras</a></li>
+
+            </ul>
+
+            <li><a href="#">Cerrar sesion</a></li>
+            
+        </div>
+        <div class="content">
+            <!-- Contenido principal -->
+            <h3>Registro de caja</h3>
+            <div class="horizontal-bar">
+                <img src="./images/agregar.png" alt="agregar" onclick="openModal()">
+                <img src="./images/Eliminar.png" alt="Eliminar">
+                <img src="./images/codigoBarras.png" alt="lector">
+            </div>
+        </div>
+
+        <!-- Ventana modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="modal-header">
+                    <h2>Registro de venta</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="venta_id">Venta ID:</label>
+                        <input type="text" id="venta_id" name="venta_id">
+                    </div>
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" id="codigo" name="codigo">
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción:</label>
+                        <input type="text" id="descripcion" name="descripcion">
+                    </div>
+                    <div class="form-group">
+                        <label for="valor_unitario">Valor Unitario:</label>
+                        <input type="text" id="valor_unitario" name="valor_unitario">
+                    </div>
+                    <div class="form-group">
+                        <label for="medio_pago">Medio de Pago:</label>
+                        <input type="text" id="medio_pago" name="medio_pago">
+                    </div>
+                    <div class="form-group">
+                        <label for="descuento">Descuento:</label>
+                        <input type="text" id="descuento" name="descuento">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_venta">Fecha de Venta:</label>
+                        <input type="text" id="fecha_venta" name="fecha_venta">
+                    </div>
+                    <div class="form-group">
+                        <label for="cantidad">Cantidad:</label>
+                        <input type="text" id="cantidad" name="cantidad">
+                    </div>
+                    <div class="form-group">
+                        <label for="iva">IVA:</label>
+                        <input type="text" id="iva" name="iva">
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para abrir la ventana modal
+        function openModal() {
+            document.getElementById("myModal").style.display = "block";
+        }
+
+        // Función para cerrar la ventana modal
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>
