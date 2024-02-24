@@ -57,28 +57,24 @@ body {
 
 .content {
     flex: 1; /* Ocupa todo el espacio restante */
-    padding: 20px;
-    margin-top: 15%;
     background-color: rgba(255, 255, 255, 0.7); /* Fondo transparente */
     padding: 10px; /* Ajusta el espaciado interno según sea necesario */
-    color:grey;
-
+    margin-top: 0%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;   
+    font-size: 25px; 
 }
 
 /* Imagen a la derecha como línea de agua */
 .wrapper {
     display: flex;
     height: 100vh;
-    background-image: url('images/logo.png'); /* Ruta de la imagen */
     background-size: 700px; /* Define el tamaño de la imagen */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
     background-position: calc(100% - 25%) calc(100% - 50%); /* Ajusta la posición de la imagen */
 }
 
 .content h3{
-    margin-top: 0%;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;   
-    font-size: 30px; 
+
 }
 
 /* Imagen a la derecha como línea de agua */

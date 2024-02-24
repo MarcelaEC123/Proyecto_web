@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./principal.css">
+    <link rel="stylesheet" href="./general.css">
     <title>Página con Menú</title>
     <style>
         /* Estilos para la ventana modal */
@@ -13,19 +13,35 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="images/logo.png" alt="Logo">
+                </div>
+                <br>
+                
+                <div class="user-icon">
+                    <img src="images/usuario-de-perfil.png" alt="User Icon">
+                </div>
+                <div class="admin-name">
+                    <span>Administrador</span>
+                </div>
+            </div>
             <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Caja</a></li>
-                <li><a href="#">Clientes</a></li>
-                <li><a href="#">Provedor</a></li>
-                <li><a href="#">Productos</a></li>
-                <li><a href="#">Compras</a></li>
-
+                <li><a href="#">> Inicio</a></li>
+                <br>
+                <li><a href="#">> Caja</a></li>
+                <br>
+                <li><a href="#">> Clientes</a></li>
+                <br>
+                <li><a href="#">> Provedor</a></li>
+                <br>
+                <li><a href="#">> Productos</a></li>
+                <br>
+                <li><a href="#">>Compras</a></li>
             </ul>
-
-            <li><a href="#">Cerrar sesion</a></li>
-            
+           
         </div>
+        <a href="#" class="logout-link">Cerrar sesión</a>
         <div class="content">
             <!-- Contenido principal -->
             <h3>Registro de caja</h3>
