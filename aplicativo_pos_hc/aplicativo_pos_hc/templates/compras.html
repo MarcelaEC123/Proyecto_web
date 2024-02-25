@@ -49,14 +49,12 @@
             <i class="fas fa-sign-out-alt"></i> Cerrar sesión
           </a>
           
-          
         <div class="content">
             <!-- Contenido principal -->
-            <h3>Proveedores</h3>
+            <h3>Compras</h3>
             <div class="horizontal-bar">
                 <img src="images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
                 <img src="images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
-
                 <img src="images/Eliminar.png" alt="Eliminar" class="icon">
                 <input type="text" id="search-input" placeholder="Buscar...">
             </div>
@@ -65,100 +63,137 @@
         <!-- Ventana modal -->
 <div id="myModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">×</span>
+        <span class="close" onclick="closeModal()">×</span> 
         <div class="modal-header">
-            <h2>Crear  Proveedor</h2>
-           
+            <h2>Registrar compra</h2>  
         </div>
         <div class="modal-body">
                 <div class="caja1">
                     <div class="form-group">
-                        <label for="venta_id">Proveedor ID:</label>
-                        <input type="text" id="proveedor_id" name="proveedor_id">
+                        <label for="venta_id">Id Compra: </label>
+                        <input type="text" id="cliente_id" name="cliente_id">
                     </div>
                     <div class="form-group">
-                        <label for="codigo">Tipo de Identificacion:</label>
-                        <select id="codigo" name="codigo">
-                            <option value="cc">CC</option>
-                            <option value="nit">NIT</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="descripcion">Identificacion:</label>
+                        <label for="descripcion">Codigo: </label>
                         <input type="text" id="Identificacion" name="Identificacion">
                     </div>
                     <div class="form-group">
-                        <label for="valor_unitario">Razon social:</label>
-                        <input type="text" id="Razon social" name="NombreRazon social">
-                    </div>
-                    
+                        <label for="valor_unitario">Descripcion: </label>
+                        <input type="text" id="Nombre" name="Nombre">
+                    </div> 
                 </div>
                 <div class="caja1">
                     <div class="form-group">
-                        <label for="descuento">Direccion:</label>
-                        <input type="text" id="descuento" name="descuento">
+                        <label for="valor_unitario">Proveedor </label>
+                        <input type="text" id="Nombre" name="Nombre">
                     </div>
                     <div class="form-group">
-                        <label for="medio_pago">Email:</label>
+                        <label for="medio_pago">Cantidad: </label>
                         <input type="text" id="Email" name="Email">
                     </div>
                     <div class="form-group">
-                        <label for="medio_pago">Telegono:</label>
+                        <label for="medio_pago">Valor unitario:</label>
                         <input type="text" id="Telefono" name="Telefono">
                     </div>
             
-                    </div>
+                </div>
        
             </div>
-            
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-default">Guardar cambios</button>
             </div>
     </div>
 </div >
-  <!-- Ventana modal2 -->
+  <!-- Ventana modal Editar -->
 <div id="myModal2" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal2()">×</span>
         <div class="modal-header">
-            <h2>Editar Proveedor</h2>
+            <h2>Editar Compra</h2>
         </div>
         <div class="modal-body">
             <div class="caja1">
                 <div class="form-group">
-                    <label for="venta_id">Proveedor ID:</label>
-                    <input type="text" id="proveedor_id" name="proveedor_id">
+                    <label for="venta_id">Id Compra: </label>
+                    <input type="text" id="cliente_id" name="cliente_id">
                 </div>
                 <div class="form-group">
-                    <label for="codigo">Tipo de Identificacion:</label>
-                    <select id="codigo" name="codigo">
-                        <option value="cc">CC</option>
-                        <option value="nit">NIT</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="descripcion">Identificacion:</label>
+                    <label for="descripcion">Codigo: </label>
                     <input type="text" id="Identificacion" name="Identificacion">
                 </div>
                 <div class="form-group">
-                    <label for="valor_unitario">Razon social:</label>
-                    <input type="text" id="Razon social" name="NombreRazon social">
-                </div>
+                    <label for="valor_unitario">Descripcion: </label>
+                    <input type="text" id="Nombre" name="Nombre">
+                </div> 
             </div>
             <div class="caja1">
                 <div class="form-group">
-                    <label for="descuento">Direccion:</label>
-                    <input type="text" id="descuento" name="descuento">
+                    <label for="valor_unitario">Proveedor </label>
+                    <input type="text" id="Nombre" name="Nombre">
                 </div>
                 <div class="form-group">
-                    <label for="medio_pago">Email:</label>
+                    <label for="medio_pago">Cantidad: </label>
                     <input type="text" id="Email" name="Email">
                 </div>
                 <div class="form-group">
-                    <label for="medio_pago">Telegono:</label>
+                    <label for="medio_pago">Valor unitario:</label>
                     <input type="text" id="Telefono" name="Telefono">
+                </div>
+        
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-default">Guardar cambios</button>
+        </div>
+    </div>
+</div>
+ <!-- Ventana modal Devoluciones -->
+ <div id="myModal3" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal3()">×</span>
+        <div class="modal-header">
+            <h2>Dovoluciones</h2>
+        </div>
+        <div class="modal-body">
+            <div class="caja1">
+                <div class="form-group">
+                    <label for="venta_id">Id Devoluciòn: </label>
+                    <input type="text" id="cliente_id" name="cliente_id">
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Codigo: </label>
+                    <input type="text" id="Identificacion" name="Identificacion">
+                </div>
+                <div class="form-group">
+                    <label for="valor_unitario">Cantidad: </label>
+                    <input type="text" id="Nombre" name="Nombre">
+                </div>
+                <div class="form-group">
+                    <label for="valor_unitario">Precio: </label>
+                    <input type="text" id="Nombre" name="Nombre">
+                </div>
+                
+            </div>
+            <div class="caja1">
+                <div class="form-group">
+                    <label for="valor_unitario">Fecha devoluciòn: </label>
+                    <input type="text" id="Nombre" name="Nombre">
+                </div>
+                <div class="form-group">
+                    <label for="medio_pago">Observaciones: </label>
+                    <input type="text" id="Telefono" name="Telefono">
+                </div>
+                <div class="form-group">
+                    <label for="codigo">Tipo de devoluciòn: </label>
+                    <select id="codigo" name="codigo">
+                        <option value="cc">Mal estado</option>
+                        <option value="ce">Vencido</option>
+                        <option value="nit">Error</option>
+                        <option value="rc">Otros</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -168,7 +203,6 @@
         </div>
     </div>
 </div>
-
     <script>
         // Función para abrir la ventana modal
         function openModal() {
@@ -178,20 +212,26 @@
         // Función para cerrar la ventana modal
         function closeModal() {
             document.getElementById("myModal").style.display = "none";}
-
-       
     </script>
     <script>
-         // Función para abrir la ventana modal
+         // Función para abrir la ventana modal editar
          function openModal2() {
             document.getElementById("myModal2").style.display = "block";
         }
-        
-        // Función para cerrar la ventana modal
+        // Función para cerrar la ventana modal editar
         function closeModal2() {
             document.getElementById("myModal2").style.display = "none";}
-
     </script>
+    <script>
+            // Función para abrir la ventana modal de devoluciones
+            function openModalDevolucion() {
+               document.getElementById("myModal3").style.display = "block";
+           }
+           
+           // Función para cerrar la ventana modal devoluciones
+           function closeModal3() {
+               document.getElementById("myModal3").style.display = "none";}
+       </script>
 
 </body>
 </html>

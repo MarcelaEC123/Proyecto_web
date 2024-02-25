@@ -70,7 +70,8 @@ body {
     padding: 10px; /* Ajusta el espaciado interno según sea necesario */
     margin-top: 0%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;   
-    font-size: 25px; 
+    font-size: 20px; 
+    color: #4b535a;
 }
 
 /* Imagen a la derecha como línea de agua */
@@ -120,9 +121,9 @@ body {
 }
 
 .modal-header {
-    background-color: #007bff;
+    background-color: #5499C7;
     color: #fff;
-    padding: 10px;
+    padding: 1%;
 }
 /* Estilo para todas las cajas de la clase form-group */
 
@@ -222,4 +223,63 @@ input[type="text"] {
     font-size: 16px; /* Tamaño de la fuente */
     margin: 0 120px; 
     justify-content: space-between 1%;
+}
+
+
+.modalEliminacion{
+    display: block;
+    justify-content: right;
+    padding-top: 13%;   
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.btn-si {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    position: relative;
+    background-color: #302d2c;
+    color: white;
+    border: none;
+    padding: 6px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 8px 70px;
+    cursor: pointer;
+}
+
+.btn-no {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    position: relative;
+    background-color: #302d2c;
+    color: white;
+    border: none;
+    padding: 6px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 8px 70px;
+    cursor: pointer;
+}
+
+.modal-eliminacion{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 120%;
+    display: flex;
+    justify-content: center;
+}
+
+.modal-header-eliminacion{
+    background-color: #2981e0;
+    color: #fff;
+    padding: 1%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 80%;
 }

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwF3tBdYF4JcJjU4pN3nI9an2P+iK8a/1qdzNm5/lf7dUq0HfdvpBfB5SvOzJ4tv" crossorigin="anonymous">
+    <link rel="stylesheet" href="./general.css">
+    <title>Página con Menú</title>
+    <style>
+        /* Estilos para la ventana modal */
+       
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="images/logo.png" alt="Logo">
+                </div>
+                <br>
+
+                <div class="user-icon">
+                    <img src="images/usuario-de-perfil.png" alt="User Icon">
+                </div>
+                <div class="admin-name">
+                    <span>Administrador</span>
+                </div>
+            </div>
+            <ul>
+                <li><a href="principal.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <br>
+                <li><a href="caja.html"><i class="fas fa-cash-register"></i> Caja</a></li>
+                <br>
+                <li><a href="clientes.html"><i class="fas fa-users"></i> Clientes</a></li>
+                <br>
+                <li><a href="proveedores.html"><i class="fas fa-user-tie"></i> Proveedor</a></li>
+                <br>
+                <li><a href="productos.html"><i class="fas fa-box"></i> Productos</a></li>
+                <br>
+                <li><a href="compras.html"><i class="fas fa-shopping-cart"></i> Compras</a></li>
+                <br>
+                <li><a href="ventaHistorico.html"><i class="fas fa-box"></i> ventasHistorico</a></li>
+            </ul>
+           
+        </div>
+        <a href="home.html" class="logout-link">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </a>
+          
+        <div class="content">
+            <!-- Contenido principal -->
+            <h3>Ventas Historico</h3>
+            <div class="horizontal-bar">
+                <img src="images/Eliminar.png" alt="Eliminar" class="icon"  onclick="openConfirmationModal()">
+                <input type="text" id="search-input" placeholder="Buscar...">
+            </div>
+        </div>
+
+ <!-- Ventana modal -->
+ <div id="myModal" class="modalEliminacion">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">×</span>
+        <div class="modal-header-eliminacion">
+            <h2>Eliminar registro</h2>
+        </div>
+        <div class="modal-eliminacion">
+            <div class="confirmation-modal-body" id="confirmationModalBody">
+                <center><p>¿Estás seguro de que deseas eliminar este registro?</p></center>
+                <button class="btn-si" onclick="deleteRecord()">Sí</button>
+                <button class="btn-no" onclick="closeConfirmationModal()">No</button></center>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+// Función para abrir la ventana modal de confirmación
+function openConfirmationModal() {
+    var confirmationModalBody = document.getElementById("confirmationModalBody");
+    confirmationModalBody.classList.add("active");
+    document.getElementById("myModal").style.display = "block";
+}
+
+// Función para cerrar la ventana modal de confirmación
+function closeConfirmationModal() {
+    var confirmationModalBody = document.getElementById("confirmationModalBody");
+    confirmationModalBody.classList.remove("active");
+    document.getElementById("myModal").style.display = "none";
+}
+
+// Función para eliminar el registro
+function deleteRecord() {
+    // Aquí iría tu lógica para eliminar el registro
+    // Por ejemplo:
+    alert("Registro eliminado"); // Esto es solo un ejemplo, reemplázalo con tu lógica real
+    // Después de eliminar el registro, cierra la ventana modal de confirmación
+    closeConfirmationModal();
+}
+
+// Función para abrir el modal principal
+function openModal() {
+    document.getElementById("myModal").style.display = "block";
+}
+
+// Función para cerrar el modal principal
+function closeModal() {
+    document.getElementById("myModal").style.display = "none";
+}
+</script>
+
+</body>
+</html>
