@@ -8,58 +8,56 @@ body {
     width: 120%; /* Ajusta el tamaño del logo según sea necesario */
     height: auto;
     padding: center;
-    margin-right: 40px;
+    margin-right: 50px;
+    margin-top: -20px;
 }
 .sidebar-header .logo {
     display: flex;
     align-items: center; /* Centra verticalmente */
     justify-content: center; /* Centra horizontalmente */
-    padding-bottom:-8%; /* Ajusta el espacio inferior según sea necesario */
+    padding-bottom:-100%; /* Ajusta el espacio inferior según sea necesario */
 }
 
 .sidebar-header .admin-name span {
-    padding: 50px;
-    font-weight: 500; /* Un poco más delgado que el texto normal */
+    padding: 40px;
+    font-weight: 300; /* Un poco más delgado que el texto normal */
     text-decoration: underline; /* Subraya el texto */
     letter-spacing: 2px; /* Agrega espacio entre las letras */
-    
+    margin-top: 10px;
 }
 .user-icon img {
-    width: 60px; /* Ajusta el tamaño del icono */
+    width: 50px; /* Ajusta el tamaño del icono */
     height: auto;
-    margin-top:3px; /* Ajusta la distancia con el logo */
+    margin: top 0px; /* Ajusta la distancia con el logo */
     display: block; /* Centra el icono horizontalmente */
-    margin-left:30%;
+    margin-left:34%;
     margin-right: auto;
-    padding: 10px;
+    padding: 5px;
 }
 
-
 .sidebar {
-    flex: 0 0 180px; /* Ancho fijo de la barra lateral */
+    flex: 0 0 100px; /* Ancho fijo de la barra lateral */
     background-color: #5499C7; /* Azul */
     color: #ffffff; /* Texto blanco */
     padding: 40px;
-    
 }
 
 .sidebar ul {
     list-style-type: none;
-    padding: 20px 60px; /* Ajusta este valor según sea necesario */
+    padding: 20px 30px; /* Ajusta este valor según sea necesario */
     margin-top: 20px; /* Ajusta este valor para subir más la lista */
 }
 .sidebar ul li a {
     color: #ffffff; /* Texto blanco */
     text-decoration: none;
-    font-weight:bold ; /* Texto en negrita */
-    margin-bottom: 30px;
+    /* font-weight:bold ; Texto en negrita */
     margin-bottom: 10px;
 }
 .logout-link {
     position: fixed;
     bottom: 0; /* Fija el enlace en la parte inferior de la ventana del navegador */
     left:  0; /* Fija el enlace en la esquina derecha de la ventana del navegador */
-    padding: 10px 12%; /* Ajusta el espaciado interno según sea necesario */
+    padding: 10px 9%; /* Ajusta el espaciado interno según sea necesario */
     color: #ffffff; /* Color de texto blanco */
     margin-bottom: 20px; /* Ajusta la distancia con los elementos anteriores */
 }

@@ -25,26 +25,28 @@
                 </div>
             </div>
             <ul>
-                <li><a href="principal.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="{{ url_for('principal') }}"><i class="fas fa-home"></i> Inicio</a></li>
                 <br>
-                <li><a href="caja.html"><i class="fas fa-cash-register"></i> Caja</a></li>
+                <li><a href="{{ url_for('caja') }}"><i class="fas fa-cash-register"></i> Caja</a></li>
                 <br>
-                <li><a href="clientes.html"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="{{ url_for('clientes') }}"><i class="fas fa-users"></i> Clientes</a></li>
                 <br>
-                <li><a href="proveedores.html"><i class="fas fa-user-tie"></i> Proveedor</a></li>
+                <li><a href="{{ url_for('proveedores') }}"><i class="fas fa-user-tie"></i> Proveedor</a></li>
                 <br>
-                <li><a href="productos.html"><i class="fas fa-box"></i> Productos</a></li>
+                <li><a href="{{ url_for('productos') }}"><i class="fas fa-box"></i> Productos</a></li>
                 <br>
-                <li><a href="compras.html"><i class="fas fa-shopping-cart"></i> Compras</a></li>
+                <li><a href="{{ url_for('compras') }}"><i class="fas fa-shopping-cart"></i> Compras</a></li>
                 <br>
-                <li><a href="ventaHistorico.html"><i class="fas fa-box"></i> ventasHistorico</a></li>
+                <li><a href="{{ url_for('venta_historico') }}"><i class="fas fa-box"></i> ventasHistorico</a></li>
+                <br>
+                <li><a href="{{ url_for('registro') }}"><i class="fas fa-box"></i> Usuarios</a></li>
             </ul>
+            
            
         </div>
-        <a href="/logout" class="logout-link">
+        <a href="{{ url_for('logout') }}" class="logout-link">
             <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-          </a>
-          
+        </a>
           
         <div class="content">
             <h1>Salsamentaria la <br> mejor</h1>

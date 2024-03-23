@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwF3tBdYF4JcJjU4pN3nI9an2P+iK8a/1qdzNm5/lf7dUq0HfdvpBfB5SvOzJ4tv" crossorigin="anonymous">
-    <link rel="stylesheet" href="./general.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     <title>Página con Menú</title>
     <style>
         /* Estilos para la ventana modal */
@@ -17,47 +17,49 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <img src="images/logo.png" alt="Logo">
+                    <img src="/static/images/logo.png" alt="Logo">
                 </div>
                 <br>
                 
                 <div class="user-icon">
-                    <img src="images/usuario-de-perfil.png" alt="User Icon">
+                    <img src="/static/images/usuario-de-perfil.png" alt="User Icon">
                 </div>
                 <div class="admin-name">
                     <span>Administrador</span>
                 </div>
             </div>
             <ul>
-                <li><a href="principal.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="{{ url_for('principal') }}"><i class="fas fa-home"></i> Inicio</a></li>
                 <br>
-                <li><a href="caja.html"><i class="fas fa-cash-register"></i> Caja</a></li>
+                <li><a href="{{ url_for('caja') }}"><i class="fas fa-cash-register"></i> Caja</a></li>
                 <br>
-                <li><a href="clientes.html"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="{{ url_for('clientes') }}"><i class="fas fa-users"></i> Clientes</a></li>
                 <br>
-                <li><a href="proveedores.html"><i class="fas fa-user-tie"></i> Proveedor</a></li>
+                <li><a href="{{ url_for('proveedores') }}"><i class="fas fa-user-tie"></i> Proveedor</a></li>
                 <br>
-                <li><a href="productos.html"><i class="fas fa-box"></i> Productos</a></li>
+                <li><a href="{{ url_for('productos') }}"><i class="fas fa-box"></i> Productos</a></li>
                 <br>
-                <li><a href="compras.html"><i class="fas fa-shopping-cart"></i> Compras</a></li>
+                <li><a href="{{ url_for('compras') }}"><i class="fas fa-shopping-cart"></i> Compras</a></li>
                 <br>
-                <li><a href="ventaHistorico.html"><i class="fas fa-box"></i> ventasHistorico</a></li>
+                <li><a href="{{ url_for('venta_historico') }}"><i class="fas fa-box"></i> ventasHistorico</a></li>
+                <br>
+                <li><a href="{{ url_for('registro') }}"><i class="fas fa-box"></i> registro</a></li>
             </ul>
+            
            
         </div>
-        <a href="home.html" class="logout-link">
+        <a href="{{ url_for('logout') }}" class="logout-link">
             <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-          </a>
-          
+        </a>       
           
         <div class="content">
             <!-- Contenido principal -->
             <h3>Productos</h3>
             <div class="horizontal-bar">
-                <img src="images/devolucion.png" alt="devolucion" class="icon" onclick="openModalDevolucion()">
-                <img src="images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
-                <img src="images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
-                <img src="images/Eliminar.png" alt="Eliminar" class="icon">
+                <img src="/static/images/devolucion.png" alt="devolucion" class="icon" onclick="openModalDevolucion()">
+                <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
+                <img src="/static/images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
+                <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon">
                 <input type="text" id="search-input" placeholder="Buscar...">
             </div>
         </div>
