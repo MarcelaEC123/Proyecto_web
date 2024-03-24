@@ -52,12 +52,12 @@
           
         <div class="content">
             <!-- Contenido principal -->
-            <h3>Clientes</h3>
+            <h3>Usuarios</h3>
             <div class="horizontal-bar">
                 <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
                 <img src="/static/images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
 
-                <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon">
+                <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon"  onclick="openConfirmationModal()">
                 <input type="text" id="search-input" placeholder="Buscar...">
             </div>
         </div>
@@ -67,14 +67,10 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal()">×</span>
         <div class="modal-header">
-            <h2>Registre nuevo usuario</h2>
+            <h2>Nuevo usuario</h2>
         </div>
         <div class="modal-body">
                 <div class="caja1">
-                    <div class="form-group">
-                        <label for="venta_id">Nombre</label>
-                        <input type="text" id="cliente_id" name="cliente_id">
-                    </div>
                     <div class="form-group">
                         <label for="codigo">Tipo de Identificacion:</label>
                         <select id="codigo" name="codigo">
@@ -87,6 +83,10 @@
                     <div class="form-group">
                         <label for="descripcion">Identificacion:</label>
                         <input type="text" id="Identificacion" name="Identificacion">
+                    </div>
+                    <div class="form-group">
+                        <label for="venta_id">Nombre:     </label>
+                        <input type="text" id="cliente_id" name="cliente_id">
                     </div>
                     <div class="form-group">
                         <label for="valor_unitario">Usuario:</label>
@@ -112,31 +112,109 @@
             </div>
     </div>
 </div >
+<!-- Ventana modal2 -->
+<div id="myModal2" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal2()">×</span>
+        <div class="modal-header">
+            <h2>Editar Usuario</h2>
+        </div>
+        <div class="modal-body">
+            <div class="caja1">
+                <div class="form-group">
+                    <label for="codigo">Tipo de Identificacion:</label>
+                    <select id="codigo" name="codigo">
+                        <option value="cc">CC</option>
+                        <option value="ce">CE</option>
+                        <option value="nit">NIT</option>
+                        <option value="rc">RC</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Identificacion:</label>
+                    <input type="text" id="Identificacion" name="Identificacion">
+                </div>
+                <div class="form-group">
+                    <label for="venta_id">Nombre:     </label>
+                    <input type="text" id="cliente_id" name="cliente_id">
+                </div>
+                <div class="form-group">
+                    <label for="valor_unitario">Usuario:</label>
+                    <input type="text" id="Nombre" name="Nombre">
+                </div>
+                
+            </div>
+            <div class="caja1">
+                <div class="form-group">
+                    <label for="descuento">Contraseña:</label>
+                    <input type="text" id="descuento" name="descuento">
+                </div>
+                <div class="form-group">
+                    <label for="medio_pago">Tipo Usuario:</label>
+                    <input type="text" id="Email" name="Email">
+                </div>            
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-default">Guardar cambios</button>
+        </div>
+    </div>
+</div>
 
-    <script>
-        // Función para abrir la ventana modal
-        function openModal() {
-            document.getElementById("myModal").style.display = "block";
-        }
-        
-        // Función para cerrar la ventana modal
-        function closeModal() {
-            document.getElementById("myModal").style.display = "none";}
+ <!-- Ventana modal -->
+ <div id="myModal" class="modalEliminacion">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">×</span>
+        <div class="modal-header-eliminacion">
+            <h2>Eliminar registro</h2>
+        </div>
+        <div class="modal-eliminacion">
+            <div class="confirmation-modal-body" id="confirmationModalBody">
+                <center><p>¿Estás seguro de que deseas eliminar este registro?</p></center>
+                <button class="btn-si" onclick="deleteRecord()">Sí</button>
+                <button class="btn-no" onclick="closeConfirmationModal()">No</button></center>
+            </div>
+        </div>
+    </div>
+</div>
 
-       
-    </script>
-    <script>
-         // Función para abrir la ventana modal
-         function openModal2() {
-            document.getElementById("myModal2").style.display = "block";
-        }
-        
-        // Función para cerrar la ventana modal
-        function closeModal2() {
-            document.getElementById("myModal2").style.display = "none";}
+</div>
 
-    </script>
+<script>
+// Función para abrir la ventana modal de confirmación
+function openConfirmationModal() {
+    var confirmationModalBody = document.getElementById("confirmationModalBody");
+    confirmationModalBody.classList.add("active");
+    document.getElementById("myModal").style.display = "block";
+}
+
+// Función para cerrar la ventana modal de confirmación
+function closeConfirmationModal() {
+    var confirmationModalBody = document.getElementById("confirmationModalBody");
+    confirmationModalBody.classList.remove("active");
+    document.getElementById("myModal").style.display = "none";
+}
+
+// Función para eliminar el registro
+function deleteRecord() {
+    // Aquí iría tu lógica para eliminar el registro
+    // Por ejemplo:
+    alert("Registro eliminado"); // Esto es solo un ejemplo, reemplázalo con tu lógica real
+    // Después de eliminar el registro, cierra la ventana modal de confirmación
+    closeConfirmationModal();
+}
+
+// Función para abrir el modal principal
+function openModal() {
+    document.getElementById("myModal").style.display = "block";
+}
+
+// Función para cerrar el modal principal
+function closeModal() {
+    document.getElementById("myModal").style.display = "none";
+}
+</script>
 
 </body>
 </html>
-

@@ -91,7 +91,7 @@ def compras():
 
 @app.route("/venta_historico")
 def venta_historico():
-    return render_template("venta_historico.html")
+    return render_template("ventaHistorico.html")
 
 @app.route("/registro")
 def registro():
