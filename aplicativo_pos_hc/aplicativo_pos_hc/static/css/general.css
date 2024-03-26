@@ -63,7 +63,7 @@ body {
 }
 
 .content {
-    flex: 1; /* Ocupa todo el espacio restante */
+    flex: 1; /*Ocupa todo el espacio restante */
     background-color: rgba(255, 255, 255, 0.7); /* Fondo transparente */
     padding: 10px; /* Ajusta el espaciado interno según sea necesario */
     margin-top: 0%;
@@ -94,16 +94,15 @@ body {
 
 .horizontal-bar {
     background-color: #d8e4f0;
-    height: 25px;
+    height: 40px;
     width: 100%; /* Esto asegura que la barra abarque todo el ancho */
-    display: flex;
-    justify-content: flex-end;
+    
 }   
 
 .horizontal-bar img {
     width: 22px; /* Establece el ancho deseado */
     height: 22px; /* Establece la altura deseada */
-    margin-right: 2%;
+    margin-right: 2%; 
 }
 
 .horizontal-bar button {
