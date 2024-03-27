@@ -3,17 +3,6 @@ import database as db
 
 app = Flask(__name__, template_folder="C:\\Users\\lenovo\\OneDrive\\Desktop\\UNIAGUSTINIANA\\Proyecto\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
 
-# # Función para conectar a la base de datos y crear un cursor
-# def conectar_bd():
-#     db = mysql.connector.connect(
-#         host="localhost",
-#         user="root",
-#         password="SQLMARCE2022.",
-#         database="Aplicativo_POS_final"
-#     )
-#     cursor = db.cursor()
-#     return db, cursor
-
 # Ruta para la página de inicio
 @app.route("/")
 def index():
@@ -54,7 +43,6 @@ def login():
         error_message = "Error al procesar la solicitud: {}".format(str(e))
         return render_template("mensaje.html", message=error_message)
 
-
 # Ruta para la página principal
 @app.route("/principal")
 def principal():
@@ -68,7 +56,6 @@ def logout():
     return redirect(url_for("index"))  # Aquí cambiamos "home" a "index"
 
 # Rutas para otras páginas
-
 @app.route("/caja")
 def caja():
     return render_template("caja.html")
@@ -94,7 +81,7 @@ def productos():
      cursor.close()   
      return render_template("productos.html", data=insertObjec)
   
-#Ruta para guardar usuarios
+#Ruta para guardar productos
 @app.route('/guardar', methods=['POST'])
 def addGuardar():    
      id_producto = request.form['id_producto']
@@ -115,34 +102,44 @@ def addGuardar():
         db_connection.close()
      return redirect(url_for('productos'))
 
-#Ruta para eliminar
-@app.route('/delete/<string:id_producto>')
-def delete(id_producto):
-        cursor = db.database.cursor()
-        sql = "DELETE FROM producto WHERE id_producto = %s)"
-        data = (id_producto,)
+@app.route("/editar_producto/<int:id_producto>", methods=["GET", "POST"])
+def editar_producto(id_producto):
+    if request.method == "POST":
+        # Obtener los datos del formulario de edición
+        print("Datos del formulario:", request.form)
+        codigo = request.form['codigo']
+        descripcion = request.form['descripcion']
+        categoria = request.form['categoria']
+        proveedor = request.form['proveedor']
+        valorUnitario = request.form['valor_unitario']
+        unidadMedida = request.form['unidad_medida']
+        
+        # Imprimir los datos obtenidos del formulario para depurar
+        print("Datos del formulario recibidos:", codigo, descripcion, categoria, proveedor, valorUnitario, unidadMedida)
+        
+        # Actualizar los detalles del producto en la base de datos
+        db_connection, cursor = db.conectar_bd()
+        sql = """UPDATE producto SET codigo = %s, descripcion = %s, categoria = %s, proveedor = %s, 
+                 valor_unitario = %s, unidad_medida = %s WHERE id_producto = %s"""
+        data = (codigo, descripcion, categoria, proveedor, valorUnitario, unidadMedida, id_producto)
         cursor.execute(sql, data)
-        db.database.commit() 
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        
         return redirect(url_for('productos'))
-
-#Ruta para editor
-@app.route('/edit/<string:id_producto>', methods=['POST'])
-def edit(id_producto):
-     id_producto = request.form['id_producto']
-     codigo = request.form['codigo']
-     categoria = request.form['categoria']
-     proveedor = request.form['proveedor']
-     valorUnitario = request.form['valor_unitario']
-     unidadMedida = request.form['unidad_medida']
-     
-     if id_producto and codigo and categoria and proveedor and valorUnitario and unidadMedida:
-        cursor = db.database.cursor()
-        sql = "UPDATE producto SET codigo = %s, categoria = %s, proveedor = %s,valor_unitario  = %s,unidad_medida = %s WHERE id_producto = %s"
-        data = (codigo,categoria,proveedor,valorUnitario,unidadMedida,id_producto)
-        cursor.execute(sql, data)
-        db.database.commit()
-     return redirect(url_for('productos'))
-
+    else:
+        # Obtener los detalles del producto a editar
+        db_connection, cursor = db.conectar_bd()
+        cursor.execute("SELECT * FROM producto WHERE id_producto = %s", (id_producto,))
+        producto = cursor.fetchone()
+        cursor.close()
+        db_connection.close()
+        
+        # Imprimir los detalles del producto para depurar
+        print("Detalles del producto a editar:", producto)
+        
+        return render_template("editar_producto.html", producto=producto)
 
 @app.route("/compras")
 def compras():
