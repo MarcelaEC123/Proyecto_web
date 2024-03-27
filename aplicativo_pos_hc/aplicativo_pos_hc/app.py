@@ -56,9 +56,46 @@ def logout():
     return redirect(url_for("index"))  # Aquí cambiamos "home" a "index"
 
 # Rutas para otras páginas
+# Ruta para caja
 @app.route("/caja")
 def caja():
-    return render_template("caja.html")
+     db_connection, cursor = db.conectar_bd()
+     cursor.execute("SELECT * FROM venta")
+     myresult = cursor.fetchall()
+     #convertir datos a diccionary 
+     insertObjec = []
+     columnNames = [column[0] for column in cursor.description]
+     for record in myresult:
+            insertObjec.append(dict(zip(columnNames, record)))
+     cursor.close()   
+     return render_template("caja.html", data=insertObjec)
+ 
+#Ruta para guardar VENTAS
+@app.route('/guardarVenta', methods=['POST'])
+def addGuardarVenta():    
+     id_venta = request.form['id_venta']
+     codigo = request.form['codigo']
+     descripcion = request.form['descripcion']
+     valor_unitario = request.form['valor_unitario']
+     medio_pago = request.form['medio_pago']
+     descuento = request.form['descuento']
+     id_cliente = request.form['id_cliente']
+     cantidad = request.form['cantidad']
+     iva = request.form['iva']
+     total_a_pagar = request.form['total_a_pagar']
+     fecha_registro = request.form['fecha_registro']
+     observaciones = request.form['observaciones']
+     
+
+     if id_venta and codigo and descripcion and valor_unitario and medio_pago and descuento and id_cliente and cantidad and iva and total_a_pagar and fecha_registro and observaciones:
+        db_connection, cursor = db.conectar_bd()
+        sql = "INSERT INTO venta (id_venta,codigo,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_venta,codigo,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones,)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+     return redirect(url_for('caja'))
 
 @app.route("/clientes")
 def clientes():
@@ -67,6 +104,7 @@ def clientes():
 @app.route("/proveedores")
 def proveedores():
     return render_template("proveedores.html")
+
 
 @app.route("/productos")
 def productos():
