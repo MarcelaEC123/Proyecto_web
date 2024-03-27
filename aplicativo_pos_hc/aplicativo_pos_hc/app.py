@@ -1,19 +1,18 @@
 from flask import Flask, request, render_template, redirect, url_for
-import mysql.connector
 import database as db
+
 app = Flask(__name__, template_folder="C:\\Users\\lenovo\\OneDrive\\Desktop\\UNIAGUSTINIANA\\Proyecto\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
 
-
-# Función para conectar a la base de datos y crear un cursor
-def conectar_bd():
-    db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="SQLMARCE2022.",
-        database="Aplicativo_POS_final"
-    )
-    cursor = db.cursor()
-    return db, cursor
+# # Función para conectar a la base de datos y crear un cursor
+# def conectar_bd():
+#     db = mysql.connector.connect(
+#         host="localhost",
+#         user="root",
+#         password="SQLMARCE2022.",
+#         database="Aplicativo_POS_final"
+#     )
+#     cursor = db.cursor()
+#     return db, cursor
 
 # Ruta para la página de inicio
 @app.route("/")
@@ -28,7 +27,7 @@ def login():
 
     try:
         # Conectar a la base de datos y crear un cursor
-        db, cursor = conectar_bd()
+        db_connection, cursor = db.conectar_bd()
 
         # Consulta SQL para verificar las credenciales de inicio de sesión
         query = "SELECT * FROM usuarios WHERE Usuario = %s AND Contrasenia = %s"
@@ -39,7 +38,7 @@ def login():
 
         # Cerrar el cursor y la conexión
         cursor.close()
-        db.close()
+        db_connection.close()
 
         # Procesar los resultados de la consulta
         if user:
@@ -84,7 +83,7 @@ def proveedores():
 
 @app.route("/productos")
 def productos():
-     db, cursor = conectar_bd()
+     db_connection, cursor = db.conectar_bd()
      cursor.execute("SELECT * FROM producto")
      myresult = cursor.fetchall()
      #convertir datos a diccionary 
@@ -100,16 +99,46 @@ def productos():
 def addGuardar():    
      id_producto = request.form['id_producto']
      codigo = request.form['codigo']
+     descripcion = request.form['descripcion']
+     categoria = request.form['categoria']
+     proveedor = request.form['proveedor']
+     valorUnitario = request.form['valor_unitario']
+     unidadMedida = request.form['unidad_medida']
+
+     if id_producto and codigo and descripcion and categoria and proveedor and valorUnitario and unidadMedida:
+        db_connection, cursor = db.conectar_bd()
+        sql = "INSERT INTO producto (id_producto,codigo,descripcion,categoria,proveedor,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_producto,codigo,descripcion,categoria,proveedor,valorUnitario,unidadMedida)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+     return redirect(url_for('productos'))
+
+#Ruta para eliminar
+@app.route('/delete/<string:id_producto>')
+def delete(id_producto):
+        cursor = db.database.cursor()
+        sql = "DELETE FROM producto WHERE id_producto = %s)"
+        data = (id_producto,)
+        cursor.execute(sql, data)
+        db.database.commit() 
+        return redirect(url_for('productos'))
+
+#Ruta para editor
+@app.route('/edit/<string:id_producto>', methods=['POST'])
+def edit(id_producto):
+     id_producto = request.form['id_producto']
+     codigo = request.form['codigo']
      categoria = request.form['categoria']
      proveedor = request.form['proveedor']
      valorUnitario = request.form['valor_unitario']
      unidadMedida = request.form['unidad_medida']
      
-
      if id_producto and codigo and categoria and proveedor and valorUnitario and unidadMedida:
         cursor = db.database.cursor()
-        sql = "INSERT INTO producto (id_producto,codigo,categoria,proveedor,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s)"
-        data = (id_producto,codigo,categoria,proveedor,valorUnitario,unidadMedida)
+        sql = "UPDATE producto SET codigo = %s, categoria = %s, proveedor = %s,valor_unitario  = %s,unidad_medida = %s WHERE id_producto = %s"
+        data = (codigo,categoria,proveedor,valorUnitario,unidadMedida,id_producto)
         cursor.execute(sql, data)
         db.database.commit()
      return redirect(url_for('productos'))
@@ -126,53 +155,6 @@ def venta_historico():
 @app.route("/registro")
 def registro():
     return render_template("registro.html")
-
-# @app.route('/productos')
-# def productos():
-#      db, cursor = conectar_bd()
-#      cursor.execute("SELECT * FROM productos")
-#      myresult = cursor.fechall()
-#      #convertir datos a diccionary 
-#      insertObjec = []
-#      columnNames = [column[0] for column in cursor.description]
-#      for record in myresult:
-#             insertObjec.append(dict(zip(columnNames, record)))
-#      cursor.close()   
-#      return render_template("productos.html", data=insertObjec)  
-     
-# # Ruta para guardar productos en la base de datos
-# @app.route("/guardar_producto", methods=["POST"])
-# def guardar_producto():
-#     if request.method == "POST":
-#         try:
-#             # Conectar a la base de datos y crear un cursor
-#             db, cursor = conectar_bd()
-
-#             # Obtener los datos del formulario
-#             codigo = request.form.get("codigo")
-#             categoria = request.form.get("categoria")
-#             proveedor = request.form.get("proveedor")
-#             valor_unitario = request.form.get("valor_unitario")
-#             unidad_medida = request.form.get("unidad_medida")
-
-#             # Insertar los datos en la base de datos
-#             query = "INSERT INTO Producto (codigo, categoria, proveedor, valor_unitario, unidad_medida) VALUES (%s, %s, %s, %s, %s)"
-#             cursor.execute(query, (codigo, categoria, proveedor, valor_unitario, unidad_medida))
-#             db.commit()
-
-#             # Cerrar el cursor y la conexión
-#             cursor.close()
-#             db.close()
-
-#             # Redireccionar a la página de productos después de guardarlos
-#             return redirect(url_for("productos"))
-
-#         except Exception as e:
-#             # Manejar cualquier excepción que pueda ocurrir durante el proceso de guardado
-#             error_message = "Error al guardar el producto: {}".format(str(e))
-#             return render_template("mensaje.html", message=error_message)
-
-
 
 
 if __name__ == "__main__":

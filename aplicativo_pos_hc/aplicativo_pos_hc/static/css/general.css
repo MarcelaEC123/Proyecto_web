@@ -280,3 +280,14 @@ input[type="text"] {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 80%;
 }
+
+th{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 90%;
+    text-align: center;
+}
+
+td{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 80%;
+}

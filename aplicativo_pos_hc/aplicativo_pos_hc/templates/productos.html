@@ -63,11 +63,13 @@
                     <table class="table table-bordered">
                         <thead>
                             <th scope="col">Id_Producto</th> 
-                            <th scope="col">Codigo</th> 
+                            <th scope="col">Codigo</th>
+                            <th scope="col">Descripcion</th> 
                             <th scope="col">Categoria</th> 
                             <th scope="col">Proveedor</th> 
                             <th scope="col">Unidad_medida</th> 
                             <th scope="col">Valor_unitario</th> 
+                            <th scope="col" colspan="2">Acciones</th> 
                         </thead>
                     
                     <tbody >
@@ -75,17 +77,18 @@
                             <tr>
                                 <td>{{d.id_producto}}</td>
                                 <td>{{d.codigo}}</td>
+                                <td>{{d.descripcion}}</td>
                                 <td>{{d.categoria}}</td>
                                 <td>{{d.proveedor}}</td>
                                 <td>{{d.unidad_medida}}</td>
                                 <td>{{d.valor_unitario}}</td>
-                                <td><button class="btn btn-primary btn-sm">Editar</td>
-                                <td><button class="btn btn-danger btn-sm">Eliminar</td>
+                                <td><button class="btn btn-primary btn-sm" id="btn-edit{{d.id_producto}}" data-bs-toggle="modal" data-bs-target="#modal{{d.id_producto}}">Editar</button></td>  
+                                <td><a href="{{url_for('delete', id_producto=d.id_producto)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
                     </table>
-                
+
         </div>
 
         <!-- Ventana modal agregar productos -->
@@ -102,10 +105,13 @@
                                     <label for="venta_id">Id Producto: </label>
                                 <input type="text" id="cliente_id" name="id_producto">
                             </div>
-                            
                             <div class="form-group">
                                 <label for="descripcion">Codigo: </label>
                                 <input type="text" id="codigo" name="codigo">
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion">Descripcion: </label>
+                                <input type="text" id="descripcion" name="descripcion">
                             </div>
                             <div class="form-group">
                                 <label for="valor_unitario">Categoria: </label>
