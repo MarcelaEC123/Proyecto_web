@@ -56,7 +56,8 @@ def logout():
     return redirect(url_for("index"))  # Aquí cambiamos "home" a "index"
 
 # Rutas para otras páginas
-# Ruta para caja
+
+# Ruta para caja-Venta
 @app.route("/caja")
 def caja():
      db_connection, cursor = db.conectar_bd()
