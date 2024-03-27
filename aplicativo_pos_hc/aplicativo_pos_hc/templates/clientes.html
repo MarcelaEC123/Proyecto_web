@@ -6,8 +6,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwF3tBdYF4JcJjU4pN3nI9an2P+iK8a/1qdzNm5/lf7dUq0HfdvpBfB5SvOzJ4tv" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Página con Menú</title>
-
 </head>
 <body>
     <div class="wrapper">
@@ -40,45 +40,74 @@
                 <br>
                 <li><a href="{{ url_for('venta_historico') }}"><i class="fas fa-box"></i> ventasHistorico</a></li>
                 <br>
-                <li><a href="{{ url_for('registro') }}"><i class="fas fa-box"></i> Usuarios</a></li>
+                <li><a href="{{ url_for('registro') }}"><i class="fas fa-box"></i> registro</a></li>
             </ul>
             
            
         </div>
         <a href="{{ url_for('logout') }}" class="logout-link">
             <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-        </a>
-
+        </a>       
           
-        <div class="content">
+        <div class="content d-flex flex-column " >
             <!-- Contenido principal -->
-            <h3>Clientes</h3>
-            <div class="horizontal-bar">
-                <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
-                <img src="/static/images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
+            <h3>Clientes</h3>     
+                <div class="horizontal-bar my-4 d-flex py-2 justify-content-end " >
+                    <img src="/static/images/devolucion.png" alt="devolucion" class="icon" onclick="openModalDevolucion()">
+                    <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
+                    <img src="/static/images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
+                    <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon">
+                    <input type="text" id="search-input" placeholder="Buscar...">
+                </div>
+                
+                    <table class="table table-bordered">
+                        <thead>
+                            <th scope="col">Id_Cliente</th> 
+                            <th scope="col">Tipo_Identificacion</th>
+                            <th scope="col">Numero_Identificacion</th>
+                            <th scope="col">Nombre</th> 
+                            <th scope="col">Email</th> 
+                            <th scope="col">Direccion</th> 
+                            <th scope="col">Telefono</th> 
+                            <th scope="col" colspan="2">Acciones</th> 
+                        </thead>
+                    
+                    <tbody >
+                        {% for d in data %}
+                            <tr>
+                                <td>{{d.id_cliente}}</td>
+                                <td>{{d.tipo_identificacion}}</td>
+                                <td>{{d.numero_identificacion}}</td>
+                                <td>{{d.nombre_completo}}</td>
+                                <td>{{d.email}}</td>
+                                <td>{{d.direccion}}</td>
+                                <td>{{d.telefono}}</td>
+                               
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
 
-                <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon">
-                <input type="text" id="search-input" placeholder="Buscar...">
-            </div>
         </div>
 
         <!-- Ventana modal -->
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">×</span>
-        <div class="modal-header">
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">×</span>
+                <form action="/guardarClientes" id="clientes_form" method="post" >
+                    <div class="modal-header">
             <h2>Crear  Cliente</h2>
            
         </div>
         <div class="modal-body">
                 <div class="caja1">
                     <div class="form-group">
-                        <label for="venta_id">Cliente ID:</label>
-                        <input type="text" id="cliente_id" name="cliente_id">
+                        <label for="id_cliente">ID Cliente:</label>
+                        <input type="text" id="id_cliente" name="id_cliente">
                     </div>
                     <div class="form-group">
-                        <label for="codigo">Tipo de Identificacion:</label>
-                        <select id="codigo" name="codigo">
+                        <label for="tipo_identificacion">Tipo Identificacion:</label>
+                        <select id="tipo_identificacion" name="tipo_identificacion">
                             <option value="cc">CC</option>
                             <option value="ce">CE</option>
                             <option value="nit">NIT</option>
@@ -86,27 +115,27 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="descripcion">Identificacion:</label>
-                        <input type="text" id="Identificacion" name="Identificacion">
+                        <label for="numero_identificacion">Numero_Identificacion:</label>
+                        <input type="text" id="numero_identificacion" name="numero_identificacion">
                     </div>
                     <div class="form-group">
-                        <label for="valor_unitario">Nombre:</label>
-                        <input type="text" id="Nombre" name="Nombre">
+                        <label for="nombre_completo">Nombre:</label>
+                        <input type="text" id="nombre_completo" name="nombre_completo">
                     </div>
                     
                 </div>
                 <div class="caja1">
                     <div class="form-group">
-                        <label for="descuento">Direccion:</label>
-                        <input type="text" id="descuento" name="descuento">
+                        <label for="email">Email:</label>
+                        <input type="text" id="email" name="email">
                     </div>
                     <div class="form-group">
-                        <label for="medio_pago">Email:</label>
-                        <input type="text" id="Email" name="Email">
+                        <label for="direccion">Direccion:</label>
+                        <input type="direccion" id="direccion" name="direccion">
                     </div>
                     <div class="form-group">
-                        <label for="medio_pago">Telegono:</label>
-                        <input type="text" id="Telefono" name="Telefono">
+                        <label for="telefono">Telefono:</label>
+                        <input type="text" id="telefono" name="telefono">
                     </div>
             
                     </div>
@@ -116,7 +145,7 @@
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-default">Guardar cambios</button>
+                <button type="submit" class="btn btn-default">Guardar cambios</button>
             </div>
     </div>
 </div >
