@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for
 import database as db
 
-app = Flask(__name__, template_folder="C:\\Users\\lenovo\\OneDrive\\Desktop\\UNIAGUSTINIANA\\Proyecto\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
+app = Flask(__name__, template_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
 
 # Ruta para la página de inicio
 @app.route("/")
@@ -100,7 +100,37 @@ def addGuardarVenta():
 
 @app.route("/clientes")
 def clientes():
-    return render_template("clientes.html")
+    db_connection, cursor = db.conectar_bd()
+    cursor.execute("SELECT * FROM clientes")
+    myresult = cursor.fetchall()
+    #convertir datos a diccionary 
+    insertObjec = []
+    columnNames = [column[0] for column in cursor.description]
+    for record in myresult:
+            insertObjec.append(dict(zip(columnNames, record)))
+    cursor.close() 
+    return render_template("clientes.html", data=insertObjec)
+
+#Ruta para guardar CLIENTES
+@app.route('/guardarClientes', methods=['POST'])
+def addGuardarClientes():    
+     id_cliente = request.form['id_cliente']
+     tipo_identificacion = request.form['tipo_identificacion']
+     numero_identificacion = request.form['numero_identificacion']
+     nombre_completo = request.form['nombre_completo']
+     email = request.form['email']
+     direccion = request.form['direccion']
+     telefono = request.form['telefono']
+    
+     if id_cliente and tipo_identificacion and numero_identificacion and nombre_completo and  email and direccion and  telefono :
+        db_connection, cursor = db.conectar_bd()
+        sql = "INSERT INTO clientes (id_cliente,tipo_identificacion,numero_identificacion,nombre_completo, email,direccion, telefono) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_cliente,tipo_identificacion,numero_identificacion,nombre_completo,email,direccion,telefono)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+     return redirect(url_for('clientes'))
 
 @app.route("/proveedores")
 def proveedores():
