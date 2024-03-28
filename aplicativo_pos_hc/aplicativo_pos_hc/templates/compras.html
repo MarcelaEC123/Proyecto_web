@@ -57,6 +57,8 @@
                     <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
                     <img src="/static/images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
                     <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon">
+                    
+
                     <input type="text" id="search-input" placeholder="Buscar...">
                 </div>
                 
@@ -83,6 +85,7 @@
                                 <td>{{d.valor_unitario}}</td>
                                 <td>{{d.valor_total}}</td>
                                 <td><a href="{{url_for('deleteCompra', id_compra=d.id_venta)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
+                               
                             </tr>
                         {% endfor %}
                     </tbody>

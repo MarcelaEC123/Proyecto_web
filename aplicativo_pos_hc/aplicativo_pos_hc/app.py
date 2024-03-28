@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for
 import database as db
 
 app = Flask(__name__, template_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
-
+app = Flask(__name__, static_folder="C:\\Users\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\static")
 # Ruta para la página de inicio
 @app.route("/")
 def index():
@@ -75,6 +75,7 @@ def caja():
 @app.route('/guardarVenta', methods=['POST'])
 def addGuardarVenta():    
      id_venta = request.form['id_venta']
+     id_factura= request.form['id_factura']
      codigo = request.form['codigo']
      descripcion = request.form['descripcion']
      valor_unitario = request.form['valor_unitario']
@@ -87,10 +88,10 @@ def addGuardarVenta():
      fecha_registro = request.form['fecha_registro']
      observaciones = request.form['observaciones']
      
-     if id_venta and codigo and descripcion and valor_unitario and medio_pago and descuento and id_cliente and cantidad and iva and total_a_pagar and fecha_registro and observaciones:
+     if id_venta and id_factura and codigo and descripcion and valor_unitario and medio_pago and descuento and id_cliente and cantidad and iva and total_a_pagar and fecha_registro and observaciones:
         db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO venta (id_venta,codigo,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        data = (id_venta,codigo,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones,)
+        sql = "INSERT INTO venta (id_venta,id_factura,codigo,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_venta,id_factura,codigo,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones,)
         cursor.execute(sql, data)
         db_connection.commit()
         cursor.close()
@@ -107,6 +108,53 @@ def deleteVenta (id_venta):
         cursor.close()
         db_connection.close()
         return redirect(url_for('caja'))
+
+# @app.route("/generar_ticket/<int:id_venta>")
+# def generar_ticket(id_venta):
+    
+#         # Conectar a la base de datos y crear un cursor
+#         db_connection, cursor = db.conectar_bd()
+
+#         # Ejecutar la consulta SQL
+#         cursor.execute("SELECT * FROM venta")
+        
+#         # Obtener los resultados de la consulta
+#         myresult = cursor.fetchall()
+        
+#         # Imprimir los resultados para revisar el formato de los datos
+#         print(myresult)
+        
+#         # Cerrar el cursor y la conexión
+#         cursor.close()
+#         db_connection.close()
+        
+#         # Convertir los datos a un formato adecuado, si es necesario
+#         insertObjec = []
+#         columnNames = [column[0] for column in cursor.description]
+#         for record in myresult:
+#             insertObjec.append(dict(zip(columnNames, record)))
+        
+#         # Renderizar la plantilla HTML con los datos recuperados
+#         return render_template("factura.html", data=insertObjec)
+
+@app.route("/generar_ticket/<int:id_venta>")
+def generar_ticket(id_venta):
+    # Conectar a la base de datos y crear un cursor
+    db_connection, cursor = db.conectar_bd()
+
+    # Ejecutar la consulta SQL para seleccionar los registros relevantes de la tabla de ventas
+    cursor.execute("SELECT cantidad, descripcion, valor_unitario FROM venta WHERE id_venta = %s", (id_venta,))
+    
+    # Obtener los resultados de la consulta
+    venta_data = cursor.fetchall()
+
+    # Cerrar el cursor y la conexión
+    cursor.close()
+    db_connection.close()
+    
+    # Renderizar la plantilla HTML con los datos recuperados
+    return render_template("factura.html", productos=venta_data)    
+
 
 
 @app.route("/clientes")

@@ -65,6 +65,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <th scope="col">Id_venta</th> 
+                            <th scope="col">Id_Factura</th> 
                             <th scope="col">Codigo</th>
                             <th scope="col">Descripcion</th> 
                             <th scope="col">Valor_Unitario</th> 
@@ -76,13 +77,14 @@
                             <th scope="col">Total_a_pagar</th>
                             <th scope="col">Fecha_Registro</th>
                             <th scope="col">Observaciones</th>
-                            <th scope="col" colspan="2">Acciones</th> 
+                            <th scope="col" colspan="3">Acciones</th> 
                         </thead>
                     
                     <tbody >
                         {% for d in data %}
                             <tr>
                                 <td>{{d.id_venta}}</td>
+                                <td>{{d.id_factura}}</td>
                                 <td>{{d.codigo}}</td>
                                 <td>{{d.descripcion}}</td>
                                 <td>{{d.valor_unitario}}</td>
@@ -94,7 +96,9 @@
                                 <td>{{d.total_a_pagar}}</td>
                                 <td>{{d.fecha_registro}}</td>
                                 <td>{{d.observaciones}}</td>
+                                <td><a href="{{ url_for('generar_ticket',id_venta=d.id_venta) }}"class="btn btn-primary btn-sm">Ticket</a></td>
                                 <td><a href="{{url_for('deleteVenta', id_venta=d.id_venta)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -114,6 +118,10 @@
                     <div class="form-group">
                         <label for="id_venta">Id_venta</label>
                         <input type="text" id="id_venta" name="id_venta">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_factura">Id_Factura</label>
+                        <input type="text" id="id_factura" name="id_factura">
                     </div>
                     <div class="form-group">
                         <label for="codigo">Código:</label>

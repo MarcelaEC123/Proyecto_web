@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="./static/css/factura.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/factura.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    <title>Factura de Venta</title>
+ 
+</head>
+<style>
+    /* Estilos CSS */
+body {
+    font-family: Arial, sans-serif;
+    margin: 10px; /* Margen en todos los lados */
+    padding: 0;
+    width: 80mm; /* Ancho del papel */
+}
+/* Define los estilos para cada sección de la factura */
+header, section, footer {
+    padding: 5px;
+}
+/* Define los estilos para los elementos de texto */
+p, h1, h2, h3, table {
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    font-size: 14pt;
+    text-align: center;
+    margin-bottom: 10px;
+}
+h2 {
+    font-size: 12pt;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+h3 {
+    font-size: 11pt; /* Ajustar el tamaño del total a pagar */
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-weight: bold; /* Hacer el total a pagar en negrita */
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+th, td {
+    border: 1px solid #000;
+    padding: 3px;
+}
+/* Línea de corte */
+.corte {
+    border-top: 1px dashed #000;
+    margin-top: 10px; /* Espacio entre la línea de corte y el contenido */
+}
+/* Logo en el encabezado */
+.logo {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.logo img {
+    max-width: 100px; /* Ajusta el tamaño del logo según sea necesario */
+}
+/* Estilos para las secciones */
+.seccion {
+    margin-bottom: 10px;
+    text-align: center; /* Centra el contenido de las secciones */
+}
+/* Estilos para las líneas entrecortadas */
+.linea-entrecortada {
+    border-bottom: 1px dashed #000;
+    margin-bottom: 5px;
+}
+/* Otros estilos */
+footer {
+    text-align: center;
+}
+
+</style>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <div class="logo">
+            <img src="/static/images/logo.png" alt="Logo">
+        </div>
+        <h1>Factura de Venta</h1>
+        <!-- Información de la compañia -->
+        <div class="seccion">
+            <h2>SALSAMENTARIA LA MEJOR</h2>
+            <p>NIT: 00000000-0</p>
+            <p>Dirección: Calle 10 SUR # 37B - 32</p>
+            <p>Ciudad: Bogotá</p>
+            <p>Teléfono: 3028635366</p>
+            <div class="linea-entrecortada"></div>
+        </div>
+        <!-- Información de la Factura -->
+        <div class="seccion">
+            <h2>Información de la Factura</h2>
+            <!-- Mostrar los detalles de la venta -->
+            <p>Número de Factura: {{ productos[0]['id_factura'] }}</p> <!-- Ajusta el índice según la estructura de tus datos -->
+            <p>Fecha de Factura: {{ productos[0]['fecha_registro'] }}</p> <!-- Ajusta el índice según la estructura de tus datos -->
+            <div class="linea-entrecortada"></div>
+        </div>
+    </header>
+
+    <!-- Detalle de los Productos -->
+    <section>
+        <h2>Detalle de los Productos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cantidad</th>
+                    <th>Descripción</th>
+                    <th>Valor Unitario (COP)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto['cantidad'] }}</td> <!-- Accede al atributo usando la notación de punto -->
+                    <td>{{ producto['descripcion'] }}</td> <!-- Accede al atributo usando la notación de punto -->
+                    <td>{{ producto['valor_unitario'] }}</td> <!-- Accede al atributo usando la notación de punto -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Línea de corte -->
+    <div class="corte"></div>
+
+    <!-- Totales -->
+    <section>
+        <h2>Totales</h2>
+        <!-- Mostrar el total de la venta -->
+        <p>Total a Pagar: COP {{ productos[0]['total_a_pagar'] }}</p> <!-- Ajusta el índice según la estructura de tus datos -->
+        <div class="linea-entrecortada"></div>
+    </section>
+
+    <!-- Pie de Página -->
+    <footer>
+        <h2>Gracias por su compra.</h2>
+    </footer>
+</body>
+</html>
