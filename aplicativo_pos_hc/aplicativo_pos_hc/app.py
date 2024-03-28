@@ -270,10 +270,40 @@ def addGuardarCompra():
 def venta_historico():
     return render_template("ventaHistorico.html")
 
-@app.route("/registro")
-def registro():
-    return render_template("registro.html")
+@app.route("/usuarios")
+def usuarios():
+     db_connection, cursor = db.conectar_bd()
+     cursor.execute("SELECT * FROM usuarios")
+     myresult = cursor.fetchall()
+     #convertir datos a diccionary 
+     insertObjec = []
+     columnNames = [column[0] for column in cursor.description]
+     for record in myresult:
+            insertObjec.append(dict(zip(columnNames, record)))
+     cursor.close()   
+     return render_template("usuarios.html", data=insertObjec)
+  
+#Ruta para guardar USUARIOS
+@app.route('/guardarUsuario', methods=['POST'])
+def addGuardarUsuario():    
+     nombre = request.form['nombre']
+     tipo_Identificacion = request.form['tipo_Identificacion']
+     numero_identificacion = request.form['numero_identificacion']
+     telefono = request.form['telefono']
+     email = request.form['email']
+     usuario = request.form['usuario']
+     contrasenia = request.form['contrasenia']
+     tipo_usuario = request.form['tipo_usuario']
 
+     if nombre and tipo_Identificacion and numero_identificacion and telefono and email and usuario and contrasenia and tipo_usuario:
+        db_connection, cursor = db.conectar_bd()
+        sql = "INSERT INTO usuarios (nombre,tipo_Identificacion,numero_identificacion,telefono,email,usuario,contrasenia,tipo_usuario) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (nombre,tipo_Identificacion,numero_identificacion,telefono,email,usuario,contrasenia,tipo_usuario)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+     return redirect(url_for('usuarios'))
 
 if __name__ == "__main__":
     app.run(debug=True)
