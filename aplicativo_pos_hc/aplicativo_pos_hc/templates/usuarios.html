@@ -62,6 +62,7 @@
                 
                     <table class="table table-bordered">
                         <thead>
+                            <th scope="col">Id_usuario</th>
                             <th scope="col">Nombre</th> 
                             <th scope="col">Tipo_Identificacion</th>
                             <th scope="col">Numero_identificacion</th> 
@@ -76,21 +77,22 @@
                     <tbody >
                         {% for d in data %}
                             <tr>
+                                <td>{{d.id_usuario}}</td>
                                 <td>{{d.nombre}}</td>
                                 <td>{{d.tipo_Identificacion}}</td>
                                 <td>{{d.numero_identificacion}}</td>
                                 <td>{{d.telefono}}</td>
                                 <td>{{d.email}}</td>
                                 <td>{{d.usuario}}</td>
-                                <td>{{d.contrasenia}}</td>
+                                <td>************</td>
                                 <td>{{d.tipo_usuario}}</td>
-                                <td><a href="{{url_for('deleteUsuarios', nombre=d.nombre)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                <td><a href="{{url_for('deleteUsuarios', id_usuario=d.id_usuario)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
                                 </tr>
                         {% endfor %}
                     </tbody>
                     </table>
         </div>
-         <!-- Ventana modal agregar venta -->
+         <!-- Ventana modal agregar usuario -->
          <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">×</span>
@@ -100,13 +102,22 @@
         </div>
         <div class="modal-body">
                 <div class="caja1">
+                     <div class="form-group">
+                        <label for="id_usuario">Id_usuario:</label>
+                        <input type="text" id="id_usuario" name="id_usuario" value="{{ next_id }}" readonly>
+                    </div>
                     <div class="form-group">
                         <label for="nombre">nombre:</label>
                         <input type="text" id="nombre" name="nombre">
                     </div>
                     <div class="form-group">
-                        <label for="tipo_Identificacion">tipo_Identificacion:</label>
-                        <input type="text" id="tipo_Identificacion" name="tipo_Identificacion">
+                        <label for="tipo_Identificacion">Tipo Identificacion:</label>
+                        <select id="tipo_Identificacion" name="tipo_Identificacion">
+                            <option value="cc">CC</option>
+                            <option value="ce">CE</option>
+                            <option value="nit">NIT</option>
+                            <option value="rc">RC</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="numero_identificacion">numero_identificacion:</label>
@@ -127,13 +138,16 @@
                         <input type="text" id="usuario" name="usuario">
                     </div>
                     <div class="form-group">
-                        <label for="contrasenia">contrasenia:</label>
-                        <input type="text" id="contrasenia" name="contrasenia">
-                    </div>
+                        <label for="contrasenia">Contraseña:</label>
+                        <input type="password" id="contrasenia" name="contrasenia">
+                    </div>                    
                     <div class="form-group">
                         <label for="tipo_usuario">tipo_usuario:</label>
-                        <input type="text" id="tipo_usuario" name="tipo_usuario">
-                    </div>
+                        <select id="tipo_usuario" name="tipo_usuario">
+                            <option value="cc">Administrador</option>
+                            <option value="ce">Vendedor</option>
+                        </select>
+                     </div>
                  </div>
             </div>
             <div class="modal-footer">
