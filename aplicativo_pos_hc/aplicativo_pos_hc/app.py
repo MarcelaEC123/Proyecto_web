@@ -87,7 +87,6 @@ def addGuardarVenta():
      fecha_registro = request.form['fecha_registro']
      observaciones = request.form['observaciones']
      
-
      if id_venta and codigo and descripcion and valor_unitario and medio_pago and descuento and id_cliente and cantidad and iva and total_a_pagar and fecha_registro and observaciones:
         db_connection, cursor = db.conectar_bd()
         sql = "INSERT INTO venta (id_venta,codigo,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
@@ -97,6 +96,18 @@ def addGuardarVenta():
         cursor.close()
         db_connection.close()
      return redirect(url_for('caja'))
+
+@app.route('/deleteVenta/<string:id_venta>')
+def deleteVenta (id_venta):
+        db_connection, cursor = db.conectar_bd()
+        sql = "DELETE FROM venta WHERE id_venta=%s"
+        data = (id_venta,)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return redirect(url_for('caja'))
+
 
 @app.route("/clientes")
 def clientes():
@@ -131,6 +142,17 @@ def addGuardarClientes():
         cursor.close()
         db_connection.close()
      return redirect(url_for('clientes'))
+
+@app.route('/deleteCliente/<string:id_cliente>')
+def deleteCliente (id_cliente):
+        db_connection, cursor = db.conectar_bd()
+        sql = "DELETE FROM clientes WHERE id_cliente=%s"
+        data = (id_cliente,)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return redirect(url_for('clientes'))
 
 @app.route("/proveedores")
 def proveedores():
@@ -168,6 +190,16 @@ def addGuardarPreveedores():
         db_connection.close()
      return redirect(url_for('proveedores'))
 
+@app.route('/deleteProveedor/<string:id_proveedor>')
+def deleteProveedor (id_proveedor):
+        db_connection, cursor = db.conectar_bd()
+        sql = "DELETE FROM proveedor WHERE id_proveedor=%s"
+        data = (id_proveedor,)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return redirect(url_for('proveedores'))
 
 @app.route("/productos")
 def productos():
@@ -266,6 +298,17 @@ def addGuardarCompra():
         db_connection.close()
      return redirect(url_for('compras'))
 
+@app.route('/deleteCompra/<string:id_compra>')
+def deleteCompra(id_compra):
+        db_connection, cursor = db.conectar_bd()
+        sql = "DELETE FROM compras WHERE id_compra=%s"
+        data = (id_compra,)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return redirect(url_for('compras'))
+
 @app.route("/venta_historico")
 def venta_historico():
     return render_template("ventaHistorico.html")
@@ -304,6 +347,17 @@ def addGuardarUsuario():
         cursor.close()
         db_connection.close()
      return redirect(url_for('usuarios'))
+
+@app.route('/deleteUsuarios/<string:nombre>')
+def deleteUsuario(nombre):
+        db_connection, cursor = db.conectar_bd()
+        sql = "DELETE FROM usuarios WHERE nombre=%s"
+        data = (nombre,)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return redirect(url_for('usuarios'))
 
 if __name__ == "__main__":
     app.run(debug=True)
