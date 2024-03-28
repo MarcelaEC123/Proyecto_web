@@ -5,7 +5,7 @@ def conectar_bd():
     database = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="",
+        password="SQLMARCE2022.",
         database="Aplicativo_POS_final"
     )
     cursor = database.cursor()

@@ -72,12 +72,12 @@
                     <div class="modal-body">
                         <div class="caja1">
                             <div class="form-group">
-                                    <label for="id_producto">Id Producto: </label>
-                                <input type="text" id="id_producto" name="id_producto">
+                                <label for="id_producto">Id Producto: </label>
+                                <input type="text" id="id_producto" name="id_producto" value="{{ next_id }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="codigo">Codigo: </label>
-                                <input type="text" id="codigo" name="codigo">
+                                <input type="text" id="codigo" name="codigo" value="{{ new_code }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="descripcion">Descripcion: </label>

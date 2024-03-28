@@ -1,8 +1,8 @@
 from flask import Flask, request, render_template, redirect, url_for
 import database as db
 
-app = Flask(__name__, template_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
-app = Flask(__name__, static_folder="C:\\Users\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\static")
+app = Flask(__name__, template_folder="C:\\Users\\lenovo\\OneDrive\\Desktop\\UNIAGUSTINIANA\\Proyecto\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
+
 # Ruta para la página de inicio
 @app.route("/")
 def index():
@@ -249,39 +249,83 @@ def deleteProveedor (id_proveedor):
         db_connection.close()
         return redirect(url_for('proveedores'))
 
+#Ruta para guardar PRODUCTOS
 @app.route("/productos")
 def productos():
-     db_connection, cursor = db.conectar_bd()
-     cursor.execute("SELECT * FROM producto")
-     myresult = cursor.fetchall()
-     #convertir datos a diccionary 
-     insertObjec = []
-     columnNames = [column[0] for column in cursor.description]
-     for record in myresult:
-            insertObjec.append(dict(zip(columnNames, record)))
-     cursor.close()   
-     return render_template("productos.html", data=insertObjec)
-  
+    db_connection, cursor = db.conectar_bd()
+    
+    # Obtener el próximo valor autoincremental de id_producto
+    cursor.execute("SHOW TABLE STATUS LIKE 'producto'")
+    table_status = cursor.fetchone()
+    next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
+    
+    # Contar la cantidad de registros
+    cursor.execute("SELECT COUNT(*) FROM producto")
+    count = cursor.fetchone()[0]
+
+    if count == 0:
+        next_id = 1  # Si no hay registros, comenzar desde 1
+    else:
+        # Obtener el último ID y ajustar para el siguiente ID
+        cursor.execute("SELECT MAX(id_producto) FROM producto")
+        last_id = cursor.fetchone()[0]
+        next_id = last_id + 1
+    
+    # Generar el nuevo código
+    cursor.execute("SELECT MAX(codigo) FROM producto")
+    last_code = cursor.fetchone()[0]
+    if last_code:
+        new_code = str(int(last_code) + 1).zfill(4)  # Incrementar el último código y rellenar con ceros
+    else:
+        new_code = "0001"  # Si no hay códigos en la base de datos, iniciar desde "0001"
+    
+    # Obtener los productos existentes
+    cursor.execute("SELECT * FROM producto")
+    myresult = cursor.fetchall()
+    
+    # Convertir datos a diccionario
+    insertObjec = []
+    columnNames = [column[0] for column in cursor.description]
+    for record in myresult:
+        insertObjec.append(dict(zip(columnNames, record)))
+    
+    cursor.close()
+    
+    return render_template("productos.html", data=insertObjec, next_id=next_id, new_code=new_code)
+
 #Ruta para guardar productos
 @app.route('/guardar', methods=['POST'])
 def addGuardar():    
-     id_producto = request.form['id_producto']
-     codigo = request.form['codigo']
-     descripcion = request.form['descripcion']
-     categoria = request.form['categoria']
-     proveedor = request.form['proveedor']
-     valorUnitario = request.form['valor_unitario']
-     unidadMedida = request.form['unidad_medida']
+    # Obtener los datos del formulario
+    descripcion = request.form['descripcion']
+    categoria = request.form['categoria']
+    proveedor = request.form['proveedor']
+    valorUnitario = request.form['valor_unitario']
+    unidadMedida = request.form['unidad_medida']
 
-     if id_producto and codigo and descripcion and categoria and proveedor and valorUnitario and unidadMedida:
-        db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO producto (id_producto,codigo,descripcion,categoria,proveedor,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s,%s)"
-        data = (id_producto,codigo,descripcion,categoria,proveedor,valorUnitario,unidadMedida)
+    # Obtener el último código de la base de datos
+    db_connection, cursor = db.conectar_bd()
+    cursor.execute("SELECT MAX(codigo) FROM producto")
+    last_code = cursor.fetchone()[0]
+
+    # Generar el nuevo código
+    if last_code:
+        new_code = str(int(last_code) + 1).zfill(4)  # Incrementar el último código y rellenar con ceros
+    else:
+        new_code = "0001"  # Si no hay códigos en la base de datos, iniciar desde "0001"
+
+    # Verificar que los campos no estén vacíos
+    if descripcion and categoria and proveedor and valorUnitario and unidadMedida:
+        sql = "INSERT INTO producto (codigo, descripcion, categoria, proveedor, valor_unitario, unidad_medida) VALUES (%s, %s, %s, %s, %s, %s)"
+        data = (new_code, descripcion, categoria, proveedor, valorUnitario, unidadMedida)
         cursor.execute(sql, data)
         db_connection.commit()
-        cursor.close()
-        db_connection.close()
-     return redirect(url_for('productos'))
+    
+    cursor.close()
+    db_connection.close()
+    
+    return redirect(url_for('productos'))
+
 
 @app.route('/deleteProducto/<string:id_producto>')
 def delete (id_producto):
@@ -313,6 +357,8 @@ def editar(id_producto):
         db_connection.close()
     return redirect(url_for('productos'))
 
+
+#Ruta para guardar COMPRAS
 @app.route("/compras")
 def compras():
      db_connection, cursor = db.conectar_bd()
@@ -361,51 +407,121 @@ def deleteCompra(id_compra):
 def venta_historico():
     return render_template("ventaHistorico.html")
 
+# Ruta para mostrar usuarios
 @app.route("/usuarios")
 def usuarios():
-     db_connection, cursor = db.conectar_bd()
-     cursor.execute("SELECT * FROM usuarios")
-     myresult = cursor.fetchall()
-     #convertir datos a diccionary 
-     insertObjec = []
-     columnNames = [column[0] for column in cursor.description]
-     for record in myresult:
-            insertObjec.append(dict(zip(columnNames, record)))
-     cursor.close()   
-     return render_template("usuarios.html", data=insertObjec)
-  
-#Ruta para guardar USUARIOS
+    db_connection, cursor = db.conectar_bd()
+    
+    # Obtener el último ID insertado antes de eliminar registros
+    cursor.execute("SELECT MAX(id_usuario) FROM usuarios")
+    last_id = cursor.fetchone()[0]
+
+    # Calcular el próximo ID
+    if last_id is None:
+        next_id = 1
+    else:
+        next_id = last_id + 1
+    
+    # Obtener los usuarios existentes
+    cursor.execute("SELECT * FROM usuarios")
+    myresult = cursor.fetchall()
+    
+    # Convertir datos a diccionario
+    insertObjec = []
+    columnNames = [column[0] for column in cursor.description]
+    for record in myresult:
+        insertObjec.append(dict(zip(columnNames, record)))
+    
+    cursor.close()
+    
+    return render_template("usuarios.html", data=insertObjec, next_id=next_id)
+
+# Ruta para guardar usuarios
 @app.route('/guardarUsuario', methods=['POST'])
 def addGuardarUsuario():    
-     nombre = request.form['nombre']
-     tipo_Identificacion = request.form['tipo_Identificacion']
-     numero_identificacion = request.form['numero_identificacion']
-     telefono = request.form['telefono']
-     email = request.form['email']
-     usuario = request.form['usuario']
-     contrasenia = request.form['contrasenia']
-     tipo_usuario = request.form['tipo_usuario']
+    nombre = request.form['nombre']
+    tipo_Identificacion = request.form['tipo_Identificacion']
+    numero_identificacion = request.form['numero_identificacion']
+    telefono = request.form['telefono']
+    email = request.form['email']
+    usuario = request.form['usuario']
+    contrasenia = request.form['contrasenia']
+    tipo_usuario = request.form['tipo_usuario']
 
-     if nombre and tipo_Identificacion and numero_identificacion and telefono and email and usuario and contrasenia and tipo_usuario:
+    if nombre and tipo_Identificacion and numero_identificacion and telefono and email and usuario and contrasenia and tipo_usuario:
+        # Conectar a la base de datos
         db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO usuarios (nombre,tipo_Identificacion,numero_identificacion,telefono,email,usuario,contrasenia,tipo_usuario) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
-        data = (nombre,tipo_Identificacion,numero_identificacion,telefono,email,usuario,contrasenia,tipo_usuario)
+
+        # Obtener el último ID insertado antes de eliminar registros
+        cursor.execute("SELECT MAX(id_usuario) FROM usuarios")
+        last_id = cursor.fetchone()[0]
+
+        # Calcular el próximo ID
+        if last_id is None:
+            next_id = 1
+        else:
+            next_id = last_id + 1
+
+        # Insertar el nuevo usuario en la tabla usuarios
+        sql = "INSERT INTO usuarios (id_usuario, nombre, tipo_Identificacion, numero_identificacion, telefono, email, usuario, contrasenia, tipo_usuario) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        data = (next_id, nombre, tipo_Identificacion, numero_identificacion, telefono, email, usuario, contrasenia, tipo_usuario)
         cursor.execute(sql, data)
         db_connection.commit()
+
+        # Cerrar la conexión
         cursor.close()
         db_connection.close()
-     return redirect(url_for('usuarios'))
 
-@app.route('/deleteUsuarios/<string:nombre>')
-def deleteUsuario(nombre):
+    return redirect(url_for('usuarios'))
+
+
+
+@app.route('/deleteUsuarios/<string:id_usuario>')
+def deleteUsuarios(id_usuario):
         db_connection, cursor = db.conectar_bd()
-        sql = "DELETE FROM usuarios WHERE nombre=%s"
-        data = (nombre,)
+        sql = "DELETE FROM usuarios WHERE id_usuario=%s"
+        data = (id_usuario,)
         cursor.execute(sql, data)
         db_connection.commit()
         cursor.close()
         db_connection.close()
         return redirect(url_for('usuarios'))
+# @app.route("/usuarios")
+# def usuarios():
+#      db_connection, cursor = db.conectar_bd()
+#      cursor.execute("SELECT * FROM usuarios")
+#      myresult = cursor.fetchall()
+#      #convertir datos a diccionary 
+#      insertObjec = []
+#      columnNames = [column[0] for column in cursor.description]
+#      for record in myresult:
+#             insertObjec.append(dict(zip(columnNames, record)))
+#      cursor.close()   
+#      return render_template("usuarios.html", data=insertObjec)
+  
+# #Ruta para guardar USUARIOS
+# @app.route('/guardarUsuario', methods=['POST'])
+# def addGuardarUsuario():    
+#      nombre = request.form['nombre']
+#      tipo_Identificacion = request.form['tipo_Identificacion']
+#      numero_identificacion = request.form['numero_identificacion']
+#      telefono = request.form['telefono']
+#      email = request.form['email']
+#      usuario = request.form['usuario']
+#      contrasenia = request.form['contrasenia']
+#      tipo_usuario = request.form['tipo_usuario']
+
+#      if nombre and tipo_Identificacion and numero_identificacion and telefono and email and usuario and contrasenia and tipo_usuario:
+#         db_connection, cursor = db.conectar_bd()
+#         sql = "INSERT INTO usuarios (nombre,tipo_Identificacion,numero_identificacion,telefono,email,usuario,contrasenia,tipo_usuario) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+#         data = (nombre,tipo_Identificacion,numero_identificacion,telefono,email,usuario,contrasenia,tipo_usuario)
+#         cursor.execute(sql, data)
+#         db_connection.commit()
+#         cursor.close()
+#         db_connection.close()
+#      return redirect(url_for('usuarios'))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
