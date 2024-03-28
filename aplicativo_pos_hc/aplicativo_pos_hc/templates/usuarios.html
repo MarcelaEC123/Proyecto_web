@@ -1,3 +1,4 @@
+<!-- usuarios.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,8 +7,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwF3tBdYF4JcJjU4pN3nI9an2P+iK8a/1qdzNm5/lf7dUq0HfdvpBfB5SvOzJ4tv" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
-    <title>Registro de Nuevo Usuario</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Página con Menú</title>
 </head>
 <body>
     <div class="wrapper">
@@ -40,130 +41,110 @@
                 <br>
                 <li><a href="{{ url_for('venta_historico') }}"><i class="fas fa-box"></i> ventasHistorico</a></li>
                 <br>
-                <li><a href="{{ url_for('registro') }}"><i class="fas fa-box"></i> Usuarios</a></li>
+                <li><a href="{{ url_for('usuarios') }}"><i class="fas fa-box"></i> Usuarios</a></li>
             </ul>
             
            
         </div>
         <a href="{{ url_for('logout') }}" class="logout-link">
             <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-        </a>
-
+        </a>       
           
-        <div class="content">
+        <div class="content d-flex flex-column " >
             <!-- Contenido principal -->
-            <h3>Usuarios</h3>
-            <div class="horizontal-bar">
-                <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
-                <img src="/static/images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
-
-                <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon"  onclick="openConfirmationModal()">
-                <input type="text" id="search-input" placeholder="Buscar...">
-            </div>
-        </div>
-
-        <!-- Ventana modal -->
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">×</span>
-        <div class="modal-header">
-            <h2>Nuevo usuario</h2>
-        </div>
-        <div class="modal-body">
-                <div class="caja1">
-                    <div class="form-group">
-                        <label for="codigo">Tipo de Identificacion:</label>
-                        <select id="codigo" name="codigo">
-                            <option value="cc">CC</option>
-                            <option value="ce">CE</option>
-                            <option value="nit">NIT</option>
-                            <option value="rc">RC</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="descripcion">Identificacion:</label>
-                        <input type="text" id="Identificacion" name="Identificacion">
-                    </div>
-                    <div class="form-group">
-                        <label for="venta_id">Nombre:     </label>
-                        <input type="text" id="cliente_id" name="cliente_id">
-                    </div>
-                    <div class="form-group">
-                        <label for="valor_unitario">Usuario:</label>
-                        <input type="text" id="Nombre" name="Nombre">
-                    </div>
-                    
-                </div>
-                <div class="caja1">
-                    <div class="form-group">
-                        <label for="descuento">Contraseña:</label>
-                        <input type="text" id="descuento" name="descuento">
-                    </div>
-                    <div class="form-group">
-                        <label for="medio_pago">Tipo Usuario:</label>
-                        <input type="text" id="Email" name="Email">
-                    </div>            
-                </div>
-            </div>
-    
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-default">Guardar cambios</button>
-            </div>
-    </div>
-</div >
-<!-- Ventana modal2 -->
-<div id="myModal2" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal2()">×</span>
-        <div class="modal-header">
-            <h2>Editar Usuario</h2>
-        </div>
-        <div class="modal-body">
-            <div class="caja1">
-                <div class="form-group">
-                    <label for="codigo">Tipo de Identificacion:</label>
-                    <select id="codigo" name="codigo">
-                        <option value="cc">CC</option>
-                        <option value="ce">CE</option>
-                        <option value="nit">NIT</option>
-                        <option value="rc">RC</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="descripcion">Identificacion:</label>
-                    <input type="text" id="Identificacion" name="Identificacion">
-                </div>
-                <div class="form-group">
-                    <label for="venta_id">Nombre:     </label>
-                    <input type="text" id="cliente_id" name="cliente_id">
-                </div>
-                <div class="form-group">
-                    <label for="valor_unitario">Usuario:</label>
-                    <input type="text" id="Nombre" name="Nombre">
+            <h3>Usuarios</h3>     
+                <div class="horizontal-bar my-4 d-flex py-2 justify-content-end " >
+                    <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
+                    <img src="/static/images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
+                    <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon">
+                    <input type="text" id="search-input" placeholder="Buscar...">
                 </div>
                 
-            </div>
-            <div class="caja1">
-                <div class="form-group">
-                    <label for="descuento">Contraseña:</label>
-                    <input type="text" id="descuento" name="descuento">
+                    <table class="table table-bordered">
+                        <thead>
+                            <th scope="col">Nombre</th> 
+                            <th scope="col">Tipo_Identificacion</th>
+                            <th scope="col">Numero_identificacion</th> 
+                            <th scope="col">Telefono</th> 
+                            <th scope="col">Email</th> 
+                            <th scope="col">Usuario</th> 
+                            <th scope="col">Contrasenia</th>
+                            <th scope="col">Tipo_usuario</th>
+                            <th scope="col" colspan="2">Acciones</th> 
+                        </thead>
+                    
+                    <tbody >
+                        {% for d in data %}
+                            <tr>
+                                <td>{{d.nombre}}</td>
+                                <td>{{d.tipo_Identificacion}}</td>
+                                <td>{{d.numero_identificacion}}</td>
+                                <td>{{d.telefono}}</td>
+                                <td>{{d.email}}</td>
+                                <td>{{d.usuario}}</td>
+                                <td>{{d.contrasenia}}</td>
+                                <td>{{d.tipo_usuario}}</td>
+                                </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+        </div>
+         <!-- Ventana modal agregar venta -->
+         <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">×</span>
+                <form action="/guardarUsuario" id="venta_form" method="post" >
+                    <div class="modal-header">
+            <h2>Nuevo Usuario</h2>
+        </div>
+        <div class="modal-body">
+                <div class="caja1">
+                    <div class="form-group">
+                        <label for="nombre">nombre:</label>
+                        <input type="text" id="nombre" name="nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_Identificacion">tipo_Identificacion:</label>
+                        <input type="text" id="tipo_Identificacion" name="tipo_Identificacion">
+                    </div>
+                    <div class="form-group">
+                        <label for="numero_identificacion">numero_identificacion:</label>
+                        <input type="text" id="numero_identificacion" name="numero_identificacion">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">telefono:</label>
+                        <input type="text" id="telefono" name="telefono">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="medio_pago">Tipo Usuario:</label>
-                    <input type="text" id="Email" name="Email">
-                </div>            
+                <div class="caja1">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="text" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="usuario">usuario:</label>
+                        <input type="text" id="usuario" name="usuario">
+                    </div>
+                    <div class="form-group">
+                        <label for="contrasenia">contrasenia:</label>
+                        <input type="text" id="contrasenia" name="contrasenia">
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_usuario">tipo_usuario:</label>
+                        <input type="text" id="tipo_usuario" name="tipo_usuario">
+                    </div>
+                 </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-default">Guardar cambios</button>
-        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn btn-default">Guardar cambios</button>
+            </div>
     </div>
 </div>
 
- <!-- Ventana modal -->
- <div id="myModal" class="modalEliminacion">
+
+ <!-- Ventana modal Eliminar -->
+ <!-- <div id="myModal" class="modalEliminacion">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">×</span>
         <div class="modal-header-eliminacion">
@@ -179,7 +160,7 @@
     </div>
 </div>
 
-</div>
+</div> -->
 
 <script>
 // Función para abrir la ventana modal de confirmación

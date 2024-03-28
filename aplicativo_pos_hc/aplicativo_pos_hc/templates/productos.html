@@ -41,7 +41,7 @@
                 <br>
                 <li><a href="{{ url_for('venta_historico') }}"><i class="fas fa-box"></i> ventasHistorico</a></li>
                 <br>
-                <li><a href="{{ url_for('registro') }}"><i class="fas fa-box"></i> registro</a></li>
+                <li><a href="{{ url_for('usuarios') }}"><i class="fas fa-box"></i> registro</a></li>
             </ul>
             
            
@@ -61,38 +61,7 @@
                     <input type="text" id="search-input" placeholder="Buscar...">
                 </div>
                 
-                    <table class="table table-bordered">
-                        <thead>
-                            <th scope="col">Id_Producto</th> 
-                            <th scope="col">Codigo</th>
-                            <th scope="col">Descripcion</th> 
-                            <th scope="col">Categoria</th> 
-                            <th scope="col">Proveedor</th> 
-                            <th scope="col">Unidad_medida</th> 
-                            <th scope="col">Valor_unitario</th> 
-                            <th scope="col" colspan="2">Acciones</th> 
-                        </thead>
-                    
-                    <tbody >
-                        {% for d in data %}
-                            <tr>
-                                <td>{{d.id_producto}}</td>
-                                <td>{{d.codigo}}</td>
-                                <td>{{d.descripcion}}</td>
-                                <td>{{d.categoria}}</td>
-                                <td>{{d.proveedor}}</td>
-                                <td>{{d.unidad_medida}}</td>
-                                <td>{{d.valor_unitario}}</td>
-                                <td><a href="{{ url_for('editar_producto', id_producto=d.id_producto) }}" class="btn btn-primary btn-sm">Editar</a></td>  
-                                <td><a href="#" class="btn btn-danger btn-sm">Eliminar</a></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                    </table>
-
-        </div>
-
-        <!-- Ventana modal agregar productos -->
+                  <!-- Ventana modal agregar productos -->
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">×</span>
@@ -133,10 +102,8 @@
                                 <label for="medio_pago">Unidad de medida: </label>
                                 <input type="text" id="unidadMedida" name="unidad_medida">
                             </div>
-                    
                         </div>
                     </div>
-        
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
                         <button type="submit" class="btn btn-default">Guardar cambios</button>
@@ -144,6 +111,70 @@
                 </form>
             </div>
         </div>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <th scope="col">Id_Producto</th> 
+                            <th scope="col">Codigo</th>
+                            <th scope="col">Descripcion</th> 
+                            <th scope="col">Categoria</th> 
+                            <th scope="col">Proveedor</th> 
+                            <th scope="col">Unidad_medida</th> 
+                            <th scope="col">Valor_unitario</th> 
+                            <th scope="col" colspan="2">Acciones</th> 
+                        </thead>
+                    
+                    <tbody >
+                        {% for d in data %}
+                            <tr>
+                                <td>{{d.id_producto}}</td>
+                                <td>{{d.codigo}}</td>
+                                <td>{{d.descripcion}}</td>
+                                <td>{{d.categoria}}</td>
+                                <td>{{d.proveedor}}</td>
+                                <td>{{d.unidad_medida}}</td>
+                                <td>{{d.valor_unitario}}</td>
+                                <td><button class="btn btn-primary btn-sm" id="btn-editar{{d.id_producto}}" data-bs-toggle="modal" data-bs-target="#modal{{d.id_producto}}">Editar</button></td>  
+                                <td><a href="{{url_for('delete', id_producto=d.id_producto)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
+                            </tr>
+
+                                        <!-- Modal Editar -->
+                            <div class="modal fade" id="modal{{d.id_producto}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Editar Producto</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/editar_producto/{{d.id_producto}}" method="post">
+                                                <label>Id Producto: </label> 
+                                                <input type="text" id="id_producto" name="id_producto" value="{{d.id_producto}}">
+                                                <label>Codigo: </label>
+                                                <input type="text" id="codigo" name="codigo" value="{{d.codigo}}">
+                                                <label>Descripcion: </label>
+                                                <input type="text" id="descripcion" name="descripcion" value="{{d.descripcion}}">
+                                                <label>Categoria: </label>
+                                                <input type="text" id="categoria" name="categoria" value="{{d.categoria}}">
+                                                <label>Proveedor </label>
+                                                <input type="text" id="proveedor" name="proveedor" value="{{d.proveedor}}">
+                                                <label>Valor unitario:</label>
+                                                <input type="text" id="valorUnitario" name="valor_unitario" value="{{d.valor_unitario}}">
+                                                <label>Unidad de medida: </label>
+                                                <input type="text" id="unidadMedida" name="unidad_medida" value="{{d.unidad_medida}}">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+
         
  <!-- Ventana modal Devoluciones -->
  <div id="myModal3" class="modal">
@@ -199,7 +230,6 @@
     </div>
 </div>
 
-
     <script>
         // Función para abrir la ventana modal
         function openModal() {
@@ -209,15 +239,7 @@
         // Función para cerrar la ventana modal
         function closeModal() {
             document.getElementById("myModal").style.display = "none";}
-    </script>
-    <script>
-         // Función para abrir la ventana modal editar
-         function openModal2() {
-            document.getElementById("myModal2").style.display = "block";
-        }
-        // Función para cerrar la ventana modal editar
-        function closeModal2() {
-            document.getElementById("myModal2").style.display = "none";}
+
     </script>
     <script>
             // Función para abrir la ventana modal de devoluciones
