@@ -134,7 +134,39 @@ def addGuardarClientes():
 
 @app.route("/proveedores")
 def proveedores():
-    return render_template("proveedores.html")
+    db_connection, cursor = db.conectar_bd()
+    cursor.execute("SELECT * FROM proveedor")
+    myresult = cursor.fetchall()
+    #convertir datos a diccionary 
+    insertObjec = []
+    columnNames = [column[0] for column in cursor.description]
+    for record in myresult:
+            insertObjec.append(dict(zip(columnNames, record)))
+    cursor.close() 
+    return render_template("proveedores.html", data=insertObjec)
+
+#Ruta para guardar PROVEEDORES
+@app.route('/guardarProveedores', methods=['POST'])
+def addGuardarPreveedores():    
+     id_proveedor = request.form['id_proveedor']
+     tipo_identificacion = request.form['tipo_identificacion']
+     numero_identificacion = request.form['numero_identificacion']
+     razon_social = request.form['razon_social']
+     email = request.form['email']
+     direccion = request.form['direccion']
+     telefono = request.form['telefono']
+     dia_de_visita = request.form['dia_de_visita']
+     dia_de_entrega = request.form['dia_de_entrega']
+    
+     if id_proveedor and tipo_identificacion and numero_identificacion and  razon_social and  email and direccion and  telefono and dia_de_visita and dia_de_entrega:
+        db_connection, cursor = db.conectar_bd()
+        sql = "INSERT INTO proveedor (id_proveedor,tipo_identificacion,numero_identificacion, razon_social, email,direccion, telefono , dia_de_visita, dia_de_entrega) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_proveedor,tipo_identificacion,numero_identificacion, razon_social,email,direccion,telefono,dia_de_visita,dia_de_entrega)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+     return redirect(url_for('proveedores'))
 
 
 @app.route("/productos")
@@ -212,7 +244,36 @@ def editar_producto(id_producto):
 
 @app.route("/compras")
 def compras():
-    return render_template("compras.html")
+     db_connection, cursor = db.conectar_bd()
+     cursor.execute("SELECT * FROM compras")
+     myresult = cursor.fetchall()
+     #convertir datos a diccionary 
+     insertObjec = []
+     columnNames = [column[0] for column in cursor.description]
+     for record in myresult:
+            insertObjec.append(dict(zip(columnNames, record)))
+     cursor.close()   
+     return render_template("compras.html", data=insertObjec)
+ 
+#Ruta para guardar COMPRAS
+@app.route('/guardarCompra', methods=['POST'])
+def addGuardarCompra():    
+     id_compra = request.form['id_compra']
+     codigo_producto = request.form['codigo_producto']
+     proveedor = request.form['proveedor']
+     cantidad = request.form['cantidad']
+     valor_unitario = request.form['valor_unitario']
+     valor_total = request.form['valor_total']
+      
+     if id_compra and codigo_producto and proveedor and valor_unitario and cantidad and valor_unitario and valor_total:
+        db_connection, cursor = db.conectar_bd()
+        sql = "INSERT INTO compras(id_compra,codigo_producto,proveedor,cantidad,valor_unitario,valor_total) VALUES (%s,%s,%s,%s,%s,%s)"
+        data = (id_compra,codigo_producto,proveedor,cantidad,valor_unitario,valor_total)
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+     return redirect(url_for('compras'))
 
 @app.route("/venta_historico")
 def venta_historico():
