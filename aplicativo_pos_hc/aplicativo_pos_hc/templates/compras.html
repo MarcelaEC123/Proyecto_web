@@ -6,11 +6,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwF3tBdYF4JcJjU4pN3nI9an2P+iK8a/1qdzNm5/lf7dUq0HfdvpBfB5SvOzJ4tv" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Página con Menú</title>
-    <style>
-        /* Estilos para la ventana modal */
-       
-    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -43,61 +40,95 @@
                 <br>
                 <li><a href="{{ url_for('venta_historico') }}"><i class="fas fa-box"></i> ventasHistorico</a></li>
                 <br>
-                <li><a href="{{ url_for('registro') }}"><i class="fas fa-box"></i> Usuarios</a></li>
+                <li><a href="{{ url_for('registro') }}"><i class="fas fa-box"></i> registro</a></li>
             </ul>
             
            
         </div>
         <a href="{{ url_for('logout') }}" class="logout-link">
             <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-        </a>
-
+        </a>       
           
-        <div class="content">
+        <div class="content d-flex flex-column " >
             <!-- Contenido principal -->
-            <h3>Compras</h3>
-            <div class="horizontal-bar">
-                <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
-                <img src="/static/images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
-                <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon">
-                <input type="text" id="search-input" placeholder="Buscar...">
-            </div>
+            <h3>Productos</h3>     
+                <div class="horizontal-bar my-4 d-flex py-2 justify-content-end " >
+                    <img src="/static/images/devolucion.png" alt="devolucion" class="icon" onclick="openModalDevolucion()">
+                    <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
+                    <img src="/static/images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
+                    <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon">
+                    <input type="text" id="search-input" placeholder="Buscar...">
+                </div>
+                
+                    <table class="table table-bordered">
+                        <thead>
+                            <th scope="col">Id Compra</th> 
+                            <th scope="col">Codigo Producto</th>
+                            <th scope="col">Nombre producto</th> 
+                            <th scope="col">Proveedor</th> 
+                            <th scope="col">Cantidad</th> 
+                            <th scope="col">Valor Unitario</th> 
+                            <th scope="col">Valor Total</th> 
+                            <th scope="col" colspan="2">Acciones</th> 
+                        </thead>
+                    
+                    <tbody >
+                        {% for d in data %}
+                            <tr>
+                                <td>{{d.id_compra}}</td>
+                                <td>{{d.codigo_producto}}</td>
+                                <td>{{d.nombre_producto}}</td>
+                                <td>{{d.proveedor}}</td>
+                                <td>{{d.cantidad}}</td>
+                                <td>{{d.valor_unitario}}</td>
+                                <td>{{d.valor_total}}</td>
+                     
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+
         </div>
 
         <!-- Ventana modal -->
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">×</span> 
-        <div class="modal-header">
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">×</span>
+                <form action="/guardarCompra" id="compra_form" method="post" >
+                    <div class="modal-header">
             <h2>Registrar compra</h2>  
         </div>
         <div class="modal-body">
                 <div class="caja1">
                     <div class="form-group">
-                        <label for="venta_id">Id Compra: </label>
-                        <input type="text" id="cliente_id" name="cliente_id">
+                        <label for="id_compra">Id Compra: </label>
+                        <input type="text" id="id_compra" name="id_compra">
                     </div>
                     <div class="form-group">
-                        <label for="descripcion">Codigo: </label>
-                        <input type="text" id="Identificacion" name="Identificacion">
+                        <label for="codigo_producto">Codigo Producto: </label>
+                        <input type="text" id="codigo_producto" name="codigo_producto">
                     </div>
                     <div class="form-group">
-                        <label for="valor_unitario">Descripcion: </label>
-                        <input type="text" id="Nombre" name="Nombre">
+                        <label for="nombre_producto">Nombre Producto: </label>
+                        <input type="text" id="nombre_producto" name="nombre_producto">
                     </div> 
                 </div>
                 <div class="caja1">
                     <div class="form-group">
-                        <label for="valor_unitario">Proveedor </label>
-                        <input type="text" id="Nombre" name="Nombre">
+                        <label for="proveedor">Proveedor </label>
+                        <input type="text"  id="proveedor" name="proveedor">
                     </div>
                     <div class="form-group">
-                        <label for="medio_pago">Cantidad: </label>
-                        <input type="text" id="Email" name="Email">
+                        <label for="cantidad">Cantidad: </label>
+                        <input type="text" id="cantidad" name="cantidad">
                     </div>
                     <div class="form-group">
-                        <label for="medio_pago">Valor unitario:</label>
-                        <input type="text" id="Telefono" name="Telefono">
+                        <label for="valor_unitario">Valor unitario:</label>
+                        <input type="text" id="valor_unitario" name="valor_unitario">
+                    </div>
+                    <div class="form-group">
+                        <label for="valor_total">Valor Total:</label>
+                        <input type="text" id="valor_total" name="valor_total">
                     </div>
             
                 </div>
@@ -106,7 +137,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-default">Guardar cambios</button>
+                <button type="submit" class="btn btn-default">Guardar cambios</button>
             </div>
     </div>
 </div >
