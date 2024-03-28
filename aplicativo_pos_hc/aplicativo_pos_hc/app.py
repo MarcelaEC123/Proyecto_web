@@ -221,17 +221,17 @@ def addGuardarPreveedores():
      id_proveedor = request.form['id_proveedor']
      tipo_identificacion = request.form['tipo_identificacion']
      numero_identificacion = request.form['numero_identificacion']
-     razon_social = request.form['razon_social']
+     nombre_proveedor = request.form['nombre_proveedor ']
      email = request.form['email']
      direccion = request.form['direccion']
      telefono = request.form['telefono']
      dia_de_visita = request.form['dia_de_visita']
      dia_de_entrega = request.form['dia_de_entrega']
     
-     if id_proveedor and tipo_identificacion and numero_identificacion and  razon_social and  email and direccion and  telefono and dia_de_visita and dia_de_entrega:
+     if id_proveedor and tipo_identificacion and numero_identificacion and  nombre_proveedor  and  email and direccion and  telefono and dia_de_visita and dia_de_entrega:
         db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO proveedor (id_proveedor,tipo_identificacion,numero_identificacion, razon_social, email,direccion, telefono , dia_de_visita, dia_de_entrega) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        data = (id_proveedor,tipo_identificacion,numero_identificacion, razon_social,email,direccion,telefono,dia_de_visita,dia_de_entrega)
+        sql = "INSERT INTO proveedor (id_proveedor,tipo_identificacion,numero_identificacion, nombre_proveedor , email,direccion, telefono , dia_de_visita, dia_de_entrega) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_proveedor,tipo_identificacion,numero_identificacion, nombre_proveedor ,email,direccion,telefono,dia_de_visita,dia_de_entrega)
         cursor.execute(sql, data)
         db_connection.commit()
         cursor.close()
@@ -269,14 +269,14 @@ def addGuardar():
      codigo = request.form['codigo']
      descripcion = request.form['descripcion']
      categoria = request.form['categoria']
-     proveedor = request.form['proveedor']
+     nombre_proveedor = request.form['nombre_proveedor']
      valorUnitario = request.form['valor_unitario']
      unidadMedida = request.form['unidad_medida']
 
-     if id_producto and codigo and descripcion and categoria and proveedor and valorUnitario and unidadMedida:
+     if id_producto and codigo and descripcion and categoria and nombre_proveedor and valorUnitario and unidadMedida:
         db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO producto (id_producto,codigo,descripcion,categoria,proveedor,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s,%s)"
-        data = (id_producto,codigo,descripcion,categoria,proveedor,valorUnitario,unidadMedida)
+        sql = "INSERT INTO producto (id_producto,codigo,descripcion,categoria, nombre_proveedor,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_producto,codigo,descripcion,categoria, nombre_proveedor,valorUnitario,unidadMedida)
         cursor.execute(sql, data)
         db_connection.commit()
         cursor.close()
@@ -299,14 +299,14 @@ def editar(id_producto):
     codigo = request.form['codigo']
     descripcion = request.form['descripcion']
     categoria = request.form['categoria']
-    proveedor = request.form['proveedor']
+    nombre_proveedor = request.form[' nombre_proveedor']
     valorUnitario = request.form['valor_unitario']
     unidadMedida = request.form['unidad_medida']
         
-    if codigo and descripcion and categoria and proveedor and valorUnitario and unidadMedida:
+    if codigo and descripcion and categoria and nombre_proveedor and valorUnitario and unidadMedida:
         db_connection, cursor = db.conectar_bd()
-        sql = "UPDATE producto SET codigo = %s, descripcion = %s, categoria = %s, proveedor = %s, valor_unitario = %s, unidad_medida = %s WHERE id_producto = %s"
-        data = (codigo, descripcion, categoria, proveedor, valorUnitario, unidadMedida, id_producto)
+        sql = "UPDATE producto SET codigo = %s, descripcion = %s, categoria = %s, nombre_proveedor= %s, valor_unitario = %s, unidad_medida = %s WHERE id_producto = %s"
+        data = (codigo, descripcion, categoria,  nombre_proveedor, valorUnitario, unidadMedida, id_producto)
         cursor.execute(sql, data)
         db_connection.commit()
         cursor.close()

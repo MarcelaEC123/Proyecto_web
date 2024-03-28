@@ -10,3 +10,4 @@ def conectar_bd():
     )
     cursor = database.cursor()
     return database, cursor
+

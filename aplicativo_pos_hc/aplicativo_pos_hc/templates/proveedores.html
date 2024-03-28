@@ -53,11 +53,7 @@
             <!-- Contenido principal -->
             <h3>Registro de Proveedor</h3>     
                 <div class="horizontal-bar my-4 d-flex py-2 justify-content-end " >
-                    <img src="/static/images/devolucion.png" alt="devolucion" class="icon" onclick="openModalDevolucion()">
                     <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
-                    <img src="/static/images/editar.png" alt="Editar" class="icon" onclick="openModal2()">
-                    <img src="/static/images/Eliminar.png" alt="Eliminar" class="icon">
-                    <button type="button" class="lector">Lectura codigo de barras</button>
                     <input type="text" id="search-input" placeholder="Buscar...">
                 </div>
                 
@@ -66,7 +62,7 @@
                             <th scope="col">Id Proveedor</th> 
                             <th scope="col">Tipo Identificacion</th>
                             <th scope="col">Numero Identificacion</th>
-                            <th scope="col">Razon Social</th> 
+                            <th scope="col">nombre proveedor </th> 
                             <th scope="col">Email</th> 
                             <th scope="col">Direccion</th> 
                             <th scope="col">Telefono</th> 
@@ -81,7 +77,7 @@
                                 <td>{{d.id_proveedor}}</td>
                                 <td>{{d.tipo_identificacion}}</td>
                                 <td>{{d.numero_identificacion}}</td>
-                                <td>{{d.razon_social}}</td>
+                                <td>{{d.nombre_proveedor }}</td>
                                 <td>{{d.email}}</td>
                                 <td>{{d.direccion}}</td>
                                 <td>{{d.telefono}}</td>
@@ -121,8 +117,8 @@
                         <input type="text" id="numero_identificacion" name="numero_identificacion">
                     </div>
                     <div class="form-group">
-                        <label for="razon social">Razon social:</label>
-                        <input type="text" id="razon social" name="razon_social">
+                        <label for="nombre_proveedor ">Razon social:</label>
+                        <input type="text" id="nombre_proveedor " name="nombre_proveedor ">
                     </div>
                     
                 </div>
@@ -200,8 +196,8 @@
                     <input type="text" id="Identificacion" name="Identificacion">
                 </div>
                 <div class="form-group">
-                    <label for="valor_unitario">Razon social:</label>
-                    <input type="text" id="Razon social" name="NombreRazon social">
+                    <label for="nombre_proveedor ">Razon social:</label>
+                    <input type="text" id="nombre_proveedor " name="nombre_proveedor ">
                 </div>
             </div>
             <div class="caja1">
