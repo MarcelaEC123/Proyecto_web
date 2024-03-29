@@ -80,9 +80,9 @@ def caja():
     cursor.execute("SELECT MAX(id_factura) FROM venta")
     last_code = cursor.fetchone()[0]
     if last_code:
-        new_code = str(int(last_code) + 1).zfill(7)  # Incrementar el último código y rellenar con ceros
+        new_code = str(int(last_code) + 1).zfill(5)  # Incrementar el último código y rellenar con ceros
     else:
-        new_code = "0000001"  # Si no hay códigos en la base de datos, iniciar desde "0001"
+        new_code = "00001"  # Si no hay códigos en la base de datos, iniciar desde "0001"
     # Obtener los productos existentes
     cursor.execute("SELECT * FROM venta")
     myresult = cursor.fetchall()
@@ -94,7 +94,6 @@ def caja():
     cursor.close()
     return render_template("caja.html", data=insertObjec, next_id=next_id, new_code=new_code)
 
- 
 #Ruta para guardar VENTAS
 @app.route('/guardarVenta', methods=['POST'])
 def addGuardarVenta():    

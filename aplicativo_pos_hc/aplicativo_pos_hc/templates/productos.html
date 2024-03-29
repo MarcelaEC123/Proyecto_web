@@ -230,8 +230,7 @@
     </div>
 </div>
 
-
- <!-- Modal para agregar stock -->
+<!-- Ventana modal para agregar stock -->
 <div id="stockModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeStockModal()">×</span>
@@ -240,7 +239,7 @@
                 <h2>Agregar Stock</h2>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="producto_id" name="producto_id">
+                <input type="hidden" id="id_producto_stock" name="id_producto">
                 <div class="form-group">
                     <label for="cantidad">Cantidad:</label>
                     <input type="text" id="cantidad" name="cantidad">
@@ -248,18 +247,27 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" onclick="closeStockModal()">Cancelar</button>
-                <button type="submit" class="btn btn-default">Agregar</button>
+                <button type="submit" class="btn btn-default">Agregar Stock</button>
             </div>
         </form>
     </div>
 </div>
 
-
     <script>
+        // Función para abrir el modal de agregar stock
         function openStockModal(id_producto) {
-            document.getElementById('producto_id').value = id_producto;
+            // Asigna el valor del id_producto al input hidden dentro del modal
+            document.getElementById("id_producto_stock").value = id_producto;
+            // Muestra el modal
+            document.getElementById("stockModal").style.display = "block";
+        }
+
+        // Función para cerrar el modal de agregar stock
+        function closeStockModal() {
+            document.getElementById("stockModal").style.display = "none";
         }
     </script>
+
 
     <script>
         // Función para abrir la ventana modal
