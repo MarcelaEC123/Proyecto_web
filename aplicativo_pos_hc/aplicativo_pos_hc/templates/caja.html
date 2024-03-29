@@ -37,10 +37,6 @@
                 <br>
                 <li><a href="{{ url_for('productos') }}"><i class="fas fa-box"></i> Productos</a></li>
                 <br>
-                <li><a href="{{ url_for('compras') }}"><i class="fas fa-shopping-cart"></i> Compras</a></li>
-                <br>
-                <li><a href="{{ url_for('venta_historico') }}"><i class="fas fa-box"></i> ventasHistorico</a></li>
-                <br>
                 <li><a href="{{ url_for('usuarios') }}"><i class="fas fa-box"></i> Usuarios</a></li>
             </ul>
             
@@ -55,7 +51,7 @@
             <h3>Registro de Caja</h3>     
                 <div class="horizontal-bar my-4 d-flex py-2 justify-content-end " >
                     <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
-                    <button type="button" class="lector">Lectura codigo de barras</button>
+                    <!-- <button type="button" class="lector">Lectura codigo de barras</button> -->
                     <input type="text" id="search-input" placeholder="Buscar...">
                 </div>
                 
@@ -114,11 +110,11 @@
                 <div class="caja1">
                     <div class="form-group">
                         <label for="id_venta">Id_venta</label>
-                        <input type="text" id="id_venta" name="id_venta">
+                        <input type="text" id="id_venta" name="id_venta" value="{{ next_id }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="id_factura">Id_Factura</label>
-                        <input type="text" id="id_factura" name="id_factura">
+                        <input type="text" id="id_factura" name="id_factura" value="{{ new_code }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="codigo">Código:</label>

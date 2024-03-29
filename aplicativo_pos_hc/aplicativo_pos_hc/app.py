@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for
 import database as db
 
 app = Flask(__name__, template_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
-app = Flask(__name__, static_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\static")
+
 # Ruta para la página de inicio
 @app.route("/")
 def index():
@@ -60,17 +60,41 @@ def logout():
 # Ruta para caja-Venta
 @app.route("/caja")
 def caja():
-     db_connection, cursor = db.conectar_bd()
-     cursor.execute("SELECT * FROM venta")
-     myresult = cursor.fetchall()
-     #convertir datos a diccionary 
-     insertObjec = []
-     columnNames = [column[0] for column in cursor.description]
-     for record in myresult:
-            insertObjec.append(dict(zip(columnNames, record)))
-     cursor.close()   
-     return render_template("caja.html", data=insertObjec)
- 
+    db_connection, cursor = db.conectar_bd()
+    
+    # Obtener el próximo valor autoincremental de id_producto
+    cursor.execute("SHOW TABLE STATUS LIKE 'venta'")
+    table_status = cursor.fetchone()
+    next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
+    
+    # Contar la cantidad de registros
+    cursor.execute("SELECT COUNT(*) FROM venta")
+    count = cursor.fetchone()[0]
+    if count == 0:
+        next_id = 1  # Si no hay registros, comenzar desde 1
+    else:
+        # Obtener el último ID y ajustar para el siguiente ID
+        cursor.execute("SELECT MAX(id_venta) FROM venta")
+        last_id = cursor.fetchone()[0]
+        next_id = last_id + 1
+    # Generar el nuevo código
+    cursor.execute("SELECT MAX(id_factura) FROM venta")
+    last_code = cursor.fetchone()[0]
+    if last_code:
+        new_code = str(int(last_code) + 1).zfill(5)  # Incrementar el último código y rellenar con ceros
+    else:
+        new_code = "00001"  # Si no hay códigos en la base de datos, iniciar desde "0001"
+    # Obtener los productos existentes
+    cursor.execute("SELECT * FROM venta")
+    myresult = cursor.fetchall()
+    # Convertir datos a diccionario
+    insertObjec = []
+    columnNames = [column[0] for column in cursor.description]
+    for record in myresult:
+        insertObjec.append(dict(zip(columnNames, record)))
+    cursor.close()
+    return render_template("caja.html", data=insertObjec, next_id=next_id, new_code=new_code)
+
 #Ruta para guardar VENTAS
 @app.route('/guardarVenta', methods=['POST'])
 def addGuardarVenta():    
@@ -109,34 +133,6 @@ def deleteVenta (id_venta):
         db_connection.close()
         return redirect(url_for('caja'))
 
-# @app.route("/generar_ticket/<int:id_venta>")
-# def generar_ticket(id_venta):
-    
-#         # Conectar a la base de datos y crear un cursor
-#         db_connection, cursor = db.conectar_bd()
-
-#         # Ejecutar la consulta SQL
-#         cursor.execute("SELECT * FROM venta")
-        
-#         # Obtener los resultados de la consulta
-#         myresult = cursor.fetchall()
-        
-#         # Imprimir los resultados para revisar el formato de los datos
-#         print(myresult)
-        
-#         # Cerrar el cursor y la conexión
-#         cursor.close()
-#         db_connection.close()
-        
-#         # Convertir los datos a un formato adecuado, si es necesario
-#         insertObjec = []
-#         columnNames = [column[0] for column in cursor.description]
-#         for record in myresult:
-#             insertObjec.append(dict(zip(columnNames, record)))
-        
-#         # Renderizar la plantilla HTML con los datos recuperados
-#         return render_template("factura.html", data=insertObjec)
-
 @app.route("/generar_ticket/<int:id_venta>")
 def generar_ticket(id_venta):
     # Conectar a la base de datos y crear un cursor
@@ -158,20 +154,36 @@ def generar_ticket(id_venta):
     # Renderizar la plantilla HTML con los datos recuperados
     return render_template("factura.html", productos=venta_data)
 
-
-
 @app.route("/clientes")
 def clientes():
     db_connection, cursor = db.conectar_bd()
+    
+    # Obtener el próximo valor autoincremental de id_producto
+    cursor.execute("SHOW TABLE STATUS LIKE 'clientes'")
+    table_status = cursor.fetchone()
+    next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
+    
+    # Contar la cantidad de registros
+    cursor.execute("SELECT COUNT(*) FROM clientes")
+    count = cursor.fetchone()[0]
+    if count == 0:
+        next_id = 1  # Si no hay registros, comenzar desde 1
+    else:
+        # Obtener el último ID y ajustar para el siguiente ID
+        cursor.execute("SELECT MAX(id_cliente) FROM clientes")
+        last_id = cursor.fetchone()[0]
+        next_id = last_id + 1
+    
+    # Obtener los productos existentes
     cursor.execute("SELECT * FROM clientes")
     myresult = cursor.fetchall()
-    #convertir datos a diccionary 
+    # Convertir datos a diccionario
     insertObjec = []
     columnNames = [column[0] for column in cursor.description]
     for record in myresult:
-            insertObjec.append(dict(zip(columnNames, record)))
-    cursor.close() 
-    return render_template("clientes.html", data=insertObjec)
+        insertObjec.append(dict(zip(columnNames, record)))
+    cursor.close()
+    return render_template("clientes.html", data=insertObjec, next_id=next_id)
 
 #Ruta para guardar CLIENTES
 @app.route('/guardarClientes', methods=['POST'])
@@ -208,15 +220,33 @@ def deleteCliente (id_cliente):
 @app.route("/proveedores")
 def proveedores():
     db_connection, cursor = db.conectar_bd()
+    
+    # Obtener el próximo valor autoincremental de id_producto
+    cursor.execute("SHOW TABLE STATUS LIKE 'proveedor'")
+    table_status = cursor.fetchone()
+    next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
+    
+    # Contar la cantidad de registros
+    cursor.execute("SELECT COUNT(*) FROM proveedor")
+    count = cursor.fetchone()[0]
+    if count == 0:
+        next_id = 1  # Si no hay registros, comenzar desde 1
+    else:
+        # Obtener el último ID y ajustar para el siguiente ID
+        cursor.execute("SELECT MAX(id_proveedor) FROM proveedor")
+        last_id = cursor.fetchone()[0]
+        next_id = last_id + 1
+    
+    # Obtener los productos existentes
     cursor.execute("SELECT * FROM proveedor")
     myresult = cursor.fetchall()
-    #convertir datos a diccionary 
+    # Convertir datos a diccionario
     insertObjec = []
     columnNames = [column[0] for column in cursor.description]
     for record in myresult:
-            insertObjec.append(dict(zip(columnNames, record)))
-    cursor.close() 
-    return render_template("proveedores.html", data=insertObjec)
+        insertObjec.append(dict(zip(columnNames, record)))
+    cursor.close()
+    return render_template("proveedores.html", data=insertObjec, next_id=next_id)
 
 #Ruta para guardar PROVEEDORES
 @app.route('/guardarProveedores', methods=['POST'])
@@ -265,7 +295,6 @@ def productos():
     # Contar la cantidad de registros
     cursor.execute("SELECT COUNT(*) FROM producto")
     count = cursor.fetchone()[0]
-
     if count == 0:
         next_id = 1  # Si no hay registros, comenzar desde 1
     else:
@@ -273,7 +302,6 @@ def productos():
         cursor.execute("SELECT MAX(id_producto) FROM producto")
         last_id = cursor.fetchone()[0]
         next_id = last_id + 1
-    
     # Generar el nuevo código
     cursor.execute("SELECT MAX(codigo) FROM producto")
     last_code = cursor.fetchone()[0]
@@ -281,43 +309,63 @@ def productos():
         new_code = str(int(last_code) + 1).zfill(4)  # Incrementar el último código y rellenar con ceros
     else:
         new_code = "0001"  # Si no hay códigos en la base de datos, iniciar desde "0001"
-    
     # Obtener los productos existentes
     cursor.execute("SELECT * FROM producto")
     myresult = cursor.fetchall()
-    
     # Convertir datos a diccionario
     insertObjec = []
     columnNames = [column[0] for column in cursor.description]
     for record in myresult:
         insertObjec.append(dict(zip(columnNames, record)))
-    
     cursor.close()
-    
     return render_template("productos.html", data=insertObjec, next_id=next_id, new_code=new_code)
 
-#Ruta para guardar productos
+# Ruta para guardar productos
 @app.route('/guardar', methods=['POST'])
 def addGuardar():    
-     id_producto = request.form['id_producto']
      codigo = request.form['codigo']
      descripcion = request.form['descripcion']
      categoria = request.form['categoria']
      nombre_proveedor = request.form['nombre_proveedor']
+     stock = request.form['stock']
      valorUnitario = request.form['valor_unitario']
      unidadMedida = request.form['unidad_medida']
 
-     if id_producto and codigo and descripcion and categoria and nombre_proveedor and valorUnitario and unidadMedida:
+     if codigo and descripcion and categoria and nombre_proveedor and stock and valorUnitario and unidadMedida:
         db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO producto (id_producto,codigo,descripcion,categoria,nombre_proveedor,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s,%s)"
-        data = (id_producto,codigo,descripcion,categoria,nombre_proveedor,valorUnitario,unidadMedida)
+        sql = "INSERT INTO producto (codigo,descripcion,categoria,nombre_proveedor,stock,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        data = (codigo,descripcion,categoria,nombre_proveedor,stock,valorUnitario,unidadMedida)
         cursor.execute(sql, data)
         db_connection.commit()
     
-     cursor.close()
-     db_connection.close()
+        cursor.close()
+        db_connection.close()
     
      return redirect(url_for('productos'))
+
+# Ruta para agregar stock
+@app.route('/addStock', methods=['POST'])
+def addStock():
+    id_producto = request.form['id_producto']
+    cantidad = request.form['cantidad']
+
+    if id_producto and cantidad:
+        db_connection, cursor = db.conectar_bd()
+        # Obtener el stock actual del producto
+        cursor.execute("SELECT stock FROM producto WHERE id_producto = %s", (id_producto,))
+        stock_actual = cursor.fetchone()[0]
+
+        # Sumar la cantidad proporcionada al stock actual
+        nuevo_stock = stock_actual + int(cantidad)
+
+        # Actualizar el stock en la base de datos
+        cursor.execute("UPDATE producto SET stock = %s WHERE id_producto = %s", (nuevo_stock, id_producto))  # Corregido aquí
+        db_connection.commit()
+
+        cursor.close()
+        db_connection.close()
+
+    return redirect(url_for('productos'))
 
 
 @app.route('/deleteProducto/<string:id_producto>')
@@ -336,69 +384,19 @@ def editar(id_producto):
     codigo = request.form['codigo']
     descripcion = request.form['descripcion']
     categoria = request.form['categoria']
-    nombre_proveedor = request.form['nombre_proveedor']
+    nombre_proveedor = request.form[' nombre_proveedor']
     valorUnitario = request.form['valor_unitario']
     unidadMedida = request.form['unidad_medida']
         
-    if codigo and descripcion and categoria and nombre_proveedor and valorUnitario and unidadMedida:
+    if codigo and descripcion and categoria and nombre_proveedor and stock and valorUnitario and unidadMedida:
         db_connection, cursor = db.conectar_bd()
-        sql = "UPDATE producto SET codigo = %s, descripcion = %s, categoria = %s, nombre_proveedor= %s, valor_unitario = %s, unidad_medida = %s WHERE id_producto = %s"
-        data = (codigo, descripcion, categoria,  nombre_proveedor, valorUnitario, unidadMedida, id_producto)
+        sql = "UPDATE producto SET codigo = %s, descripcion = %s, categoria = %s, nombre_proveedor= %s,stock= %s, valor_unitario = %s, unidad_medida = %s WHERE id_producto = %s"
+        data = (codigo, descripcion, categoria,  nombre_proveedor,stock, valorUnitario, unidadMedida, id_producto)
         cursor.execute(sql, data)
         db_connection.commit()
         cursor.close()
         db_connection.close()
     return redirect(url_for('productos'))
-
-
-#Ruta para guardar COMPRAS
-@app.route("/compras")
-def compras():
-     db_connection, cursor = db.conectar_bd()
-     cursor.execute("SELECT * FROM compras")
-     myresult = cursor.fetchall()
-     #convertir datos a diccionary 
-     insertObjec = []
-     columnNames = [column[0] for column in cursor.description]
-     for record in myresult:
-            insertObjec.append(dict(zip(columnNames, record)))
-     cursor.close()   
-     return render_template("compras.html", data=insertObjec)
- 
-#Ruta para guardar COMPRAS
-@app.route('/guardarCompra', methods=['POST'])
-def addGuardarCompra():    
-     id_compra = request.form['id_compra']
-     codigo_producto = request.form['codigo_producto']
-     proveedor = request.form['proveedor']
-     cantidad = request.form['cantidad']
-     valor_unitario = request.form['valor_unitario']
-     valor_total = request.form['valor_total']
-      
-     if id_compra and codigo_producto and proveedor and valor_unitario and cantidad and valor_unitario and valor_total:
-        db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO compras(id_compra,codigo_producto,proveedor,cantidad,valor_unitario,valor_total) VALUES (%s,%s,%s,%s,%s,%s)"
-        data = (id_compra,codigo_producto,proveedor,cantidad,valor_unitario,valor_total)
-        cursor.execute(sql, data)
-        db_connection.commit()
-        cursor.close()
-        db_connection.close()
-     return redirect(url_for('compras'))
-
-@app.route('/deleteCompra/<string:id_compra>')
-def deleteCompra(id_compra):
-        db_connection, cursor = db.conectar_bd()
-        sql = "DELETE FROM compras WHERE id_compra=%s"
-        data = (id_compra,)
-        cursor.execute(sql, data)
-        db_connection.commit()
-        cursor.close()
-        db_connection.close()
-        return redirect(url_for('compras'))
-
-@app.route("/venta_historico")
-def venta_historico():
-    return render_template("ventaHistorico.html")
 
 # Ruta para mostrar usuarios
 @app.route("/usuarios")
@@ -467,8 +465,6 @@ def addGuardarUsuario():
 
     return redirect(url_for('usuarios'))
 
-
-
 @app.route('/deleteUsuarios/<string:id_usuario>')
 def deleteUsuarios(id_usuario):
         db_connection, cursor = db.conectar_bd()
@@ -479,42 +475,6 @@ def deleteUsuarios(id_usuario):
         cursor.close()
         db_connection.close()
         return redirect(url_for('usuarios'))
-# @app.route("/usuarios")
-# def usuarios():
-#      db_connection, cursor = db.conectar_bd()
-#      cursor.execute("SELECT * FROM usuarios")
-#      myresult = cursor.fetchall()
-#      #convertir datos a diccionary 
-#      insertObjec = []
-#      columnNames = [column[0] for column in cursor.description]
-#      for record in myresult:
-#             insertObjec.append(dict(zip(columnNames, record)))
-#      cursor.close()   
-#      return render_template("usuarios.html", data=insertObjec)
-  
-# #Ruta para guardar USUARIOS
-# @app.route('/guardarUsuario', methods=['POST'])
-# def addGuardarUsuario():    
-#      nombre = request.form['nombre']
-#      tipo_Identificacion = request.form['tipo_Identificacion']
-#      numero_identificacion = request.form['numero_identificacion']
-#      telefono = request.form['telefono']
-#      email = request.form['email']
-#      usuario = request.form['usuario']
-#      contrasenia = request.form['contrasenia']
-#      tipo_usuario = request.form['tipo_usuario']
-
-#      if nombre and tipo_Identificacion and numero_identificacion and telefono and email and usuario and contrasenia and tipo_usuario:
-#         db_connection, cursor = db.conectar_bd()
-#         sql = "INSERT INTO usuarios (nombre,tipo_Identificacion,numero_identificacion,telefono,email,usuario,contrasenia,tipo_usuario) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
-#         data = (nombre,tipo_Identificacion,numero_identificacion,telefono,email,usuario,contrasenia,tipo_usuario)
-#         cursor.execute(sql, data)
-#         db_connection.commit()
-#         cursor.close()
-#         db_connection.close()
-#      return redirect(url_for('usuarios'))
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
