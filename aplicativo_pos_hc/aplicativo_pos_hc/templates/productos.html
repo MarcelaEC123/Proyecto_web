@@ -88,6 +88,10 @@
                                 <input type="text" id="nombre_proveedor" name="nombre_proveedor">
                             </div>
                             <div class="form-group">
+                                <label for="stock">Stock</label>
+                                <input type="text" id="stock" name="stock">
+                            </div>
+                            <div class="form-group">
                                 <label for="medio_pago">Valor unitario:</label>
                                 <input type="text" id="valorUnitario" name="valor_unitario">
                             </div>
@@ -112,9 +116,10 @@
                             <th scope="col">Descripcion</th> 
                             <th scope="col">Categoria</th> 
                             <th scope="col">nombre_proveedor</th> 
+                            <th scope="col">Stock</th> 
                             <th scope="col">Unidad_medida</th> 
                             <th scope="col">Valor_unitario</th> 
-                            <th scope="col" colspan="2">Acciones</th> 
+                            <th scope="col" colspan="3">Acciones</th> 
                         </thead>
                     
                     <tbody >
@@ -125,8 +130,10 @@
                                 <td>{{d.descripcion}}</td>
                                 <td>{{d.categoria}}</td>
                                 <td>{{d.nombre_proveedor}}</td>
+                                <td>{{d.stock}}</td>
                                 <td>{{d.unidad_medida}}</td>
                                 <td>{{d.valor_unitario}}</td>
+                                <td><button class="btn btn-success btn-sm" onclick="openStockModal('{{ d.id_producto }}')" data-bs-toggle="modal" data-bs-target="#stockModal">Agregar Stock</button></td>
                                 <td><button class="btn btn-primary btn-sm" id="btn-editar{{d.id_producto}}" data-bs-toggle="modal" data-bs-target="#modal{{d.id_producto}}">Editar</button></td>  
                                 <td><a href="{{url_for('delete', id_producto=d.id_producto)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
                             </tr>
@@ -222,6 +229,37 @@
         </div>
     </div>
 </div>
+
+
+ <!-- Modal para agregar stock -->
+<div id="stockModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeStockModal()">×</span>
+        <form action="/addStock" method="post">
+            <div class="modal-header">
+                <h2>Agregar Stock</h2>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="producto_id" name="producto_id">
+                <div class="form-group">
+                    <label for="cantidad">Cantidad:</label>
+                    <input type="text" id="cantidad" name="cantidad">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="closeStockModal()">Cancelar</button>
+                <button type="submit" class="btn btn-default">Agregar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <script>
+        function openStockModal(id_producto) {
+            document.getElementById('producto_id').value = id_producto;
+        }
+    </script>
 
     <script>
         // Función para abrir la ventana modal

@@ -317,28 +317,52 @@ def productos():
     cursor.close()
     return render_template("productos.html", data=insertObjec, next_id=next_id, new_code=new_code)
 
-#Ruta para guardar productos
+# Ruta para guardar productos
 @app.route('/guardar', methods=['POST'])
 def addGuardar():    
-     id_producto = request.form['id_producto']
      codigo = request.form['codigo']
      descripcion = request.form['descripcion']
      categoria = request.form['categoria']
      nombre_proveedor = request.form['nombre_proveedor']
+     stock = request.form['stock']
      valorUnitario = request.form['valor_unitario']
      unidadMedida = request.form['unidad_medida']
 
-     if id_producto and codigo and descripcion and categoria and nombre_proveedor and valorUnitario and unidadMedida:
+     if codigo and descripcion and categoria and nombre_proveedor and stock and valorUnitario and unidadMedida:
         db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO producto (id_producto,codigo,descripcion,categoria,nombre_proveedor,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s,%s)"
-        data = (id_producto,codigo,descripcion,categoria,nombre_proveedor,valorUnitario,unidadMedida)
+        sql = "INSERT INTO producto (codigo,descripcion,categoria,nombre_proveedor,stock,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        data = (codigo,descripcion,categoria,nombre_proveedor,stock,valorUnitario,unidadMedida)
         cursor.execute(sql, data)
         db_connection.commit()
     
-     cursor.close()
-     db_connection.close()
+        cursor.close()
+        db_connection.close()
     
      return redirect(url_for('productos'))
+
+# Ruta para agregar stock
+@app.route('/addStock', methods=['POST'])
+def addStock():
+    id_producto = request.form['id_producto']
+    cantidad = request.form['cantidad']
+
+    if id_producto and cantidad:
+        db_connection, cursor = db.conectar_bd()
+        # Obtener el stock actual del producto
+        cursor.execute("SELECT stock FROM producto WHERE id_producto = %s", (id_producto,))
+        stock_actual = cursor.fetchone()[0]
+
+        # Sumar la cantidad proporcionada al stock actual
+        nuevo_stock = stock_actual + int(cantidad)
+
+        # Actualizar el stock en la base de datos
+        cursor.execute("UPDATE producto SET stock = %s WHERE id_producto = %s", (nuevo_stock, id_producto))  # Corregido aquí
+        db_connection.commit()
+
+        cursor.close()
+        db_connection.close()
+
+    return redirect(url_for('productos'))
 
 
 @app.route('/deleteProducto/<string:id_producto>')
@@ -358,13 +382,14 @@ def editar(id_producto):
     descripcion = request.form['descripcion']
     categoria = request.form['categoria']
     nombre_proveedor = request.form[' nombre_proveedor']
+    stock = request.form['stock']
     valorUnitario = request.form['valor_unitario']
     unidadMedida = request.form['unidad_medida']
         
-    if codigo and descripcion and categoria and nombre_proveedor and valorUnitario and unidadMedida:
+    if codigo and descripcion and categoria and nombre_proveedor and stock and valorUnitario and unidadMedida:
         db_connection, cursor = db.conectar_bd()
-        sql = "UPDATE producto SET codigo = %s, descripcion = %s, categoria = %s, nombre_proveedor= %s, valor_unitario = %s, unidad_medida = %s WHERE id_producto = %s"
-        data = (codigo, descripcion, categoria,  nombre_proveedor, valorUnitario, unidadMedida, id_producto)
+        sql = "UPDATE producto SET codigo = %s, descripcion = %s, categoria = %s, nombre_proveedor= %s,stock= %s, valor_unitario = %s, unidad_medida = %s WHERE id_producto = %s"
+        data = (codigo, descripcion, categoria,  nombre_proveedor,stock, valorUnitario, unidadMedida, id_producto)
         cursor.execute(sql, data)
         db_connection.commit()
         cursor.close()
