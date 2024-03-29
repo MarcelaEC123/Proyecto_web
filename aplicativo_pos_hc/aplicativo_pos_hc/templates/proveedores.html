@@ -58,7 +58,7 @@
                             <th scope="col">Id Proveedor</th> 
                             <th scope="col">Tipo Identificacion</th>
                             <th scope="col">Numero Identificacion</th>
-                            <th scope="col">nombre proveedor </th> 
+                            <th scope="col">Nombre proveedor</th> 
                             <th scope="col">Email</th> 
                             <th scope="col">Direccion</th> 
                             <th scope="col">Telefono</th> 
@@ -73,7 +73,7 @@
                                 <td>{{d.id_proveedor}}</td>
                                 <td>{{d.tipo_identificacion}}</td>
                                 <td>{{d.numero_identificacion}}</td>
-                                <td>{{d.nombre_proveedor }}</td>
+                                <td>{{d.nombre_proveedor}}</td>
                                 <td>{{d.email}}</td>
                                 <td>{{d.direccion}}</td>
                                 <td>{{d.telefono}}</td>
@@ -89,12 +89,11 @@
         <!-- Ventana modal agregar venta -->
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal()">×</span>
                 <form action="/guardarProveedores" id="proveedores_form" method="post" >
                     <div class="modal-header">
-            <h2>Crear  Proveedor</h2>
-           
-        </div>
+                        <h2>Crear  Proveedor</h2>
+                        <span class="close" onclick="closeModal()">×</span>
+                    </div>
         <div class="modal-body">
                 <div class="caja1">
                     <div class="form-group">
@@ -113,8 +112,8 @@
                         <input type="text" id="numero_identificacion" name="numero_identificacion">
                     </div>
                     <div class="form-group">
-                        <label for="nombre_proveedor ">Razon social:</label>
-                        <input type="text" id="nombre_proveedor " name="nombre_proveedor ">
+                        <label for="nombre_proveedor">Razon social:</label>
+                        <input type="text" id="nombre_proveedor" name="nombre_proveedor">
                     </div>
                     
                 </div>
@@ -155,10 +154,10 @@
                             <option value="lunes">Domingo</option>
                          </select>
                     </div>
-            
-                    </div>
+                </div>
+            </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
                         <button type="submit" class="btn btn-default">Guardar cambios</button>
                     </div>
                 </form>

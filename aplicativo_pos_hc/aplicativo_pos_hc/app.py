@@ -220,7 +220,7 @@ def deleteCliente (id_cliente):
 def proveedores():
     db_connection, cursor = db.conectar_bd()
     
-    # Obtener el próximo valor autoincremental de id_producto
+        # Obtener el próximo valor autoincremental de id_producto
     cursor.execute("SHOW TABLE STATUS LIKE 'proveedor'")
     table_status = cursor.fetchone()
     next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
@@ -384,6 +384,7 @@ def editar(id_producto):
     descripcion = request.form['descripcion']
     categoria = request.form['categoria']
     nombre_proveedor = request.form[' nombre_proveedor']
+    stock = request.form['stock']
     valorUnitario = request.form['valor_unitario']
     unidadMedida = request.form['unidad_medida']
         

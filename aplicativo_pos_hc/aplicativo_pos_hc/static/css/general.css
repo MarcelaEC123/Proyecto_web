@@ -120,7 +120,7 @@ body {
 .modal-header {
     background-color: #5499C7;
     color: #fff;
-    padding: 1%;
+    padding: 3%;
 }
 /* Estilo para todas las cajas de la clase form-group */
 
@@ -196,8 +196,8 @@ input[type="text"] {
 .close {
     color: #fcf8f8;
     float: right;
-    padding-right: 2%;
-    padding-top: 2%;
+    padding-right: 1%;
+    padding-top: 1%;
     font-size: 30px;
     font-weight: bold;
 }
