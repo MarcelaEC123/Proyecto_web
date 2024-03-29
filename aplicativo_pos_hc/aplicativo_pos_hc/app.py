@@ -14,26 +14,18 @@ def login():
     password = request.form.get("password")
 
     try:
-        # Conectar a la base de datos y crear un cursor
         db_connection, cursor = db.conectar_bd()
-
         # Consulta SQL para verificar las credenciales de inicio de sesión
         query = "SELECT * FROM usuarios WHERE Usuario = %s AND Contrasenia = %s"
         cursor.execute(query, (username, password))
-
         # Leer y procesar los resultados de la consulta
         user = cursor.fetchone()
-
         # Cerrar el cursor y la conexión
         cursor.close()
         db_connection.close()
-
-        # Procesar los resultados de la consulta
         if user:
-            # Redirigir al usuario a la página principal si el inicio de sesión es exitoso
             return redirect(url_for("principal"))
         else:
-            # Si las credenciales son incorrectas, renderizar la plantilla de mensaje de error
             error_message = "Credenciales incorrectas"
             return render_template("mensaje.html", message=error_message)
 
@@ -50,18 +42,12 @@ def principal():
 # Ruta para cerrar sesión
 @app.route("/logout")
 def logout():
-    # Realiza cualquier limpieza necesaria para cerrar sesión
-    # Luego redirecciona al usuario a la página de inicio
-    return redirect(url_for("index"))  # Aquí cambiamos "home" a "index"
-
-# Rutas para otras páginas
+    return redirect(url_for("index"))
 
 # Ruta para caja-Venta
 @app.route("/caja")
 def caja():
     db_connection, cursor = db.conectar_bd()
-    
-    # Obtener el próximo valor autoincremental de id_producto
     cursor.execute("SHOW TABLE STATUS LIKE 'venta'")
     table_status = cursor.fetchone()
     next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
