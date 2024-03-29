@@ -69,7 +69,7 @@ body {
     background-color: rgba(255, 255, 255, 0.7); /* Fondo transparente */
     padding: 330px; /* Ajusta el espaciado interno según sea necesario */
     color:grey;
-     margin-left: 30px;
+    margin-left: 30px;
 }
 
 /* Imagen a la derecha como línea de agua */
@@ -98,4 +98,8 @@ body {
     opacity: 0.3; /* Opacidad baja */
 }
 
+.DatosEmpresa{
+    margin-top: -150px;
+    margin-left: -340px;
 
+}

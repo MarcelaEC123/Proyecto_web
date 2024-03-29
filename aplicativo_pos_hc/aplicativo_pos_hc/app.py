@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for
 import database as db
 
-app = Flask(__name__, template_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
+app = Flask(__name__, template_folder="C:\\Users\\lenovo\\OneDrive\\Desktop\\UNIAGUSTINIANA\\Proyecto\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
 
 # Ruta para la página de inicio
 @app.route("/")
@@ -45,41 +45,54 @@ def principal():
 def logout():
     return redirect(url_for("index"))
 
-# Ruta para caja-Venta
 @app.route("/caja")
 def caja():
-    db_connection, cursor = db.conectar_bd()
-    cursor.execute("SHOW TABLE STATUS LIKE 'venta'")
-    table_status = cursor.fetchone()
-    next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
-    
-    # Contar la cantidad de registros
-    cursor.execute("SELECT COUNT(*) FROM venta")
-    count = cursor.fetchone()[0]
-    if count == 0:
-        next_id = 1  # Si no hay registros, comenzar desde 1
-    else:
-        # Obtener el último ID y ajustar para el siguiente ID
-        cursor.execute("SELECT MAX(id_venta) FROM venta")
-        last_id = cursor.fetchone()[0]
-        next_id = last_id + 1
-    # Generar el nuevo código
-    cursor.execute("SELECT MAX(id_factura) FROM venta")
-    last_code = cursor.fetchone()[0]
-    if last_code:
-        new_code = str(int(last_code) + 1).zfill(5)  # Incrementar el último código y rellenar con ceros
-    else:
-        new_code = "00001"  # Si no hay códigos en la base de datos, iniciar desde "0001"
-    # Obtener los productos existentes
-    cursor.execute("SELECT * FROM venta")
-    myresult = cursor.fetchall()
-    # Convertir datos a diccionario
-    insertObjec = []
-    columnNames = [column[0] for column in cursor.description]
-    for record in myresult:
-        insertObjec.append(dict(zip(columnNames, record)))
-    cursor.close()
-    return render_template("caja.html", data=insertObjec, next_id=next_id, new_code=new_code)
+    try:
+        db_connection, cursor = db.conectar_bd()
+        
+        # Obtener el próximo valor autoincremental de id_venta
+        cursor.execute("SHOW TABLE STATUS LIKE 'venta'")
+        table_status = cursor.fetchone()
+        if table_status is not None:
+            next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
+            
+            # Contar la cantidad de registros
+            cursor.execute("SELECT COUNT(*) FROM venta")
+            count = cursor.fetchone()[0]
+            if count == 0:
+                next_id = 1  # Si no hay registros, comenzar desde 1
+            else:
+                # Obtener el último ID y ajustar para el siguiente ID
+                cursor.execute("SELECT MAX(id_venta) FROM venta")
+                last_id = cursor.fetchone()[0]
+                next_id = last_id + 1
+                
+            # Generar el nuevo código de factura
+            cursor.execute("SELECT MAX(id_factura) FROM venta")
+            last_code = cursor.fetchone()[0]
+            if last_code is not None:
+                new_code = str(int(last_code) + 1).zfill(7)  # Incrementar el último código y rellenar con ceros
+            else:
+                new_code = "0000001"  # Si no hay códigos en la base de datos, iniciar desde "0000001"
+
+            
+            # Obtener los productos existentes
+            cursor.execute("SELECT * FROM venta")
+            myresult = cursor.fetchall()
+            
+            # Convertir datos a diccionario
+            insertObjects = []
+            columnNames = [column[0] for column in cursor.description]
+            for record in myresult:
+                insertObjects.append(dict(zip(columnNames, record)))
+                
+            cursor.close()
+            return render_template("caja.html", data=insertObjects, next_id=next_id, new_code=new_code)
+        else:
+            return "No se pudo obtener información de la tabla 'venta'"
+    except Exception as e:
+        # Manejar cualquier excepción que ocurra
+        return f"Error: {str(e)}"
 
 #Ruta para guardar VENTAS
 @app.route('/guardarVenta', methods=['POST'])
