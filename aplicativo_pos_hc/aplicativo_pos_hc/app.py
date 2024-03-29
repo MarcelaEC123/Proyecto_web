@@ -1,7 +1,8 @@
 from flask import Flask, request, render_template, redirect, url_for
 import database as db
 
-app = Flask(__name__, template_folder="C:\\Users\\lenovo\\OneDrive\\Desktop\\UNIAGUSTINIANA\\Proyecto\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
+app = Flask(__name__, template_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
+
 # Ruta para la página de inicio
 @app.route("/")
 def index():
@@ -124,17 +125,20 @@ def generar_ticket(id_venta):
     db_connection, cursor = db.conectar_bd()
 
     # Ejecutar la consulta SQL para seleccionar los registros relevantes de la tabla de ventas
-    cursor.execute("SELECT cantidad, descripcion, valor_unitario FROM venta WHERE id_venta = %s", (id_venta,))
+    cursor.execute("SELECT cantidad, descripcion, valor_unitario ,id_factura,fecha_registro FROM venta WHERE id_venta = %s", (id_venta,))
     
     # Obtener los resultados de la consulta
     venta_data = cursor.fetchall()
+
+    # Imprimir los datos de la venta para depuración
+    print("Datos de la venta:", venta_data)
 
     # Cerrar el cursor y la conexión
     cursor.close()
     db_connection.close()
     
     # Renderizar la plantilla HTML con los datos recuperados
-    return render_template("factura.html", productos=venta_data)    
+    return render_template("factura.html", productos=venta_data)
 
 @app.route("/clientes")
 def clientes():
@@ -367,7 +371,6 @@ def editar(id_producto):
     descripcion = request.form['descripcion']
     categoria = request.form['categoria']
     nombre_proveedor = request.form[' nombre_proveedor']
-    stock = request.form['stock']
     valorUnitario = request.form['valor_unitario']
     unidadMedida = request.form['unidad_medida']
         

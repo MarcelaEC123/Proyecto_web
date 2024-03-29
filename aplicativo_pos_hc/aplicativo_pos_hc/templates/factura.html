@@ -96,17 +96,14 @@ footer {
             <p>Teléfono: 3028635366</p>
             <div class="linea-entrecortada"></div>
         </div>
-        <!-- Información de la Factura -->
         <div class="seccion">
             <h2>Información de la Factura</h2>
-            <!-- Mostrar los detalles de la venta -->
-            <p>Número de Factura: {{ productos[0]['id_factura'] }}</p> <!-- Ajusta el índice según la estructura de tus datos -->
-            <p>Fecha de Factura: {{ productos[0]['fecha_registro'] }}</p> <!-- Ajusta el índice según la estructura de tus datos -->
+            <p>Número de Factura: {{ productos[0]['id_factura'] }}</p>
+            <p>Fecha de Factura: {{ productos[0]['fecha_registro'] }}</p>
             <div class="linea-entrecortada"></div>
         </div>
     </header>
-
-    <!-- Detalle de los Productos -->
+    
     <section>
         <h2>Detalle de los Productos</h2>
         <table>
@@ -120,23 +117,20 @@ footer {
             <tbody>
                 {% for producto in productos %}
                 <tr>
-                    <td>{{ producto['cantidad'] }}</td> <!-- Accede al atributo usando la notación de punto -->
-                    <td>{{ producto['descripcion'] }}</td> <!-- Accede al atributo usando la notación de punto -->
-                    <td>{{ producto['valor_unitario'] }}</td> <!-- Accede al atributo usando la notación de punto -->
+                    <td>{{ productos['cantidad'] }}</td>
+                    <td>{{ productos['descripcion'] }}</td>
+                    <td>{{ productos['valor_unitario'] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </section>
 
-    <!-- Línea de corte -->
     <div class="corte"></div>
 
-    <!-- Totales -->
     <section>
         <h2>Totales</h2>
-        <!-- Mostrar el total de la venta -->
-        <p>Total a Pagar: COP {{ productos[0]['total_a_pagar'] }}</p> <!-- Ajusta el índice según la estructura de tus datos -->
+        <p>Total a Pagar: COP {{ productos[0]['total_a_pagar'] }}</p>
         <div class="linea-entrecortada"></div>
     </section>
 
