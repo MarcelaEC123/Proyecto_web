@@ -69,12 +69,12 @@
                     <div class="modal-body">
                         <div class="caja1">
                             <div class="form-group">
-                                    <label for="id_producto">Id Producto: </label>
-                                <input type="text" id="id_producto" name="id_producto">
+                                <label for="id_producto">Id Producto: </label>
+                                <input type="text" id="id_producto" name="id_producto" value="{{ next_id }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="codigo">Codigo: </label>
-                                <input type="text" id="codigo" name="codigo">
+                                <input type="text" id="codigo" name="codigo" value="{{ new_code }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="descripcion">Descripcion: </label>
@@ -88,8 +88,8 @@
                         </div>
                         <div class="caja1">
                             <div class="form-group">
-                                <label for="valor_unitario">Proveedor </label>
-                                <input type="text" id="proveedor" name="proveedor">
+                                <label for="nombre_proveedor">Nombre Proveedor </label>
+                                <input type="text" id="nombre_proveedor" name="nombre_proveedor">
                             </div>
                             <div class="form-group">
                                 <label for="medio_pago">Valor unitario:</label>
@@ -115,7 +115,7 @@
                             <th scope="col">Codigo</th>
                             <th scope="col">Descripcion</th> 
                             <th scope="col">Categoria</th> 
-                            <th scope="col">nombre_proveedorr</th> 
+                            <th scope="col">nombre_proveedor</th> 
                             <th scope="col">Unidad_medida</th> 
                             <th scope="col">Valor_unitario</th> 
                             <th scope="col" colspan="2">Acciones</th> 
@@ -128,7 +128,7 @@
                                 <td>{{d.codigo}}</td>
                                 <td>{{d.descripcion}}</td>
                                 <td>{{d.categoria}}</td>
-                                <td>{{d. nombre_proveedor}}</td>
+                                <td>{{d.nombre_proveedor}}</td>
                                 <td>{{d.unidad_medida}}</td>
                                 <td>{{d.valor_unitario}}</td>
                                 <td><button class="btn btn-primary btn-sm" id="btn-editar{{d.id_producto}}" data-bs-toggle="modal" data-bs-target="#modal{{d.id_producto}}">Editar</button></td>  
@@ -154,7 +154,7 @@
                                                 <label>Categoria: </label>
                                                 <input type="text" id="categoria" name="categoria" value="{{d.categoria}}">
                                                 <label> nombre_proveedor </label>
-                                                <input type="text" id=" nombre_proveedor" name=" nombre_proveedor" value="{{d.nombre_proveedor}}">
+                                                <input type="text" id="nombre_proveedor" name="nombre_proveedor" value="{{d.nombre_proveedor}}">
                                                 <label>Valor unitario:</label>
                                                 <input type="text" id="valorUnitario" name="valor_unitario" value="{{d.valor_unitario}}">
                                                 <label>Unidad de medida: </label>
