@@ -59,16 +59,41 @@ def logout():
 # Ruta para caja-Venta
 @app.route("/caja")
 def caja():
-     db_connection, cursor = db.conectar_bd()
-     cursor.execute("SELECT * FROM venta")
-     myresult = cursor.fetchall()
-     #convertir datos a diccionary 
-     insertObjec = []
-     columnNames = [column[0] for column in cursor.description]
-     for record in myresult:
-            insertObjec.append(dict(zip(columnNames, record)))
-     cursor.close()   
-     return render_template("caja.html", data=insertObjec)
+    db_connection, cursor = db.conectar_bd()
+    
+    # Obtener el próximo valor autoincremental de id_producto
+    cursor.execute("SHOW TABLE STATUS LIKE 'venta'")
+    table_status = cursor.fetchone()
+    next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
+    
+    # Contar la cantidad de registros
+    cursor.execute("SELECT COUNT(*) FROM venta")
+    count = cursor.fetchone()[0]
+    if count == 0:
+        next_id = 1  # Si no hay registros, comenzar desde 1
+    else:
+        # Obtener el último ID y ajustar para el siguiente ID
+        cursor.execute("SELECT MAX(id_venta) FROM venta")
+        last_id = cursor.fetchone()[0]
+        next_id = last_id + 1
+    # Generar el nuevo código
+    cursor.execute("SELECT MAX(id_factura) FROM venta")
+    last_code = cursor.fetchone()[0]
+    if last_code:
+        new_code = str(int(last_code) + 1).zfill(7)  # Incrementar el último código y rellenar con ceros
+    else:
+        new_code = "0000001"  # Si no hay códigos en la base de datos, iniciar desde "0001"
+    # Obtener los productos existentes
+    cursor.execute("SELECT * FROM venta")
+    myresult = cursor.fetchall()
+    # Convertir datos a diccionario
+    insertObjec = []
+    columnNames = [column[0] for column in cursor.description]
+    for record in myresult:
+        insertObjec.append(dict(zip(columnNames, record)))
+    cursor.close()
+    return render_template("caja.html", data=insertObjec, next_id=next_id, new_code=new_code)
+
  
 #Ruta para guardar VENTAS
 @app.route('/guardarVenta', methods=['POST'])
@@ -129,15 +154,33 @@ def generar_ticket(id_venta):
 @app.route("/clientes")
 def clientes():
     db_connection, cursor = db.conectar_bd()
+    
+    # Obtener el próximo valor autoincremental de id_producto
+    cursor.execute("SHOW TABLE STATUS LIKE 'clientes'")
+    table_status = cursor.fetchone()
+    next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
+    
+    # Contar la cantidad de registros
+    cursor.execute("SELECT COUNT(*) FROM clientes")
+    count = cursor.fetchone()[0]
+    if count == 0:
+        next_id = 1  # Si no hay registros, comenzar desde 1
+    else:
+        # Obtener el último ID y ajustar para el siguiente ID
+        cursor.execute("SELECT MAX(id_cliente) FROM clientes")
+        last_id = cursor.fetchone()[0]
+        next_id = last_id + 1
+    
+    # Obtener los productos existentes
     cursor.execute("SELECT * FROM clientes")
     myresult = cursor.fetchall()
-    #convertir datos a diccionary 
+    # Convertir datos a diccionario
     insertObjec = []
     columnNames = [column[0] for column in cursor.description]
     for record in myresult:
-            insertObjec.append(dict(zip(columnNames, record)))
-    cursor.close() 
-    return render_template("clientes.html", data=insertObjec)
+        insertObjec.append(dict(zip(columnNames, record)))
+    cursor.close()
+    return render_template("clientes.html", data=insertObjec, next_id=next_id)
 
 #Ruta para guardar CLIENTES
 @app.route('/guardarClientes', methods=['POST'])
