@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for
 import database as db
 
-app = Flask(__name__, template_folder="C:\\Users\\lenovo\\OneDrive\\Desktop\\UNIAGUSTINIANA\\Proyecto\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
+app = Flask(__name__, template_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
 
 # Ruta para la página de inicio
 @app.route("/")
@@ -99,7 +99,7 @@ def caja():
 def addGuardarVenta():    
      id_venta = request.form['id_venta']
      id_factura= request.form['id_factura']
-     codigo = request.form['codigo']
+     nombre_proveedor = request.form['nombre_proveedor']
      descripcion = request.form['descripcion']
      valor_unitario = request.form['valor_unitario']
      medio_pago = request.form['medio_pago']
@@ -111,10 +111,10 @@ def addGuardarVenta():
      fecha_registro = request.form['fecha_registro']
      observaciones = request.form['observaciones']
      
-     if id_venta and id_factura and codigo and descripcion and valor_unitario and medio_pago and descuento and id_cliente and cantidad and iva and total_a_pagar and fecha_registro and observaciones:
+     if id_venta and id_factura and  nombre_proveedor and descripcion and valor_unitario and medio_pago and descuento and id_cliente and cantidad and iva and total_a_pagar and fecha_registro and observaciones:
         db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO venta (id_venta,id_factura,codigo,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        data = (id_venta,id_factura,codigo,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones,)
+        sql = "INSERT INTO venta (id_venta,id_factura, nombre_proveedor,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_venta,id_factura,nombre_proveedor,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones,)
         cursor.execute(sql, data)
         db_connection.commit()
         cursor.close()
@@ -122,15 +122,38 @@ def addGuardarVenta():
      return redirect(url_for('caja'))
 
 @app.route('/deleteVenta/<string:id_venta>')
-def deleteVenta (id_venta):
+def deleteVenta(id_venta):
+    try:
+        # Conectar a la base de datos y crear un cursor
         db_connection, cursor = db.conectar_bd()
-        sql = "DELETE FROM venta WHERE id_venta=%s"
-        data = (id_venta,)
-        cursor.execute(sql, data)
+
+        # Definir la consulta SQL para eliminar la venta por su ID
+        sql = "DELETE FROM venta WHERE id_venta = %s"
+
+        # Ejecutar la consulta SQL con los datos proporcionados
+        cursor.execute(sql, (id_venta,))
+
+        # Confirmar los cambios en la base de datos
         db_connection.commit()
+
+        # Cerrar el cursor y la conexión
         cursor.close()
         db_connection.close()
+
+        # Redirigir al usuario de vuelta a la página de caja después de eliminar la venta
         return redirect(url_for('caja'))
+
+    except Exception as e:
+        # Manejar cualquier excepción que ocurra durante el proceso
+        # Imprimir el error para fines de depuración
+        print("Error al eliminar la venta:", e)
+        # Si hay un error, deshacer cualquier cambio pendiente y cerrar la conexión
+        db_connection.rollback()
+        cursor.close()
+        db_connection.close()
+        # Redirigir al usuario a una página de error o volver a cargar la página actual
+        # Puedes personalizar esta parte según tu aplicación
+        return "Error al eliminar la venta. Por favor, inténtalo de nuevo más tarde."
 
 @app.route("/generar_ticket/<int:id_venta>")
 def generar_ticket(id_venta):
