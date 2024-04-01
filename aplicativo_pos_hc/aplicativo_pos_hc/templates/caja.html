@@ -59,15 +59,13 @@
                         <thead>
                             <th scope="col">Id_venta</th> 
                             <th scope="col">Id_Factura</th> 
-                            <th scope="col">Nombre_proveedor</th>
+                            <th scope="col">codigo</th>
                             <th scope="col">Descripcion</th> 
                             <th scope="col">Valor_Unitario</th> 
                             <th scope="col">Medio_Pago</th> 
                             <th scope="col">Descuento</th> 
-                            <th scope="col">Id_Cliente</th>
                             <th scope="col">Cantidad</th>
                             <th scope="col">Iva</th>
-                            <th scope="col">Total_a_pagar</th>
                             <th scope="col">Fecha_Registro</th>
                             <th scope="col">Observaciones</th>
                             <th scope="col" colspan="3">Acciones</th> 
@@ -78,15 +76,13 @@
                             <tr>
                                 <td>{{d.id_venta}}</td>
                                 <td>{{d.id_factura}}</td>
-                                <td>{{d.nombre_proveedor}}</td>
+                                <td>{{d.codigo}}</td>
                                 <td>{{d.descripcion}}</td>
                                 <td>{{d.valor_unitario}}</td>
                                 <td>{{d.medio_pago}}</td>
-                                <td>{{d.descuento}}</td>
-                                <td>{{d.id_cliente}}</td>
+                                <td>{{d.descuento}}</td> 
                                 <td>{{d.cantidad}}</td>
                                 <td>{{d.iva}}</td>
-                                <td>{{d.total_a_pagar}}</td>
                                 <td>{{d.fecha_registro}}</td>
                                 <td>{{d.observaciones}}</td>
                                 <td><a href="{{ url_for('generar_ticket', id_venta=d.id_venta) }}" class="btn btn-primary btn-sm">Ticket</a></td>
@@ -117,8 +113,8 @@
                         <input type="text" id="id_factura" name="id_factura" value="{{ new_code }}" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="nombre_proveedor">Nombre Proveedor:</label>
-                        <input type="text" id="nombre_proveedor" name="nombre_proveedor">
+                        <label for="codigo">codigo:</label>
+                        <input type="text" id="codigo" name="codigo">
 
                     </div>
                     <div class="form-group">
@@ -140,10 +136,6 @@
                 </div>
                 <div class="caja1">
                     <div class="form-group">
-                        <label for="id_cliente">Id Cliente:</label>
-                        <input type="text" id="id_cliente" name="id_cliente">
-                    </div>
-                    <div class="form-group">
                         <label for="cantidad">Cantidad:</label>
                         <input type="text" id="cantidad" name="cantidad">
                     </div>
@@ -151,10 +143,7 @@
                         <label for="iva">IVA:</label>
                         <input type="text" id="iva" name="iva">
                     </div>
-                    <div class="form-group">
-                        <label for="total_a_pagar">Total_a_Pagar:</label>
-                        <input type="text" id="total_a_pagar" name="total_a_pagar">
-                    </div>
+                   
                     <div class="form-group">
                         <label for="fecha_registro">Fecha de registro:</label>
                         <input type="date" id="fecha_registro" name="fecha_registro">

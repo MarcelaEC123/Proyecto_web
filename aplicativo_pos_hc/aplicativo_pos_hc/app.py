@@ -99,22 +99,20 @@ def caja():
 def addGuardarVenta():    
      id_venta = request.form['id_venta']
      id_factura= request.form['id_factura']
-     nombre_proveedor = request.form['nombre_proveedor']
+     codigo = request.form['codigo']
      descripcion = request.form['descripcion']
      valor_unitario = request.form['valor_unitario']
      medio_pago = request.form['medio_pago']
      descuento = request.form['descuento']
-     id_cliente = request.form['id_cliente']
      cantidad = request.form['cantidad']
      iva = request.form['iva']
-     total_a_pagar = request.form['total_a_pagar']
      fecha_registro = request.form['fecha_registro']
      observaciones = request.form['observaciones']
      
-     if id_venta and id_factura and  nombre_proveedor and descripcion and valor_unitario and medio_pago and descuento and id_cliente and cantidad and iva and total_a_pagar and fecha_registro and observaciones:
+     if id_venta and id_factura and codigo and descripcion and valor_unitario and medio_pago and descuento and  cantidad and iva and  fecha_registro and observaciones:
         db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO venta (id_venta,id_factura, nombre_proveedor,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        data = (id_venta,id_factura,nombre_proveedor,descripcion,valor_unitario,medio_pago,descuento,id_cliente,cantidad,iva,total_a_pagar,fecha_registro,observaciones,)
+        sql = "INSERT INTO venta (id_venta,id_factura, codigo,descripcion,valor_unitario,medio_pago,descuento,cantidad,iva,fecha_registro,observaciones) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        data = (id_venta,id_factura,codigo,descripcion,valor_unitario,medio_pago,descuento,cantidad,iva,fecha_registro,observaciones,)
         cursor.execute(sql, data)
         db_connection.commit()
         cursor.close()
