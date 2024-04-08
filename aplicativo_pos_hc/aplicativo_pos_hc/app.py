@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for
+
 import database as db
 
 app = Flask(__name__, template_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
@@ -49,7 +50,7 @@ def logout():
 def caja():
     try:
         db_connection, cursor = db.conectar_bd()
-        
+
         # Obtener el próximo valor autoincremental de id_venta
         cursor.execute("SHOW TABLE STATUS LIKE 'venta'")
         table_status = cursor.fetchone()
@@ -91,33 +92,36 @@ def caja():
         else:
             return "No se pudo obtener información de la tabla 'venta'"
     except Exception as e:
-        # Manejar cualquier excepción que ocurra
         return f"Error: {str(e)}"
-
-#Ruta para guardar VENTAS
+        
 @app.route('/guardarVenta', methods=['POST'])
 def addGuardarVenta():    
-     id_venta = request.form['id_venta']
-     id_factura= request.form['id_factura']
-     codigo = request.form['codigo']
-     descripcion = request.form['descripcion']
-     valor_unitario = request.form['valor_unitario']
-     medio_pago = request.form['medio_pago']
-     descuento = request.form['descuento']
-     cantidad = request.form['cantidad']
-     iva = request.form['iva']
-     fecha_registro = request.form['fecha_registro']
-     observaciones = request.form['observaciones']
-     
-     if id_venta and id_factura and codigo and descripcion and valor_unitario and medio_pago and descuento and  cantidad and iva and  fecha_registro and observaciones:
-        db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO venta (id_venta,id_factura, codigo,descripcion,valor_unitario,medio_pago,descuento,cantidad,iva,fecha_registro,observaciones) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        data = (id_venta,id_factura,codigo,descripcion,valor_unitario,medio_pago,descuento,cantidad,iva,fecha_registro,observaciones,)
-        cursor.execute(sql, data)
-        db_connection.commit()
-        cursor.close()
-        db_connection.close()
-     return redirect(url_for('caja'))
+    id_venta = request.form['id_venta']
+    id_factura = request.form['id_factura']  
+    medio_pago = request.form['medio_pago']
+    descuento = request.form['descuento']
+    iva = request.form['iva']
+    fecha_registro = request.form['fecha_registro']
+    observaciones = request.form['observaciones']
+    
+    # Corrige la cantidad de parámetros y la consulta SQL para la inserción de la venta
+    if id_venta and id_factura and medio_pago and descuento and iva and fecha_registro and observaciones:
+        try:
+            db_connection, cursor = db.conectar_bd()
+            sql_venta = "INSERT INTO venta (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, observaciones) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            data_venta = (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, observaciones)
+            cursor.execute(sql_venta, data_venta)
+            
+            db_connection.commit()
+            cursor.close()
+            db_connection.close()
+            return redirect(url_for('caja'))
+        except Exception as e:
+            return f"Error al guardar la venta: {str(e)}"
+    else:
+        return "Por favor, complete todos los campos."
+
+
 
 @app.route('/deleteVenta/<string:id_venta>')
 def deleteVenta(id_venta):
@@ -155,25 +159,59 @@ def deleteVenta(id_venta):
 
 @app.route("/generar_ticket/<int:id_venta>")
 def generar_ticket(id_venta):
-    # Conectar a la base de datos y crear un cursor
-    db_connection, cursor = db.conectar_bd()
+    try:
+        # Conectar a la base de datos y crear un cursor
+        db_connection, cursor = db.conectar_bd()
 
-    # Ejecutar la consulta SQL para seleccionar los registros relevantes de la tabla de ventas
-    cursor.execute("SELECT cantidad, descripcion, valor_unitario ,id_factura,fecha_registro FROM venta WHERE id_venta = %s", (id_venta,))
+        # Ejecutar la consulta SQL para seleccionar los registros relevantes de la tabla de ventas
+        cursor.execute("SELECT cantidad, descripcion, valor_unitario, id_factura, fecha_registro FROM venta WHERE id_venta = %s", (id_venta,))
+        
+        # Obtener los resultados de la consulta
+        venta_data = cursor.fetchall()
+
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        db_connection.close()
+        
+        # Renderizar la plantilla HTML con los datos recuperados
+        return render_template("factura.html", productos=venta_data)
     
-    # Obtener los resultados de la consulta
-    venta_data = cursor.fetchall()
+    except Exception as e:
+        return f"Error al generar el ticket: {str(e)}"
 
-    # Imprimir los datos de la venta para depuración
-    print("Datos de la venta:", venta_data)
 
-    # Cerrar el cursor y la conexión
-    cursor.close()
-    db_connection.close()
-    
-    # Renderizar la plantilla HTML con los datos recuperados
-    return render_template("factura.html", productos=venta_data)
 
+@app.route('/agregar_producto/<int:id_venta>', methods=['POST'])
+def agregar_producto_venta(id_venta):
+    try:
+        if request.method == 'POST':
+            # Obtener los datos del formulario
+            codigo = request.form.get('codigo')
+            descripcion = request.form.get('descripcion')
+            cantidad = request.form.get('cantidad')
+            valor_unitario = request.form.get('valor_unitario')
+           
+            # Verificar si todos los campos están presentes
+            if None in (codigo, descripcion, cantidad, valor_unitario):
+                return "Todos los campos son requeridos."
+
+            # Id_factura predefinida
+            id_factura = 1  # Reemplaza esto con el valor real de la factura
+
+            # Corrige la consulta SQL para la inserción de productos en la venta
+            db_connection, cursor = db.conectar_bd()
+            sql = "INSERT INTO detalle_venta (id_venta, codigo, descripcion, cantidad, valor_unitario) VALUES (%s, %s, %s, %s, %s, %s)"
+            data = (id_venta, codigo, descripcion, cantidad, valor_unitario)
+            cursor.execute(sql, data)
+            db_connection.commit()
+            cursor.close()
+            db_connection.close()
+
+            return "Producto agregado correctamente a la venta."
+    except Exception as e:
+        print("Error no esperado:", e)
+        return f"Error no esperado al agregar el producto a la venta: {str(e)}"
+ 
 @app.route("/clientes")
 def clientes():
     db_connection, cursor = db.conectar_bd()
@@ -241,7 +279,7 @@ def deleteCliente (id_cliente):
 def proveedores():
     db_connection, cursor = db.conectar_bd()
     
-        # Obtener el próximo valor autoincremental de id_producto
+       # Obtener el próximo valor autoincremental de id_producto
     cursor.execute("SHOW TABLE STATUS LIKE 'proveedor'")
     table_status = cursor.fetchone()
     next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
@@ -301,6 +339,31 @@ def deleteProveedor (id_proveedor):
         cursor.close()
         db_connection.close()
         return redirect(url_for('proveedores'))
+
+@app.route('/editar_proveedor', methods=['POST'])
+def editar_proveedor():
+    # Tu lógica para editar el proveedor aquí
+
+    if request.method == 'POST':
+        id_proveedor = request.form['id_proveedor']
+        tipo_identificacion = request.form['tipo_identificacion']
+        numero_identificacion = request.form['numero_identificacion']
+        nombre_proveedor = request.form['nombre_proveedor']
+        email = request.form['email']
+        direccion = request.form['direccion']
+        telefono = request.form['telefono']
+        dia_de_visita = request.form['dia_de_visita']
+        dia_de_entrega = request.form['dia_de_entrega']
+
+        if id_proveedor and tipo_identificacion and numero_identificacion and nombre_proveedor and email and direccion and telefono and dia_de_visita and dia_de_entrega:
+            if db.actualizar_proveedor(id_proveedor, tipo_identificacion, numero_identificacion, nombre_proveedor, email, direccion, telefono, dia_de_visita, dia_de_entrega):
+                return 'Proveedor editado exitosamente'
+            else:
+                return 'Proveedor no encontrado'
+        else:
+            return 'Todos los campos son obligatorios'
+
+
 
 #Ruta para guardar PRODUCTOS
 @app.route("/productos")
@@ -399,25 +462,32 @@ def delete (id_producto):
         db_connection.close()
         return redirect(url_for('productos'))
 
-@app.route('/editar_producto/<string:id_producto>', methods=['POST'])
-def editar(id_producto):
-    codigo = request.form['codigo']
-    descripcion = request.form['descripcion']
-    categoria = request.form['categoria']
-    nombre_proveedor = request.form[' nombre_proveedor']
-    stock = request.form['stock']
-    valorUnitario = request.form['valor_unitario']
-    unidadMedida = request.form['unidad_medida']
-        
-    if codigo and descripcion and categoria and nombre_proveedor and stock and valorUnitario and unidadMedida:
-        db_connection, cursor = db.conectar_bd()
-        sql = "UPDATE producto SET codigo = %s, descripcion = %s, categoria = %s, nombre_proveedor= %s,stock= %s, valor_unitario = %s, unidad_medida = %s WHERE id_producto = %s"
-        data = (codigo, descripcion, categoria,  nombre_proveedor,stock, valorUnitario, unidadMedida, id_producto)
-        cursor.execute(sql, data)
-        db_connection.commit()
-        cursor.close()
-        db_connection.close()
-    return redirect(url_for('productos'))
+@app.route('/editar_producto', methods=['POST'])
+def editar_producto():
+    # Tu lógica para editar el producto aquí
+
+    if request.method == 'POST':
+        # Obtiene los datos del formulario
+        id_producto = request.form['id_producto']
+        codigo = request.form['codigo']
+        descripcion = request.form['descripcion']
+        categoria = request.form['categoria']
+        nombre_proveedor = request.form['nombre_proveedor']
+        valor_unitario = request.form['valor_unitario']
+        unidad_medida = request.form['unidad_medida']
+        stock = request.form['stock']
+
+     
+
+        if id_producto and codigo and descripcion and categoria and nombre_proveedor and valor_unitario and unidad_medida and stock:
+            if db.actualizar_proveedor(id_producto, codigo, descripcion, categoria,nombre_proveedor, valor_unitario, unidad_medida, stock):
+                return 'Producto fue editado exitosamente'
+            else:
+                return 'Producto no encontrado'
+        else:
+            return 'Todos los campos son obligatorios'
+
+
 
 # Ruta para mostrar usuarios
 @app.route("/usuarios")

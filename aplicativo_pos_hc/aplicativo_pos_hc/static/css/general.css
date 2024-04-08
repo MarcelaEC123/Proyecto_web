@@ -281,13 +281,23 @@ input[type="text"] {
     font-size: 80%;
 }
 
-th{
+th, td {
     font-family: 'Times New Roman', Times, serif;
-    font-size: 90%;
-    text-align: center;
+    font-size: 80%; /* Ajusta el tamaño de fuente según sea necesario */
+    text-align: center; /* Centra el texto en las celdas */
 }
 
-td{
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 80%;
+.table {
+    width: 100%; /* Hace que la tabla ocupe todo el ancho del contenedor */
+    border-collapse: collapse; /* Fusiona los bordes de las celdas */
+}
+
+.table th, .table td {
+    border: 1px solid #ccc; /* Añade un borde a todas las celdas */
+    padding: 8px; /* Añade espacio interno a las celdas */
+}
+
+.table th {
+    background-color: #d8e4f0; /* Color de fondo para las celdas del encabezado */
+    color: #000; /* Color de texto para las celdas del encabezado */
 }

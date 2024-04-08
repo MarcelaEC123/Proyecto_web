@@ -1,15 +1,18 @@
-<!-- productos.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-NwF3tBdYF4JcJjU4pN3nI9an2P+iK8a/1qdzNm5/lf7dUq0HfdvpBfB5SvOzJ4tv" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha384-NwF3tBdYF4JcJjU4pN3nI9an2P+iK8a/1qdzNm5/lf7dUq0HfdvpBfB5SvOzJ4tv" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Página con Menú</title>
 </head>
+
 <body>
     <div class="wrapper">
         <div class="sidebar">
@@ -18,7 +21,7 @@
                     <img src="/static/images/logo.png" alt="Logo">
                 </div>
                 <br>
-                
+
                 <div class="user-icon">
                     <img src="/static/images/usuario-de-perfil.png" alt="User Icon">
                 </div>
@@ -39,141 +42,188 @@
                 <br>
                 <li><a href="{{ url_for('usuarios') }}"><i class="fas fa-box"></i> Usuarios</a></li>
             </ul>
-            
-           
         </div>
         <a href="{{ url_for('logout') }}" class="logout-link">
             <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-        </a>       
-          
-        <div class="content d-flex flex-column " >
-            <!-- Contenido principal -->
-            <h3>Registro de Caja</h3>     
-                <div class="horizontal-bar my-4 d-flex py-2 justify-content-end " >
-                    <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
-                    <!-- <button type="button" class="lector">Lectura codigo de barras</button> -->
-                    <input type="text" id="search-input" placeholder="Buscar...">
-                </div>
-                
-                    <table class="table table-bordered">
-                        <thead>
-                            <th scope="col">Id_venta</th> 
-                            <th scope="col">Id_Factura</th> 
-                            <th scope="col">codigo</th>
-                            <th scope="col">Descripcion</th> 
-                            <th scope="col">Valor_Unitario</th> 
-                            <th scope="col">Medio_Pago</th> 
-                            <th scope="col">Descuento</th> 
-                            <th scope="col">Cantidad</th>
-                            <th scope="col">Iva</th>
-                            <th scope="col">Fecha_Registro</th>
-                            <th scope="col">Observaciones</th>
-                            <th scope="col" colspan="3">Acciones</th> 
-                        </thead>
-                    
-                    <tbody >
-                        {% for d in data %}
-                            <tr>
-                                <td>{{d.id_venta}}</td>
-                                <td>{{d.id_factura}}</td>
-                                <td>{{d.codigo}}</td>
-                                <td>{{d.descripcion}}</td>
-                                <td>{{d.valor_unitario}}</td>
-                                <td>{{d.medio_pago}}</td>
-                                <td>{{d.descuento}}</td> 
-                                <td>{{d.cantidad}}</td>
-                                <td>{{d.iva}}</td>
-                                <td>{{d.fecha_registro}}</td>
-                                <td>{{d.observaciones}}</td>
-                                <td><a href="{{ url_for('generar_ticket', id_venta=d.id_venta) }}" class="btn btn-primary btn-sm">Ticket</a></td>
-                                <td><a href="{{url_for('deleteVenta', id_venta=d.id_venta)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
-                                
-                            </tr>
+        </a>
+
+        <div class="content d-flex flex-column ">
+            <h3>Registro de Caja</h3>
+            <div class="horizontal-bar my-4 d-flex py-2 justify-content-end ">
+                <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openAgregarVentaModal()">
+                <input type="text" id="search-input" placeholder="Buscar...">
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                    <th scope="col">Id_venta</th>
+                    <th scope="col">Id_Factura</th>
+                    <th scope="col">Medio_Pago</th>
+                    <th scope="col">Descuento</th>
+                    <th scope="col">Iva</th>
+                    <th scope="col">Fecha_Registro</th>
+                    <th scope="col">Observaciones</th>
+                    <th scope="col">Acciones</th>
+                </thead>
+
+                <tbody>
+                    {% for d in data %}
+                    <tr>
+                        <td>{{ d.id_venta }}</td>
+                        <td>{{ d.id_factura }}</td>
+                        <td>{{ d.medio_pago }}</td>
+                        <td>{{ d.descuento }}</td>
+                        <td>{{ d.iva }}</td>
+                        <td>{{ d.fecha_registro }}</td>
+                        <td>{{ d.observaciones }}</td>
+                        <td>
+                            <a href="{{ url_for('generar_ticket', id_venta=d.id_venta) }}"
+                                class="btn btn-primary btn-sm">Ticket</a>
+                            <a href="{{ url_for('deleteVenta', id_venta=d.id_venta) }}"
+                                class="btn btn-danger btn-sm">Eliminar</a>
+                            <button type="button" class="btn btn-success btn-sm"
+                                onclick="openAgregarProductoModal('{{ d.id_venta }}')">Agregar Producto a Venta</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Tabla para mostrar los productos agregados -->
+            <div class="content d-flex flex-column ">
+                <h3>Productos Agregados</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <th scope="col">Código</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Valor Unitario</th>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos %}
+                        <tr>
+                            <td>{{ producto.codigo }}</td>
+                            <td>{{ producto.descripcion }}</td>
+                            <td>{{ producto.cantidad }}</td>
+                            <td>{{ producto.valor_unitario }}</td>
+                        </tr>
                         {% endfor %}
                     </tbody>
-                    </table>
+                </table>
+            </div>
         </div>
 
         <!-- Ventana modal agregar venta -->
         <div id="myModal" class="modal">
-            <div class="modal-content"> 
-                <form action="/guardarVenta" id="venta_form" method="post" >
+            <div class="modal-content">
+                <form action="/guardarVenta" id="venta_form" method="post">
                     <div class="modal-header">
                         <h2>Registro de venta</h2>
                         <span class="close" onclick="closeModal()">×</span>
                     </div>
-        <div class="modal-body">
-                <div class="caja1">
-                    <div class="form-group">
-                        <label for="id_venta">Id_venta</label>
-                        <input type="text" id="id_venta" name="id_venta" value="{{ next_id }}" readonly>
+                    <div class="modal-body">
+                        <!-- Contenido del formulario de venta -->
+                        <div class="form-group">
+                            <label for="id_venta">ID Venta:</label>
+                            <input type="text" id="id_venta" name="id_venta">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_factura">ID Factura:</label>
+                            <input type="text" id="id_factura" name="id_factura">
+                        </div>
+                        <div class="form-group">
+                            <label for="medio_pago">Medio de Pago:</label>
+                            <input type="text" id="medio_pago" name="medio_pago">
+                        </div>
+                        <div class="form-group">
+                            <label for="descuento">Descuento:</label>
+                            <input type="text" id="descuento" name="descuento">
+                        </div>
+                        <div class="form-group">
+                            <label for="iva">IVA:</label>
+                            <input type="text" id="iva" name="iva">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_registro">Fecha de Registro:</label>
+                            <input type="text" id="fecha_registro" name="fecha_registro">
+                        </div>
+                        <div class="form-group">
+                            <label for="observaciones">Observaciones:</label>
+                            <input type="text" id="observaciones" name="observaciones">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="id_factura">Id_Factura</label>
-                        <input type="text" id="id_factura" name="id_factura" value="{{ new_code }}" readonly>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
                     </div>
-                    <div class="form-group">
-                        <label for="codigo">codigo:</label>
-                        <input type="text" id="codigo" name="codigo">
 
-                    </div>
-                    <div class="form-group">
-                        <label for="descripcion">Descripción:</label>
-                        <input type="text" id="descripcion" name="descripcion">
-                    </div>
-                    <div class="form-group">
-                        <label for="valor_unitario">Valor Unitario:</label>
-                        <input type="text" id="valor_unitario" name="valor_unitario">
-                    </div>
-                    <div class="form-group">
-                        <label for="medio_pago">Medio de Pago:</label>
-                        <input type="text" id="medio_pago" name="medio_pago">
-                    </div>
-                    <div class="form-group">
-                        <label for="descuento">Descuento:</label>
-                        <input type="text" id="descuento" name="descuento">
-                    </div>
-                </div>
-                <div class="caja1">
-                    <div class="form-group">
-                        <label for="cantidad">Cantidad:</label>
-                        <input type="text" id="cantidad" name="cantidad">
-                    </div>
-                    <div class="form-group">
-                        <label for="iva">IVA:</label>
-                        <input type="text" id="iva" name="iva">
-                    </div>
-                   
-                    <div class="form-group">
-                        <label for="fecha_registro">Fecha de registro:</label>
-                        <input type="date" id="fecha_registro" name="fecha_registro">
-                    </div>
-                    <div class="form-group">
-                        <label for="observaciones">Observaciones:</label>
-                        <input type="text" id="observaciones" name="observaciones">
-                    </div>
-                </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
-                <button type="submit" class="btn btn-default">Guardar cambios</button>
+        </div>
+
+
+        <!-- Ventana modal agregar producto -->
+        <div id="agregarProductoModal" class="modal">
+            <div class="modal-content">
+                <form id="agregarProductoForm" action="" method="POST">
+                    <div class="modal-header">
+                        <h2>Agregar Producto</h2>
+                        <span class="close" onclick="closeAgregarProductoModal()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="id_venta_producto" name="id_venta_producto">
+                        <input type="hidden" id="id_factura_producto" name="facturaId">
+                        <div class="form-group">
+                            <label for="codigo">Código:</label>
+                            <input type="text" id="codigo" name="codigo">
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción:</label>
+                            <input type="text" id="descripcion" name="descripcion">
+                        </div>
+                        <div class="form-group">
+                            <label for="cantidad">Cantidad:</label>
+                            <input type="text" id="cantidad" name="cantidad">
+                        </div>
+                        <div class="form-group">
+                            <label for="valor_unitario">Valor Unitario:</label>
+                            <input type="text" id="valor_unitario" name="valor_unitario">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                            onclick="closeAgregarProductoModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Agregar Producto</button>
+                    </div>
+                </form>
             </div>
-    </div>
-</div>
-
+        </div>
     </div>
 
+    <!-- Scripts -->
     <script>
-        // Función para abrir la ventana modal
-        function openModal() {
+        // Función para abrir la ventana modal de agregar venta
+        function openAgregarVentaModal() {
             document.getElementById("myModal").style.display = "block";
         }
 
-        // Función para cerrar la ventana modal
+        // Función para cerrar la ventana modal de agregar venta
         function closeModal() {
             document.getElementById("myModal").style.display = "none";
         }
 
+        // Función para abrir la ventana modal de agregar producto
+        function openAgregarProductoModal(id_venta) {
+            document.getElementById("id_venta_producto").value = id_venta;
+            document.getElementById("agregarProductoForm").action = "/agregar_producto/" + id_venta;
+            document.getElementById("agregarProductoModal").style.display = "block";
+        }
+
+        // Función para cerrar la ventana modal de agregar producto
+        function closeAgregarProductoModal() {
+            document.getElementById("agregarProductoModal").style.display = "none";
+        }
     </script>
 </body>
+
 </html>

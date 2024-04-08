@@ -38,52 +38,54 @@
                 <br>
                 <li><a href="{{ url_for('usuarios') }}"><i class="fas fa-box"></i> Usuarios</a></li>
             </ul>
-            
-           
         </div>
+        
         <a href="{{ url_for('logout') }}" class="logout-link">
             <i class="fas fa-sign-out-alt"></i> Cerrar sesión
         </a>       
           
-        <div class="content d-flex flex-column " >
+        <div class="content d-flex flex-column">
             <!-- Contenido principal -->
             <h3>Registro de Proveedor</h3>     
-                <div class="horizontal-bar my-4 d-flex py-2 justify-content-end " >
-                    <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
-                    <input type="text" id="search-input" placeholder="Buscar...">
-                </div>
+            <div class="horizontal-bar my-4 d-flex py-2 justify-content-end">
+                <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openModal()">
+                <input type="text" id="search-input" placeholder="Buscar...">
+            </div>
                 
-                    <table class="table table-bordered">
-                        <thead>
-                            <th scope="col">Id Proveedor</th> 
-                            <th scope="col">Tipo Identificacion</th>
-                            <th scope="col">Numero Identificacion</th>
-                            <th scope="col">Nombre proveedor</th> 
-                            <th scope="col">Email</th> 
-                            <th scope="col">Direccion</th> 
-                            <th scope="col">Telefono</th> 
-                            <th scope="col">Dia de Visita</th> 
-                            <th scope="col">Dia de Entrega</th> 
-                            <th scope="col" colspan="2">Acciones</th> 
-                        </thead>
+            <table class="table table-bordered">
+                <thead>
+                    <th scope="col">Id Proveedor</th> 
+                    <th scope="col">Tipo Identificacion</th>
+                    <th scope="col">Numero Identificacion</th>
+                    <th scope="col">Nombre proveedor</th> 
+                    <th scope="col">Email</th> 
+                    <th scope="col">Direccion</th> 
+                    <th scope="col">Telefono</th> 
+                    <th scope="col">Dia de Visita</th> 
+                    <th scope="col">Dia de Entrega</th> 
+                    <th scope="col" colspan="2">Acciones</th> 
+                </thead>
                     
-                    <tbody >
-                        {% for d in data %}
-                            <tr>
-                                <td>{{d.id_proveedor}}</td>
-                                <td>{{d.tipo_identificacion}}</td>
-                                <td>{{d.numero_identificacion}}</td>
-                                <td>{{d.nombre_proveedor}}</td>
-                                <td>{{d.email}}</td>
-                                <td>{{d.direccion}}</td>
-                                <td>{{d.telefono}}</td>
-                                <td>{{d.dia_de_visita}}</td>
-                                <td>{{d.dia_de_entrega}}</td>
-                                <td><a href="{{url_for('deleteProveedor', id_proveedor=d.id_proveedor)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                    </table>
+                <tbody>
+                    {% for d in data %}
+                        <tr>
+                            <td>{{d.id_proveedor}}</td>
+                            <td>{{d.tipo_identificacion}}</td>
+                            <td>{{d.numero_identificacion}}</td>
+                            <td>{{d.nombre_proveedor}}</td>
+                            <td>{{d.email}}</td>
+                            <td>{{d.direccion}}</td>
+                            <td>{{d.telefono}}</td>
+                            <td>{{d.dia_de_visita}}</td>
+                            <td>{{d.dia_de_entrega}}</td>
+                            <td><a href="{{url_for('deleteProveedor', id_proveedor=d.id_proveedor)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" onclick="openEditModal('{{d.id_proveedor}}', '{{d.tipo_identificacion}}', '{{d.numero_identificacion}}', '{{d.nombre_proveedor}}', '{{d.email}}', '{{d.direccion}}', '{{d.telefono}}', '{{d.dia_de_visita}}', '{{d.dia_de_entrega}}')">Editar</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
         <!-- Ventana modal agregar venta -->
@@ -91,71 +93,71 @@
             <div class="modal-content">
                 <form action="/guardarProveedores" id="proveedores_form" method="post" >
                     <div class="modal-header">
-                        <h2>Crear  Proveedor</h2>
+                        <h2>Crear Proveedor</h2>
                         <span class="close" onclick="closeModal()">×</span>
                     </div>
-        <div class="modal-body">
-                <div class="caja1">
-                    <div class="form-group">
-                        <label for="id_proveedor">ID Proveedor:</label>
-                        <input type="text" id="id_proveedor" name="id_proveedor">
+                    <div class="modal-body">
+                        <div class="caja1">
+                            <div class="form-group">
+                                <label for="id_proveedor">ID Proveedor:</label>
+                                <input type="text" id="id_proveedor" name="id_proveedor" value="{{ id_proveedor_nuevo }}">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tipo_identificacion">Tipo de Identificacion:</label>
+                                <select type= "text" id="tipo_identificacion" name="tipo_identificacion">
+                                    <option value="cc">CC</option>
+                                    <option value="nit">NIT</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="numero_identificacion">Numero Identificacion:</label>
+                                <input type="text" id="numero_identificacion" name="numero_identificacion">
+                            </div>
+                            <div class="form-group">
+                                <label for="nombre_proveedor">Razon social:</label>
+                                <input type="text" id="nombre_proveedor" name="nombre_proveedor">
+                            </div>
+                        </div>
+                        <div class="caja1">
+                            <div class="form-group">
+                                <label for="direccion">Direccion:</label>
+                                <input type="text" id="direccion" name="direccion">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="text" id="email" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono">Telefono:</label>
+                                <input type="text" id="telefono" name="telefono">
+                            </div>
+                            <div class="form-group">
+                                <label for="dia_de_visita">Día de Visita:</label>    
+                                <select type="text" id="dia_de_visita" name="dia_de_visita">
+                                    <option value="lunes">Lunes</option>
+                                    <option value="martes">Martes</option>
+                                    <option value="miercoles">Miércoles</option>
+                                    <option value="jueves">Jueves</option>
+                                    <option value="viernes">Viernes</option>
+                                    <option value="sabado">Sábado</option>
+                                    <option value="domingo">Domingo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dia_de_entrega">Dia de Entrega:</label>
+                                <select type="text" id="dia_de_entrega" name="dia_de_entrega">
+                                    <option value="lunes">Lunes</option>
+                                    <option value="martes">Martes</option>
+                                    <option value="miercoles">Miércoles</option>
+                                    <option value="jueves">Jueves</option>
+                                    <option value="viernes">Viernes</option>
+                                    <option value="sabado">Sábado</option>
+                                    <option value="domingo">Domingo</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="tipo_identificacion">Tipo de Identificacion:</label>
-                        <select type= "text" id="tipo_identificacion" name="tipo_identificacion">
-                            <option value="cc">CC</option>
-                            <option value="nit">NIT</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="numero_identificacion">Numero Identificacion:</label>
-                        <input type="text" id="numero_identificacion" name="numero_identificacion">
-                    </div>
-                    <div class="form-group">
-                        <label for="nombre_proveedor">Razon social:</label>
-                        <input type="text" id="nombre_proveedor" name="nombre_proveedor">
-                    </div>
-                    
-                </div>
-                <div class="caja1">
-                    <div class="form-group">
-                        <label for="direccion">Direccion:</label>
-                        <input type="text" id="direccion" name="direccion">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="text" id="email" name="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="telefono">Telefono:</label>
-                        <input type="text" id="telefono" name="telefono">
-                    </div>
-                    <div class="form-group">
-                        <label for="dia_de_visita">Día de Visita:</label>    
-                         <select type="text" id="dia_de_visita" name="dia_de_visita">
-                           <option value="lunes">Lunes</option>
-                           <option value="lunes">Martes</option>
-                           <option value="lunes">Miercoles</option>
-                           <option value="lunes">Jueves</option>
-                           <option value="lunes">Viernes</option>
-                           <option value="lunes">Sabado</option>
-                           <option value="lunes">Domingo</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="dia_de_entrega">Dia de Entrega:</label>
-                        <select type="text" id="dia_de_entrega" name="dia_de_entrega">
-                            <option value="lunes">Lunes</option>
-                            <option value="lunes">Martes</option>
-                            <option value="lunes">Miercoles</option>
-                            <option value="lunes">Jueves</option>
-                            <option value="lunes">Viernes</option>
-                            <option value="lunes">Sabado</option>
-                            <option value="lunes">Domingo</option>
-                         </select>
-                    </div>
-                </div>
-            </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
                         <button type="submit" class="btn btn-default">Guardar cambios</button>
@@ -164,56 +166,68 @@
             </div>
         </div>
         
-  <!-- Ventana modal2 -->
-<div id="myModal2" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal2()">×</span>
-        <div class="modal-header">
-            <h2>Editar Proveedor</h2>
-        </div>
-        <div class="modal-body">
-            <div class="caja1">
-                <div class="form-group">
-                    <label for="venta_id">Proveedor ID:</label>
-                    <input type="text" id="proveedor_id" name="proveedor_id">
-                </div>
-                <div class="form-group">
-                    <label for="codigo">Tipo de Identificacion:</label>
-                    <select id="codigo" name="codigo">
-                        <option value="cc">CC</option>
-                        <option value="nit">NIT</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="descripcion">Identificacion:</label>
-                    <input type="text" id="Identificacion" name="Identificacion">
-                </div>
-                <div class="form-group">
-                    <label for="nombre_proveedor ">Razon social:</label>
-                    <input type="text" id="nombre_proveedor " name="nombre_proveedor ">
-                </div>
+        <!-- Ventana modal de edición -->
+        <div id="myModal2" class="modal">
+            <div class="modal-content">
+                <form id="edit-form" method="post">
+                    <div class="modal-header">
+                        <h2>Editar Proveedor</h2>
+                        <span class="close" onclick="closeModal2()">×</span>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="edit_id_proveedor" name="id_proveedor">
+                        <div class="form-group">
+                            <label for="edit_tipo_identificacion">Tipo de Identificación:</label>
+                            <input type="text" id="edit_tipo_identificacion" name="tipo_identificacion">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_numero_identificacion">Número de Identificación:</label>
+                            <input type="text" id="edit_numero_identificacion" name="numero_identificacion">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_nombre_proveedor">Nombre proveedor:</label>
+                            <input type="text" id="edit_nombre_proveedor" name="nombre_proveedor">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_email">Email:</label>
+                            <input type="text" id="edit_email" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_direccion">Dirección:</label>
+                            <input type="text" id="edit_direccion" name="direccion">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_telefono">Teléfono:</label>
+                            <input type="text" id="edit_telefono" name="telefono">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_dia_de_visita">Día de Visita:</label>
+                            <input type="text" id="edit_dia_de_visita" name="dia_de_visita">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_dia_de_entrega">Día de Entrega:</label>
+                            <input type="text" id="edit_dia_de_entrega" name="dia_de_entrega">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" onclick="closeModal2()">Cancelar</button>
+                        <button type="button" class="btn btn-default" onclick="submitForm()">Guardar cambios</button>
+                    </div>
+                </form>
             </div>
-            <div class="caja1">
-                <div class="form-group">
-                    <label for="descuento">Direccion:</label>
-                    <input type="text" id="descuento" name="descuento">
-                </div>
-                <div class="form-group">
-                    <label for="medio_pago">Email:</label>
-                    <input type="text" id="Email" name="Email">
-                </div>
-                <div class="form-group">
-                    <label for="medio_pago">Telegono:</label>
-                    <input type="text" id="Telefono" name="Telefono">
-                </div>
-            </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-default">Guardar cambios</button>
+
+        <!-- Contenedor para mostrar el mensaje de respuesta -->
+        <div id="response-message" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Respuesta</h2>
+                    <span class="close" onclick="closeResponseModal()">×</span>
+                </div>
+                <div class="modal-body"></div>
+            </div>
         </div>
     </div>
-</div>
 
     <script>
         // Función para abrir la ventana modal
@@ -223,21 +237,51 @@
         
         // Función para cerrar la ventana modal
         function closeModal() {
-            document.getElementById("myModal").style.display = "none";}
+            document.getElementById("myModal").style.display = "none";
+        }
 
-       
-    </script>
-    <script>
-         // Función para abrir la ventana modal
-         function openModal2() {
+        // Función para abrir la ventana modal de edición y llenar los campos con los detalles del proveedor
+        function openEditModal(id_proveedor, tipo_identificacion, numero_identificacion, nombre_proveedor, email, direccion, telefono, dia_de_visita, dia_de_entrega) {
+            document.getElementById("edit_id_proveedor").value = id_proveedor;
+            document.getElementById("edit_tipo_identificacion").value = tipo_identificacion;
+            document.getElementById("edit_numero_identificacion").value = numero_identificacion;
+            document.getElementById("edit_nombre_proveedor").value = nombre_proveedor;
+            document.getElementById("edit_email").value = email;
+            document.getElementById("edit_direccion").value = direccion;
+            document.getElementById("edit_telefono").value = telefono;
+            document.getElementById("edit_dia_de_visita").value = dia_de_visita;
+            document.getElementById("edit_dia_de_entrega").value = dia_de_entrega;
             document.getElementById("myModal2").style.display = "block";
         }
-        
-        // Función para cerrar la ventana modal
+
+        // Función para cerrar la ventana modal de edición
         function closeModal2() {
-            document.getElementById("myModal2").style.display = "none";}
+            document.getElementById("myModal2").style.display = "none";
+        }
 
+        // Función para enviar el formulario utilizando AJAX
+        function submitForm() {
+            var formData = new FormData(document.getElementById("edit-form"));
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Si la respuesta es exitosa, muestra el mensaje de respuesta en el modal de edición
+                        document.querySelector("#myModal2 .modal-body").innerHTML = xhr.responseText;
+                    } else {
+                        // Maneja los errores si es necesario
+                        console.error('Error al enviar el formulario:', xhr.status);
+                    }
+                }
+            };
+            xhr.open("POST", "/editar_proveedor", true);
+            xhr.send(formData);
+        }
+
+        // Función para cerrar el modal de respuesta
+        function closeResponseModal() {
+            document.getElementById("response-message").style.display = "none";
+        }
     </script>
-
 </body>
 </html>
