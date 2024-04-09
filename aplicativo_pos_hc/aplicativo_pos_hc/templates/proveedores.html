@@ -88,7 +88,7 @@
             </table>
         </div>
 
-        <!-- Ventana modal agregar venta -->
+        <!-- Ventana modal agregar PROVEEDOR -->
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <form action="/guardarProveedores" id="proveedores_form" method="post" >
@@ -100,14 +100,17 @@
                         <div class="caja1">
                             <div class="form-group">
                                 <label for="id_proveedor">ID Proveedor:</label>
-                                <input type="text" id="id_proveedor" name="id_proveedor" value="{{ id_proveedor_nuevo }}">
+                                <input type="text" id="id_proveedor" name="id_proveedor" value="{{ next_id }}" readonly>
                             </div>
                             
                             <div class="form-group">
                                 <label for="tipo_identificacion">Tipo de Identificacion:</label>
                                 <select type= "text" id="tipo_identificacion" name="tipo_identificacion">
-                                    <option value="cc">CC</option>
-                                    <option value="nit">NIT</option>
+                                    <option value="CC">CC</option>
+                                    <option value="CE">CE</option>
+                                    <option value="NIT">NIT</option>
+                                    <option value="RC">RC</option>
+                                    <option value="OTRO">OTRO</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -135,25 +138,25 @@
                             <div class="form-group">
                                 <label for="dia_de_visita">Día de Visita:</label>    
                                 <select type="text" id="dia_de_visita" name="dia_de_visita">
-                                    <option value="lunes">Lunes</option>
-                                    <option value="martes">Martes</option>
-                                    <option value="miercoles">Miércoles</option>
-                                    <option value="jueves">Jueves</option>
-                                    <option value="viernes">Viernes</option>
-                                    <option value="sabado">Sábado</option>
-                                    <option value="domingo">Domingo</option>
+                                    <option value="Lunes">Lunes</option>
+                                    <option value="Martes">Martes</option>
+                                    <option value="Miercoles">Miércoles</option>
+                                    <option value="Jueves">Jueves</option>
+                                    <option value="Viernes">Viernes</option>
+                                    <option value="Sabado">Sábado</option>
+                                    <option value="Domingo">Domingo</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="dia_de_entrega">Dia de Entrega:</label>
                                 <select type="text" id="dia_de_entrega" name="dia_de_entrega">
-                                    <option value="lunes">Lunes</option>
-                                    <option value="martes">Martes</option>
-                                    <option value="miercoles">Miércoles</option>
-                                    <option value="jueves">Jueves</option>
-                                    <option value="viernes">Viernes</option>
-                                    <option value="sabado">Sábado</option>
-                                    <option value="domingo">Domingo</option>
+                                    <option value="Lunes">Lunes</option>
+                                    <option value="Martes">Martes</option>
+                                    <option value="Miercoles">Miércoles</option>
+                                    <option value="Jueves">Jueves</option>
+                                    <option value="Viernes">Viernes</option>
+                                    <option value="Sabado">Sábado</option>
+                                    <option value="Domingo">Domingo</option>
                                 </select>
                             </div>
                         </div>
@@ -175,39 +178,65 @@
                         <span class="close" onclick="closeModal2()">×</span>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" id="edit_id_proveedor" name="id_proveedor">
-                        <div class="form-group">
-                            <label for="edit_tipo_identificacion">Tipo de Identificación:</label>
-                            <input type="text" id="edit_tipo_identificacion" name="tipo_identificacion">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_numero_identificacion">Número de Identificación:</label>
-                            <input type="text" id="edit_numero_identificacion" name="numero_identificacion">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_nombre_proveedor">Nombre proveedor:</label>
-                            <input type="text" id="edit_nombre_proveedor" name="nombre_proveedor">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_email">Email:</label>
-                            <input type="text" id="edit_email" name="email">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_direccion">Dirección:</label>
-                            <input type="text" id="edit_direccion" name="direccion">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_telefono">Teléfono:</label>
-                            <input type="text" id="edit_telefono" name="telefono">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_dia_de_visita">Día de Visita:</label>
-                            <input type="text" id="edit_dia_de_visita" name="dia_de_visita">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_dia_de_entrega">Día de Entrega:</label>
-                            <input type="text" id="edit_dia_de_entrega" name="dia_de_entrega">
-                        </div>
+                        <div class="caja1">
+                            <input type="hidden" id="edit_id_proveedor" name="id_proveedor">
+                            <div class="form-group">
+                                <label for="edit_tipo_identificacion">Tipo de Identificación:</label>
+                                <select type="text" id="edit_tipo_identificacion" name="tipo_identificacion">
+                                    <option value="CC">CC</option>
+                                    <option value="CE">CE</option>
+                                    <option value="NIT">NIT</option>
+                                    <option value="RC">RC</option>
+                                    <option value="OTRO">OTRO</option>
+                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_numero_identificacion">Número de Identificación:</label>
+                                <input type="text" id="edit_numero_identificacion" name="numero_identificacion">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_nombre_proveedor">Nombre proveedor:</label>
+                                <input type="text" id="edit_nombre_proveedor" name="nombre_proveedor">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_email">Email:</label>
+                                <input type="text" id="edit_email" name="email">
+                            </div>
+                        </div>  
+                        <div class="caja1">   
+                            <div class="form-group">
+                                <label for="edit_direccion">Dirección:</label>
+                                <input type="text" id="edit_direccion" name="direccion">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_telefono">Teléfono:</label>
+                                <input type="text" id="edit_telefono" name="telefono">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_dia_de_visita">Día de Visita:</label>
+                                <select type="text" id="edit_dia_de_visita" name="dia_de_visita">
+                                    <option value="Lunes">Lunes</option>
+                                    <option value="Martes">Martes</option>
+                                    <option value="Miercoles">Miércoles</option>
+                                    <option value="Jueves">Jueves</option>
+                                    <option value="Viernes">Viernes</option>
+                                    <option value="Sabado">Sábado</option>
+                                    <option value="Domingo">Domingo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_dia_de_entrega">Día de Entrega:</label>
+                                <select type="text" id="edit_dia_de_entrega" name="dia_de_entrega">
+                                    <option value="Lunes">Lunes</option>
+                                    <option value="Martes">Martes</option>
+                                    <option value="Miercoles">Miércoles</option>
+                                    <option value="Jueves">Jueves</option>
+                                    <option value="Viernes">Viernes</option>
+                                    <option value="Sabado">Sábado</option>
+                                    <option value="Domingo">Domingo</option>
+                            </select>
+                            </div>
+                        </div>  
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" onclick="closeModal2()">Cancelar</button>
