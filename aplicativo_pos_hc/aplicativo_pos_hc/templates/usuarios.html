@@ -81,7 +81,10 @@
                                 <td>************</td>
                                 <td>{{d.tipo_usuario}}</td>
                                 <td><a href="{{url_for('deleteUsuarios', id_usuario=d.id_usuario)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
-                                </tr>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="openEditModal('{{d.id_usuario}}', '{{d.nombre}}','{{d.tipo_identificacion}}', '{{d.numero_identificacion}}', '{{d.telefono}}', '{{d.email}}', '{{d.usuario}}', '{{d.contrasenia}}', '{{d.tipo_usuario}}')">Editar</button>
+                                </td>    
+                            </tr>
                         {% endfor %}
                     </tbody>
                     </table>
@@ -89,13 +92,12 @@
          <!-- Ventana modal agregar usuario -->
          <div id="myModal" class="modal">
             <div class="modal-content">
-               
                 <form action="/guardarUsuario" id="venta_form" method="post" >
                     <div class="modal-header">
                         <h2 >Nuevo Usuario</h2>
                         <span class="close " onclick="closeModal()">×</span>
                     </div>
-        <div class="modal-body">
+            <div class="modal-body">
                 <div class="caja1">
                      <div class="form-group">
                         <label for="id_usuario">Id_usuario:</label>
@@ -106,7 +108,7 @@
                         <input type="text" id="nombre" name="nombre">
                     </div>
                     <div class="form-group">
-                        <label for="tipo_identificacion">Tipo Identificacion:</label>
+                        <label for="tipo_identificacion">tipo Identificacion:</label>
                         <select id="tipo_identificacion" name="tipo_identificacion">
                             <option value="CC">CC</option>
                             <option value="CE">CE</option>
@@ -153,39 +155,160 @@
     </div>
 </div>
 
+
+        <!-- Ventana modal de edición -->
+        <div id="myModal2" class="modal">
+            <div class="modal-content">
+                <form id="edit-form" method="post">
+                    <div class="modal-header">
+                        <h2>Editar Usuario</h2>
+                        <span class="close" onclick="closeModal2()">×</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="caja1">
+                            <input type="hidden" id="edit_id_usuario" name="id_usuario">               
+                            <div class="form-group">
+                                <label for="edit_nombre">nombre:</label>
+                                <input type="text" id="edit_nombre" name="edit_nombre">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_tipo_identificacion">Tipo Identificacion:</label>
+                                <select id="edit_tipo_identificacion" name="edit_tipo_identificacion">
+                                    <option value="CC">CC</option>
+                                    <option value="CE">CE</option>
+                                    <option value="NIT">NIT</option>
+                                    <option value="RC">RC</option>
+                                    <option value="OTRO">OTRO</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_numero_identificacion">Numero_identificacion:</label>
+                                <input type="text" id="edit_numero_identificacion" name="edit_numero_identificacion">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_telefono">Telefono:</label>
+                                <input type="text" id="edit_telefono" name="edit_telefono">
+                            </div>
+                        </div>
+                        <div class="caja1">
+                            <div class="form-group">
+                                <label for="edit_email">Email:</label>
+                                <input type="text" id="edit_email" name="edit_email">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_usuario">Usuario:</label>
+                                <input type="text" id="edit_usuario" name="edit_usuario">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_contrasenia">Contraseña:</label>
+                                <input type="password" id="edit_contrasenia" name="edit_contrasenia">
+                            </div>                    
+                            <div class="form-group">
+                                <label for="edit_tipo_usuario">tipo_usuario:</label>
+                                <select id="edit_tipo_usuario" name="edit_tipo_usuario">
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Vendedor">Vendedor</option>
+                                </select>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" onclick="closeModal2()">Cancelar</button>
+                        <button type="button" class="btn btn-default" onclick="submitForm()">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+          <!-- Contenedor para mostrar el mensaje de respuesta -->
+          <div id="response-message" class="modalEdit" style="display: none;" >
+            <div class="modal-content-edit">
+            <form id="edit-form" method="post">
+                <div class="modal-header">
+                     <h2>Respuesta</h2>
+                    <span class="close" onclick="closeResponseModal()">×</span>
+                </div>
+            </form>
+            </div>
+        </div>
+
 <script>
-// Función para abrir la ventana modal de confirmación
-function openConfirmationModal() {
-    var confirmationModalBody = document.getElementById("confirmationModalBody");
-    confirmationModalBody.classList.add("active");
-    document.getElementById("myModal").style.display = "block";
-}
+        // Función para abrir la ventana modal de confirmación
+        function openConfirmationModal() {
+            var confirmationModalBody = document.getElementById("confirmationModalBody");
+            confirmationModalBody.classList.add("active");
+            document.getElementById("myModal").style.display = "block";
+        }
 
-// Función para cerrar la ventana modal de confirmación
-function closeConfirmationModal() {
-    var confirmationModalBody = document.getElementById("confirmationModalBody");
-    confirmationModalBody.classList.remove("active");
-    document.getElementById("myModal").style.display = "none";
-}
+        // Función para cerrar la ventana modal de confirmación
+        function closeConfirmationModal() {
+            var confirmationModalBody = document.getElementById("confirmationModalBody");
+            confirmationModalBody.classList.remove("active");
+            document.getElementById("myModal").style.display = "none";
+        }
 
-// Función para eliminar el registro
-function deleteRecord() {
-    // Aquí iría tu lógica para eliminar el registro
-    // Por ejemplo:
-    alert("Registro eliminado"); // Esto es solo un ejemplo, reemplázalo con tu lógica real
-    // Después de eliminar el registro, cierra la ventana modal de confirmación
-    closeConfirmationModal();
-}
+        // Función para eliminar el registro
+        function deleteRecord() {
+            // Aquí iría tu lógica para eliminar el registro
+            // Por ejemplo:
+            alert("Registro eliminado"); // Esto es solo un ejemplo, reemplázalo con tu lógica real
+            // Después de eliminar el registro, cierra la ventana modal de confirmación
+            closeConfirmationModal();
+        }
 
-// Función para abrir el modal principal
-function openModal() {
-    document.getElementById("myModal").style.display = "block";
-}
+        // Función para abrir el modal principal
+        function openModal() {
+            document.getElementById("myModal").style.display = "block";
+        }
 
-// Función para cerrar el modal principal
-function closeModal() {
-    document.getElementById("myModal").style.display = "none";
-}
+        // Función para cerrar el modal principal
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        // Función para abrir la ventana modal de edición y llenar los campos con los detalles del proveedor
+        function openEditModal(id_usuario, nombre, tipo_Identificacion, numero_identificacion, telefono, email, usuario, contrasenia, tipo_usuario) {
+            document.getElementById("edit_id_usuario").value = id_usuario;
+            document.getElementById("edit_nombre").value = nombre;
+            document.getElementById("edit_tipo_identificacion").value = tipo_Identificacion; // Aquí estaba el error
+            document.getElementById("edit_numero_identificacion").value = numero_identificacion;
+            document.getElementById("edit_telefono").value = telefono;
+            document.getElementById("edit_email").value = email;
+            document.getElementById("edit_usuario").value = usuario;
+            document.getElementById("edit_contrasenia").value = contrasenia;
+            document.getElementById("edit_tipo_usuario").value = tipo_usuario;
+            document.getElementById("myModal2").style.display = "block";
+        }
+
+
+        // Función para cerrar la ventana modal de edición
+        function closeModal2() {
+            document.getElementById("myModal2").style.display = "none";
+        }
+
+         // Función para enviar el formulario utilizando AJAX
+         function submitForm() {
+            var formData = new FormData(document.getElementById("edit-form"));
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Si la respuesta es exitosa, muestra el mensaje de respuesta en el modal de edición
+                        document.querySelector("#myModal2 .modal-body").innerHTML = xhr.responseText;
+                    } else {
+                        // Maneja los errores si es necesario
+                        console.error('Error al enviar el formulario:', xhr.status);
+                    }
+                }
+            };
+            xhr.open("POST", "/editar_proveedor", true);
+            xhr.send(formData);
+        }
+
+        // Función para cerrar el modal de respuesta
+        function closeResponseModal() {
+            document.getElementById("response-message").style.display = "none";
+        }
 </script>
 
 </body>
