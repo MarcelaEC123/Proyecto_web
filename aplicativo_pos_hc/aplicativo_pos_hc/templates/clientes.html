@@ -76,6 +76,9 @@
                                 <td>{{d.direccion}}</td>
                                 <td>{{d.telefono}}</td>
                                 <td><a href="{{url_for('deleteCliente', id_cliente=d.id_cliente)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="openEditModal('{{d.id_cliente}}', '{{d.tipo_identificacion}}', '{{d.numero_identificacion}}', '{{d.nombre_completo}}', '{{d.email}}', '{{d.direccion}}', '{{d.telefono}}')">Editar</button>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -83,112 +86,127 @@
 
         </div>
 
-        <!-- Ventana modal -->
+        <!-- Ventana modal agregar clientes -->
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <form action="/guardarClientes" id="clientes_form" method="post" >
                     <div class="modal-header">
-                        <h2>Crear  Cliente</h2>
+                        <h2>Crear Cliente</h2>
                         <span class="close" onclick="closeModal()">×</span>
                     </div>
-        <div class="modal-body">
-                <div class="caja1">
-                    <div class="form-group">
-                        <label for="id_cliente">ID Cliente:</label>
-                        <input type="text" id="id_cliente" name="id_cliente" value="{{ next_id }}" readonly>
+                    <div class="modal-body">
+                            <div class="caja1">
+                                <div class="form-group">
+                                    <label for="id_cliente">ID Cliente:</label>
+                                    <input type="text" id="id_cliente" name="id_cliente" value="{{ next_id }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipo_identificacion">Tipo Identificacion:</label>
+                                    <select id="tipo_identificacion" name="tipo_identificacion">
+                                        <option value="CC">CC</option>
+                                        <option value="ce">CE</option>
+                                        <option value="nit">NIT</option>
+                                        <option value="rc">RC</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="numero_identificacion">Numero_Identificacion:</label>
+                                    <input type="text" id="numero_identificacion" name="numero_identificacion">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nombre_completo">Nombre:</label>
+                                    <input type="text" id="nombre_completo" name="nombre_completo">
+                                </div>
+                                
+                            </div>
+                            <div class="caja1">
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="text" id="email" name="email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="direccion">Direccion:</label>
+                                    <input type="direccion" id="direccion" name="direccion">
+                                </div>
+                                <div class="form-group">
+                                    <label for="telefono">Telefono:</label>
+                                    <input type="text" id="telefono" name="telefono">
+                                </div>
+                            </div>
                     </div>
-                    <div class="form-group">
-                        <label for="tipo_identificacion">Tipo Identificacion:</label>
-                        <select id="tipo_identificacion" name="tipo_identificacion">
-                            <option value="CC">CC</option>
-                            <option value="ce">CE</option>
-                            <option value="nit">NIT</option>
-                            <option value="rc">RC</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="numero_identificacion">Numero_Identificacion:</label>
-                        <input type="text" id="numero_identificacion" name="numero_identificacion">
-                    </div>
-                    <div class="form-group">
-                        <label for="nombre_completo">Nombre:</label>
-                        <input type="text" id="nombre_completo" name="nombre_completo">
-                    </div>
-                    
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-default">Guardar cambios</button>
                 </div>
-                <div class="caja1">
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="text" id="email" name="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="direccion">Direccion:</label>
-                        <input type="direccion" id="direccion" name="direccion">
-                    </div>
-                    <div class="form-group">
-                        <label for="telefono">Telefono:</label>
-                        <input type="text" id="telefono" name="telefono">
-                    </div>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
-                <button type="submit" class="btn btn-default">Guardar cambios</button>
-            </div>
-    </div>
-</div >
-  <!-- Ventana modal2 -->
-<div id="myModal2" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal2()">×</span>
-        <div class="modal-header">
-            <h2>Editar Cliente</h2>
         </div>
-        <div class="modal-body">
-            <div class="caja1">
-                <div class="form-group">
-                    <label for="venta_id">Cliente ID:</label>
-                    <input type="text" id="cliente_id" name="cliente_id">
+    </div >
+
+                <!-- Ventana modal EDITAR clientes -->
+            <div id="myModal2" class="modal">
+                    <div class="modal-content">
+                        <form id="edit-form" method="post" >
+                            <div class="modal-header">
+                                <h2>Editar Cliente</h2>
+                                <span class="close" onclick="closeModal()">×</span>
+                            </div>
+                                <div class="modal-body">
+                                        <div class="caja1">
+                                            <input type="hidden" id="edit_id_cliente" name="id_cliente">
+                                            <div class="form-group">
+                                                <label for="edit_tipo_identificacion">Tipo Identificacion:</label>
+                                                <select type="text" id="edit_tipo_identificacion" name="tipo_identificacion">
+                                                    <option value="CC">CC</option>
+                                                    <option value="ce">CE</option>
+                                                    <option value="nit">NIT</option>
+                                                    <option value="rc">RC</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="edit_numero_identificacion">Numero_Identificacion:</label>
+                                                <input type="text" id="edit_numero_identificacion" name="numero_identificacion">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="edit_nombre_completo">Nombre:</label>
+                                                <input type="text" id="edit_nombre_completo" name="nombre_completo">
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="caja1">
+                                            <div class="form-group">
+                                                <label for="edit_email">Email:</label>
+                                                <input type="text" id="edit_email" name="email">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="edit_direccion">Direccion:</label>
+                                                <input type="text" id="edit_direccion" name="direccion">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="edit_elefono">Telefono:</label>
+                                                <input type="text" id="edit_telefono" name="telefono">
+                                            </div>
+                                        </div>
+                                </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" onclick="closeModal2()">Cancelar</button>
+                                        <button type="submit" class="btn btn-default">Guardar cambios</button>
+                                    </div>
+                        </form>  
+                    </div>
+            </div >
+
+
+        <!-- Contenedor para mostrar el mensaje de respuesta -->
+        <div id="response-message" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Respuesta</h2>
+                    <span class="close" onclick="closeResponseModal()">×</span>
                 </div>
-                <div class="form-group">
-                    <label for="codigo">Tipo de Identificacion:</label>
-                    <select id="codigo" name="codigo">
-                        <option value="cc">CC</option>
-                        <option value="ce">CE</option>
-                        <option value="nit">NIT</option>
-                        <option value="rc">RC</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="descripcion">Identificacion:</label>
-                    <input type="text" id="Identificacion" name="Identificacion">
-                </div>
-                <div class="form-group">
-                    <label for="valor_unitario">Nombre:</label>
-                    <input type="text" id="Nombre" name="Nombre">
-                </div>
-            </div>
-            <div class="caja1">
-                <div class="form-group">
-                    <label for="descuento">Direccion:</label>
-                    <input type="text" id="descuento" name="descuento">
-                </div>
-                <div class="form-group">
-                    <label for="medio_pago">Email:</label>
-                    <input type="text" id="Email" name="Email">
-                </div>
-                <div class="form-group">
-                    <label for="medio_pago">Telegono:</label>
-                    <input type="text" id="Telefono" name="Telefono">
-                </div>
+                <div class="modal-body"></div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-default">Guardar cambios</button>
-        </div>
-    </div>
-</div>
+    </div>     
+
 
     <script>
         // Función para abrir la ventana modal
@@ -203,15 +221,46 @@
        
     </script>
     <script>
-         // Función para abrir la ventana modal
-         function openModal2() {
+         // Función para abrir la ventana modal de edición y llenar los campos con los detalles del proveedor
+         function openEditModal(id_cliente, tipo_identificacion, numero_identificacion, nombre_completo, email, direccion, telefono) {
+            document.getElementById("edit_id_cliente").value = id_cliente;
+            document.getElementById("edit_tipo_identificacion").value = tipo_identificacion;
+            document.getElementById("edit_numero_identificacion").value = numero_identificacion;
+            document.getElementById("edit_nombre_completo").value = nombre_completo;
+            document.getElementById("edit_email").value = email;
+            document.getElementById("edit_direccion").value = direccion;
+            document.getElementById("edit_telefono").value = telefono;
             document.getElementById("myModal2").style.display = "block";
         }
-        
-        // Función para cerrar la ventana modal
-        function closeModal2() {
-            document.getElementById("myModal2").style.display = "none";}
 
+       // Función para cerrar la ventana modal
+       function closeModal2() {
+            document.getElementById("myModal2").style.display = "none";
+        }
+        
+        // Función para enviar el formulario utilizando AJAX
+        function submitForm() {
+            var formData = new FormData(document.getElementById("edit-form"));
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Si la respuesta es exitosa, muestra el mensaje de respuesta en el modal de edición
+                        document.querySelector("#myModal2 .modal-body").innerHTML = xhr.responseText;
+                    } else {
+                        // Maneja los errores si es necesario
+                        console.error('Error al enviar el formulario:', xhr.status);
+                    }
+                }
+            };
+            xhr.open("POST", "/editar_cliente", true);
+            xhr.send(formData);
+        }
+
+        // Función para cerrar el modal de respuesta
+        function closeResponseModal() {
+            document.getElementById("response-message").style.display = "none";
+        }
     </script>
 
 </body>
