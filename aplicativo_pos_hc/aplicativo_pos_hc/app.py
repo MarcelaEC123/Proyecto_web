@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for
 
 import database as db
 
-app = Flask(__name__, template_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
+app = Flask(__name__, template_folder="C:\\Users\\lenovo\\OneDrive\\Desktop\\UNIAGUSTINIANA\\Proyecto\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
 
 # Ruta para la página de inicio
 @app.route("/")
@@ -519,7 +519,7 @@ def usuarios():
 @app.route('/guardarUsuario', methods=['POST'])
 def addGuardarUsuario():    
     nombre = request.form['nombre']
-    tipo_Identificacion = request.form['tipo_Identificacion']
+    tipo_Identificacion = request.form['tipo_identificacion']
     numero_identificacion = request.form['numero_identificacion']
     telefono = request.form['telefono']
     email = request.form['email']
@@ -563,6 +563,30 @@ def deleteUsuarios(id_usuario):
         cursor.close()
         db_connection.close()
         return redirect(url_for('usuarios'))
+
+
+@app.route('/editar_usuario', methods=['POST'])
+def editar_usuario():
+    # Tu lógica para editar el proveedor aquí
+
+    if request.method == 'POST':
+        id_usuario = request.form['id_usuario']
+        nombre = request.form['nombre']
+        tipo_Identificacion = request.form['tipo_identificacion']
+        numero_identificacion = request.form['numero_identificacion']
+        telefono = request.form['telefono']
+        email = request.form['email']
+        usuario = request.form['usuario']
+        contrasenia = request.form['contrasenia']
+        tipo_usuario = request.form['tipo_usuario']
+
+        if nombre and tipo_Identificacion and numero_identificacion and telefono and email and usuario and contrasenia and tipo_usuario:
+            if db.actualizar_usuario(id_usuario, nombre, tipo_Identificacion, numero_identificacion, telefono, email, usuario, contrasenia, tipo_usuario):
+                return 'Usuario editado exitosamente'
+            else:
+                return 'Usuario no encontrado'
+        else:
+            return 'Todos los campos son obligatorios'
 
 if __name__ == "__main__":
     app.run(debug=True)

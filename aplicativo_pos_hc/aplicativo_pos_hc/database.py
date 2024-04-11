@@ -6,7 +6,7 @@ def conectar_bd():
     database = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="",
+        password="SQLMARCE2022.",
         database="Aplicativo_POS_final"
     )
     cursor = database.cursor()
@@ -41,4 +41,18 @@ def actualizar_producto(id_producto, codigo, descripcion, categoria,id_proveedor
         return True
     except Exception as e:
         print("Error al actualizar proveedor:", e)
+        return False
+    
+def actualizar_usuario(id_usuario, nombre, tipo_Identificacion, numero_identificacion, telefono, email, usuario, contrasenia, tipo_usuario):
+    try:
+        db_connection, cursor = conectar_bd()
+        sql = "UPDATE usuarios SET nombre =%s tipo_identificacion = %s, numero_identificacion = %s, telefono = %s, email = %s, usuario = %s, contrasenia = %s, tipo_usuario = %s WHERE id_usuario = %s"
+        data = (nombre, tipo_Identificacion, numero_identificacion, telefono, email, usuario, contrasenia, tipo_usuario, id_usuario)  # Agrega el ID del proveedor al final
+        cursor.execute(sql, data)
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
+        return True
+    except Exception as e:
+        print("Error al actualizar usuario:", e)
         return False
