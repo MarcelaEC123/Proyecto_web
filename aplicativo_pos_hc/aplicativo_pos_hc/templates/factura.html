@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="./static/css/factura.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/factura.css') }}"> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     <title>Factura de Venta</title>
- 
 </head>
 <style>
     /* Estilos CSS */
@@ -78,7 +75,6 @@ th, td {
 footer {
     text-align: center;
 }
-
 </style>
 <body>
     <!-- Encabezado -->
@@ -114,15 +110,15 @@ footer {
                     <th>Valor Unitario (COP)</th>
                 </tr>
             </thead>
-            <tbody>
-                {% for producto in productos %}
-                <tr>
-                    <td>{{ productos['cantidad'] }}</td>
-                    <td>{{ productos['descripcion'] }}</td>
-                    <td>{{ productos['valor_unitario'] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
+           <tbody>
+    {% for producto in productos %}
+    <tr>
+        <td>{{ producto['cantidad'] }}</td>
+        <td>{{ producto['descripcion'] }}</td>
+        <td>{{ producto['valor_unitario'] }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
         </table>
     </section>
 

@@ -63,6 +63,7 @@
                     <th scope="col">Iva</th>
                     <th scope="col">Fecha_Registro</th>
                     <th scope="col">Observaciones</th>
+                    <th scope="col">total_pago</th>
                     <th scope="col">Acciones</th>
                 </thead>
 
@@ -76,6 +77,7 @@
                         <td>{{ d.iva }}</td>
                         <td>{{ d.fecha_registro }}</td>
                         <td>{{ d.observaciones }}</td>
+                        <td>{{ d.total_pago }}</td>
                         <td>
                             <a href="{{ url_for('generar_ticket', id_venta=d.id_venta) }}"
                                 class="btn btn-primary btn-sm">Ticket</a>
@@ -99,7 +101,7 @@
                         <th scope="col">Cantidad</th>
                         <th scope="col">Valor Unitario</th>
                     </thead>
-                    <tbody>
+                    <tbody id="productos-agregados-body">
                         {% for producto in productos %}
                         <tr>
                             <td>{{ producto.codigo }}</td>
@@ -111,55 +113,134 @@
                     </tbody>
                 </table>
             </div>
-        </div>
 
-        <!-- Ventana modal agregar venta -->
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <form action="/guardarVenta" id="venta_form" method="post">
-                    <div class="modal-header">
-                        <h2>Registro de venta</h2>
-                        <span class="close" onclick="closeModal()">×</span>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Contenido del formulario de venta -->
-                        <div class="form-group">
-                            <label for="id_venta">ID Venta:</label>
-                            <input type="text" id="id_venta" name="id_venta">
-                        </div>
-                        <div class="form-group">
-                            <label for="id_factura">ID Factura:</label>
-                            <input type="text" id="id_factura" name="id_factura">
-                        </div>
-                        <div class="form-group">
-                            <label for="medio_pago">Medio de Pago:</label>
-                            <input type="text" id="medio_pago" name="medio_pago">
-                        </div>
-                        <div class="form-group">
-                            <label for="descuento">Descuento:</label>
-                            <input type="text" id="descuento" name="descuento">
-                        </div>
-                        <div class="form-group">
-                            <label for="iva">IVA:</label>
-                            <input type="text" id="iva" name="iva">
-                        </div>
-                        <div class="form-group">
-                            <label for="fecha_registro">Fecha de Registro:</label>
-                            <input type="text" id="fecha_registro" name="fecha_registro">
-                        </div>
-                        <div class="form-group">
-                            <label for="observaciones">Observaciones:</label>
-                            <input type="text" id="observaciones" name="observaciones">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Guardar</button>
-                    </div>
-
-                </form>
+<!-- Ventana modal agregar venta -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <form action="/guardarVenta" id="venta_form" method="post">
+            <div class="modal-header">
+                <h2>Registro de venta</h2>
+                <span class="close" onclick="closeModal()">×</span>
             </div>
-        </div>
+            <div class="modal-body">
+                <!-- Contenido del formulario de venta -->
+                <div class="caja1">
+                    <div class="form-group">
+                        <label for="id_venta">ID Venta:</label>
+                        <input type="text" id="id_venta" name="id_venta">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_factura">ID Factura:</label>
+                        <input type="text" id="id_factura" name="id_factura">
+                    </div>
+                    <div class="form-group">
+                        <label for="medio_pago">Medio de pago: </label>
+                        <select id="medio_pago" name="medio_pago">
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Nequi">Nequi</option>
+                            <option value="Daviplata">Daviplata</option>
+                            <option value="Tarjeta">Tarjeta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="descuento">Descuento:</label>
+                        <input type="text" id="descuento" name="descuento">
+                    </div>
+                    <div class="form-group">
+                        <label for="observaciones">Observaciones:</label>
+                        <input type="text" id="observaciones" name="observaciones">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_registro">Fecha de Registro:</label>
+                        <input type="text" id="fecha_registro" name="fecha_registro" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="iva">IVA:</label>
+                        <input type="text" id="iva" name="iva">
+                    </div>
+                    <div class="form-group">
+                        <label for="total_pago">Total a pagar:</label>
+                        <input type="text" id="total_pago" name="total_pago">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </div>
+        </form>
+    </div>
+ <!-- Ventana modal agregar venta -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <form action="/guardarVenta" id="venta_form" method="post">
+            <div class="modal-header">
+                <h2>Registro de venta</h2>
+                <span class="close" onclick="closeModal()">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="caja1">
+                    <div class="form-group">
+                        <label for="id_venta">ID Venta:</label>
+                        <input type="text" id="id_venta" name="id_venta">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_factura">ID Factura:</label>
+                        <input type="text" id="id_factura" name="id_factura">
+                    </div>
+                    <div class="form-group">
+                        <label for="observaciones">Observaciones:</label>
+                        <input type="text" id="observaciones" name="observaciones">
+                    </div>
+                    <div class="form-group">
+                        <label for="medio_pago">Medio de pago:</label>
+                        <select id="medio_pago" name="medio_pago">
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Nequi">Nequi</option>
+                            <option value="Daviplata">Daviplata</option>
+                            <option value="Tarjeta">Tarjeta</option>
+                        </select>
+                    </div>
+                    </div>
+
+                </div>
+                <div class="caja1">
+                  
+                    <div class="form-group">
+                        <label for="fecha_registro">Fecha de Registro:</label>
+                        <input type="text" id="fecha_registro" name="fecha_registro">
+                    </div>
+                    <div class="form-group">
+                        <label for="iva">IVA:</label>
+                        <input type="text" id="iva" name="iva">
+                    </div>
+                    <div class="form-group">
+                        <label for="total_pago">Total a pagar:</label>
+                        <input type="text" id="total_pago" name="total_pago">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn btn-default">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Función para abrir la ventana modal de agregar venta
+    function openAgregarVentaModal() {
+        document.getElementById("myModal").style.display = "block";
+        // Asignar la fecha y hora actual al campo fecha_registro
+        asignarFechaRegistro();
+    }
+
+    // Función para cerrar la ventana modal de agregar venta
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+    }
+</script>
 
 
         <!-- Ventana modal agregar producto -->
@@ -199,9 +280,62 @@
             </div>
         </div>
     </div>
+    
+    <!-- Ventana modal para mostrar el mensaje de respuesta -->
+<div id="mensajeModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Mensaje</h2>
+            <span class="close" onclick="cerrarMensajeModal()">&times;</span>
+        </div>
+        <div class="modal-body" id="mensajeModalBody">
+            <p id="mensajeTexto"></p>
+        </div>
+    </div>
+</div>
 
     <!-- Scripts -->
     <script>
+        // Función para abrir la ventana modal de agregar venta
+    function openAgregarVentaModal() {
+        document.getElementById("myModal").style.display = "block";
+        // Asignar la fecha y hora actual al campo fecha_registro
+        asignarFechaRegistro();
+    }
+
+    // Función para cerrar la ventana modal de agregar venta
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+    }
+
+   // Función para abrir la ventana modal de agregar venta
+   function openAgregarVentaModal() {
+        document.getElementById("myModal").style.display = "block";
+        // Asignar la fecha y hora actual al campo fecha_registro
+        asignarFechaRegistro();
+    }
+
+    // Función para cerrar la ventana modal de agregar venta
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+    }
+
+    // Función para obtener la fecha y hora actual y asignarla al campo fecha_registro
+    function asignarFechaRegistro() {
+        // Obtener la fecha y hora actual
+        var now = new Date();
+        // Obtener la hora en formato de 12 horas
+        var hours = now.getHours() % 12 || 12; // Ajustar la hora a 12 si es medianoche
+        var am_pm = now.getHours() >= 12 ? "PM" : "AM"; // Determinar si es AM o PM
+        // Formatear la fecha y hora en el formato deseado
+        var formattedDate = now.getFullYear() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + ' ' + hours.toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0') + ':' + now.getSeconds().toString().padStart(2, '0') + ' ' + am_pm;
+        // Asignar la fecha y hora al campo fecha_registro
+        document.getElementById("fecha_registro").value = formattedDate;
+    }
+    // Llamar a la función asignarFechaRegistro cuando se cargue la página
+    window.onload = function() {
+        asignarFechaRegistro();
+    };
         // Función para abrir la ventana modal de agregar venta
         function openAgregarVentaModal() {
             document.getElementById("myModal").style.display = "block";
@@ -223,6 +357,50 @@
         function closeAgregarProductoModal() {
             document.getElementById("agregarProductoModal").style.display = "none";
         }
+        // Función para agregar un producto a la venta
+    function agregarProductoAVenta(idVenta) {
+        // Obtener los datos del producto que se va a agregar
+        var codigo = document.getElementById("codigo").value;
+        var descripcion = document.getElementById("descripcion").value;
+        var cantidad = document.getElementById("cantidad").value;
+        var valorUnitario = document.getElementById("valor_unitario").value;
+
+        // Crear un objeto con los datos del producto
+        var producto = {
+            codigo: codigo,
+            descripcion: descripcion,
+            cantidad: cantidad,
+            valor_unitario: valorUnitario
+        };
+
+        // Realizar una solicitud AJAX para agregar el producto a la venta
+        fetch("/agregar_producto/" + idVenta, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(producto)
+        })
+        .then(response => response.json())
+        .then(actualizarTablaProductos)
+        .catch(error => console.error("Error al agregar producto:", error));
+    }
+
+    // Función para actualizar la tabla de productos agregados
+    function actualizarTablaProductos(productos) {
+        var tbody = document.getElementById("productos-agregados-body");
+        tbody.innerHTML = ""; // Limpiar el contenido actual de la tabla
+
+        productos.forEach(function(producto) {
+            var row = "<tr>" +
+                        "<td>" + producto.codigo + "</td>" +
+                        "<td>" + producto.descripcion + "</td>" +
+                        "<td>" + producto.cantidad + "</td>" +
+                        "<td>" + producto.valor_unitario + "</td>" +
+                      "</tr>";
+            tbody.innerHTML += row;
+        });
+    }
     </script>
 </body>
 

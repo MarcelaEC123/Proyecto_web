@@ -103,13 +103,14 @@ def addGuardarVenta():
     iva = request.form['iva']
     fecha_registro = request.form['fecha_registro']
     observaciones = request.form['observaciones']
+    total_pago = request.form['total_pago']
     
     # Corrige la cantidad de parámetros y la consulta SQL para la inserción de la venta
-    if id_venta and id_factura and medio_pago and descuento and iva and fecha_registro and observaciones:
+    if id_venta and id_factura and medio_pago and descuento and iva and fecha_registro and observaciones and total_pago:
         try:
             db_connection, cursor = db.conectar_bd()
-            sql_venta = "INSERT INTO venta (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, observaciones) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            data_venta = (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, observaciones)
+            sql_venta = "INSERT INTO venta (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, observaciones,total_pago) VALUES (%s,%s,  %s, %s, %s, %s, %s, %s)"
+            data_venta = (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, observaciones,total_pago)
             cursor.execute(sql_venta, data_venta)
             
             db_connection.commit()
@@ -163,8 +164,9 @@ def generar_ticket(id_venta):
         # Conectar a la base de datos y crear un cursor
         db_connection, cursor = db.conectar_bd()
 
-        # Ejecutar la consulta SQL para seleccionar los registros relevantes de la tabla de ventas
-        cursor.execute("SELECT cantidad, descripcion, valor_unitario, id_factura, fecha_registro FROM venta WHERE id_venta = %s", (id_venta,))
+        # Ejecutar la consulta SQL para seleccionar los detalles de venta
+        cursor.execute("SELECT dv.cantidad, dv.descripcion, dv.valor_unitario, v.id_factura, v.fecha_registro FROM detalle_venta dv INNER JOIN venta v ON dv.id_venta = v.id_venta WHERE dv.id_venta = %s", (id_venta,))
+        
         
         # Obtener los resultados de la consulta
         venta_data = cursor.fetchall()
@@ -200,7 +202,7 @@ def agregar_producto_venta(id_venta):
 
             # Corrige la consulta SQL para la inserción de productos en la venta
             db_connection, cursor = db.conectar_bd()
-            sql = "INSERT INTO detalle_venta (id_venta, codigo, descripcion, cantidad, valor_unitario) VALUES (%s, %s, %s, %s, %s, %s)"
+            sql = "INSERT INTO detalle_venta (id_venta, codigo, descripcion, cantidad, valor_unitario) VALUES (%s, %s, %s, %s,%s)"
             data = (id_venta, codigo, descripcion, cantidad, valor_unitario)
             cursor.execute(sql, data)
             db_connection.commit()
@@ -464,29 +466,24 @@ def delete (id_producto):
 
 @app.route('/editar_producto', methods=['POST'])
 def editar_producto():
-    # Tu lógica para editar el producto aquí
-
     if request.method == 'POST':
-        # Obtiene los datos del formulario
         id_producto = request.form['id_producto']
         codigo = request.form['codigo']
         descripcion = request.form['descripcion']
         categoria = request.form['categoria']
+        id_proveedor = request.form['id_proveedor']
         nombre_proveedor = request.form['nombre_proveedor']
         valor_unitario = request.form['valor_unitario']
         unidad_medida = request.form['unidad_medida']
         stock = request.form['stock']
 
-     
-
-        if id_producto and codigo and descripcion and categoria and nombre_proveedor and valor_unitario and unidad_medida and stock:
-            if db.actualizar_proveedor(id_producto, codigo, descripcion, categoria,nombre_proveedor, valor_unitario, unidad_medida, stock):
-                return 'Producto fue editado exitosamente'
+        if id_producto and codigo and descripcion and categoria and id_proveedor and nombre_proveedor and valor_unitario and unidad_medida and stock:
+            if db.actualizar_producto(id_producto, codigo, descripcion, categoria, id_proveedor, nombre_proveedor, valor_unitario, unidad_medida, stock):
+                return 'Producto editado exitosamente', 200
             else:
-                return 'Producto no encontrado'
+                return 'Producto no encontrado', 404
         else:
-            return 'Todos los campos son obligatorios'
-
+            return 'Todos los campos son obligatorios', 400
 
 
 # Ruta para mostrar usuarios
