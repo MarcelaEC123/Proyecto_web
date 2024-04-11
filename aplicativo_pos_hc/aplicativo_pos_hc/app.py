@@ -3,7 +3,6 @@ from flask import Flask, request, render_template, redirect, url_for
 import database as db
 
 app = Flask(__name__, template_folder="C:\\Users\\lenovo\\OneDrive\\Desktop\\UNIAGUSTINIANA\\Proyecto\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
-
 # Ruta para la página de inicio
 @app.route("/")
 def index():
@@ -102,15 +101,14 @@ def addGuardarVenta():
     descuento = request.form['descuento']
     iva = request.form['iva']
     fecha_registro = request.form['fecha_registro']
-    observaciones = request.form['observaciones']
-    total_pago = request.form['total_pago']
+    total_a_pagar = request.form['total_a_pagar']
     
     # Corrige la cantidad de parámetros y la consulta SQL para la inserción de la venta
-    if id_venta and id_factura and medio_pago and descuento and iva and fecha_registro and observaciones and total_pago:
+    if id_venta and id_factura and medio_pago and descuento and iva and fecha_registro and total_a_pagar:
         try:
             db_connection, cursor = db.conectar_bd()
-            sql_venta = "INSERT INTO venta (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, observaciones,total_pago) VALUES (%s,%s,  %s, %s, %s, %s, %s, %s)"
-            data_venta = (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, observaciones,total_pago)
+            sql_venta = "INSERT INTO venta (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, total_a_pagar) VALUES (%s,  %s, %s, %s, %s, %s, %s)"
+            data_venta = (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro,total_a_pagar)
             cursor.execute(sql_venta, data_venta)
             
             db_connection.commit()

@@ -50,11 +50,11 @@
         <div class="content d-flex flex-column ">
             <h3>Registro de Caja</h3>
             <div class="horizontal-bar my-4 d-flex py-2 justify-content-end ">
-                <img src="/static/images/agregar.png" alt="agregar" class="icon" onclick="openAgregarVentaModal()">
+                <button type="button" class="btn btn-danger btn-primary" onclick="openAgregarVentaModal()">Agregar Productos</button>
                 <input type="text" id="search-input" placeholder="Buscar...">
             </div>
 
-            <table class="table table-bordered">
+            <table class="table table-bordered ">
                 <thead>
                     <th scope="col">Id_venta</th>
                     <th scope="col">Id_Factura</th>
@@ -62,8 +62,7 @@
                     <th scope="col">Descuento</th>
                     <th scope="col">Iva</th>
                     <th scope="col">Fecha_Registro</th>
-                    <th scope="col">Observaciones</th>
-                    <th scope="col">total_pago</th>
+                    <th scope="col">Total_a_pagar</th>
                     <th scope="col">Acciones</th>
                 </thead>
 
@@ -76,13 +75,10 @@
                         <td>{{ d.descuento }}</td>
                         <td>{{ d.iva }}</td>
                         <td>{{ d.fecha_registro }}</td>
-                        <td>{{ d.observaciones }}</td>
-                        <td>{{ d.total_pago }}</td>
+                        <td>{{ d.total_a_pagar }}</td>
                         <td>
-                            
-                           
                             <button type="button" class="btn btn-success btn-sm"
-                                onclick="openAgregarProductoModal('{{ d.id_venta }}')">Agregar Producto a Venta</button>
+                                onclick="openAgregarProductoModal('{{ d.id_venta }}')">Agregar Productos</button>
                                 <a href="{{ url_for('deleteVenta', id_venta=d.id_venta) }}"
                                 class="btn btn-danger btn-sm">Eliminar</a>
                              <a href="{{ url_for('generar_ticket', id_venta=d.id_venta) }}"
@@ -121,7 +117,7 @@
     <div class="modal-content">
         <form action="/guardarVenta" id="venta_form" method="post">
             <div class="modal-header">
-                <h2>Registro de venta</h2>
+                <h2>Registrar Venta</h2>
                 <span class="close" onclick="closeModal()">×</span>
             </div>
             <div class="modal-body">
@@ -148,31 +144,30 @@
                         <label for="descuento">Descuento:</label>
                         <input type="text" id="descuento" name="descuento">
                     </div>
+                </div>  
+                <div class="caja1">   
                     <div class="form-group">
-                        <label for="observaciones">Observaciones:</label>
-                        <input type="text" id="observaciones" name="observaciones">
-                    </div>
-                    <div class="form-group">
-                        <label for="fecha_registro">Fecha de Registro:</label>
-                        <input type="text" id="fecha_registro" name="fecha_registro" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="iva">IVA:</label>
+                        <label for="iva">Iva:</label>
                         <input type="text" id="iva" name="iva">
                     </div>
                     <div class="form-group">
-                        <label for="total_pago">Total a pagar:</label>
-                        <input type="text" id="total_pago" name="total_pago">
+                        <label for="fecha_registro">Fecha de Registro:</label>
+                        <input type="text" id="fecha_registro" name="fecha_registro">
+                    </div>
+                    <div class="form-group">
+                        <label for="total_a_pagar">Total a pagar:</label>
+                        <input type="text" id="total_a_pagar" name="total_a_pagar">
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
-                <button type="submit" class="btn btn-success">Guardar</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>    
             </div>
         </form>
     </div>
- <!-- Ventana modal agregar venta -->
+ <!-- Ventana modal agregar venta
 <div id="myModal" class="modal">
     <div class="modal-content">
         <form action="/guardarVenta" id="venta_form" method="post">
@@ -228,7 +223,7 @@
             </div>
         </form>
     </div>
-</div>
+</div> -->
 
 <script>
     // Función para abrir la ventana modal de agregar venta
@@ -324,16 +319,14 @@
 
     // Función para obtener la fecha y hora actual y asignarla al campo fecha_registro
     function asignarFechaRegistro() {
-        // Obtener la fecha y hora actual
-        var now = new Date();
-        // Obtener la hora en formato de 12 horas
-        var hours = now.getHours() % 12 || 12; // Ajustar la hora a 12 si es medianoche
-        var am_pm = now.getHours() >= 12 ? "PM" : "AM"; // Determinar si es AM o PM
-        // Formatear la fecha y hora en el formato deseado
-        var formattedDate = now.getFullYear() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + ' ' + hours.toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0') + ':' + now.getSeconds().toString().padStart(2, '0') + ' ' + am_pm;
-        // Asignar la fecha y hora al campo fecha_registro
-        document.getElementById("fecha_registro").value = formattedDate;
-    }
+    // Obtener la fecha y hora actual
+    var now = new Date();
+    // Formatear la fecha y hora en el formato deseado (24 horas)
+    var formattedDate = now.getFullYear() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + ' ' + now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0') + ':' + now.getSeconds().toString().padStart(2, '0');
+    // Asignar la fecha y hora al campo fecha_registro
+    document.getElementById("fecha_registro").value = formattedDate;
+}
+
     // Llamar a la función asignarFechaRegistro cuando se cargue la página
     window.onload = function() {
         asignarFechaRegistro();

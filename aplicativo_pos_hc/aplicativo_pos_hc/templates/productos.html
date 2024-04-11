@@ -79,7 +79,7 @@
                                     <input type="text" id="descripcion" name="descripcion">
                                 </div>
                                 <div class="form-group">
-                                    <label for="valor_unitario">Categoria: </label>
+                                    <label for="categoria">Categoria: </label>
                                     <select id="categoria" name="categoria">
                                         <option value="Abarrotes">Abarrotes</option>
                                         <option value="Aderezos">Aderezos</option>
@@ -112,7 +112,6 @@
                                         <option value="Vencidos">Vencidos</option>
                                     </select>
                                 </div>
-
                             </div>
                             <div class="caja1">
                                 <div class="form-group">
@@ -124,18 +123,17 @@
                                     <input type="text" id="stock" name="stock">
                                 </div>
                                 <div class="form-group">
-                                    <label for="medio_pago">Valor unitario:</label>
-                                    <input type="text" id="valorUnitario" name="valor_unitario">
+                                    <label for="valor_unitario">Valor unitario:</label>
+                                    <input type="text" id="valor_unitario" name="valor_unitario">
                                 </div>
                                 <label for="unidad_medida">Unidad medida: </label>
                                 <select id="unidad_medida" name="unidad_medida">
-                                    <option value="Abarrotes">Libra</option>
-                                    <option value="Aderezos">Gramo</option>
-                                    <option value="Anchetas">Mililitro</option>
-                                    <option value="Bebidas">Centimetro</option>
-                        
-                                </div>        
-                            </select>
+                                    <option value="Unidad">Unidad</option>
+                                    <option value="Libra">Libra</option>
+                                    <option value="Gramo">Gramo</option>
+                                    <option value="Mililitro">Mililitro</option>
+                                    <option value="Centimetro">Centimetro</option>       
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -174,7 +172,6 @@
                                 onclick="openStockModal('{{ d.id_producto }}')" data-bs-toggle="modal"
                                 data-bs-target="#stockModal">Agregar Stock</button></td>
                         <td><button class="btn btn-primary btn-sm" onclick="openEditModal('{{ d.id_producto }}', '{{ d.codigo }}', '{{ d.descripcion }}', '{{ d.categoria }}', '{{ d.id_proveedor }}', '{{ d.nombre_proveedor }}', '{{ d.valor_unitario }}', '{{ d.unidad_medida }}', '{{ d.stock }}')">Editar</button></td>
-
                         <td><a href="{{url_for('delete', id_producto=d.id_producto)}}"
                                 class="btn btn-danger btn-sm">Eliminar</a></td>
                     </tr>
@@ -216,36 +213,80 @@
                         <span class="close" onclick="closeModal2()">×</span>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" id="edit_id_producto" name="id_producto">
-                        <div class="form-group">
-                   
-                            <input type="hidden" id="edit_codigo" name="codigo">
+                        <input type="hidden" id="edit_id_producto" name="edit_id_producto">
+                            <div class="caja1">
+                                <div class="form-group">
+                                    <label for="edit_codigo">Codigo: </label>
+                                    <input type="text" id="edit_codigo" name="edit_codigo" value="{{ new_code }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_descripcion">Descripcion: </label>
+                                    <input type="text" id="edit_descripcion" name="edit_descripcion">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_categoria">Categoria: </label>
+                                    <select id="edit_categoria" name="edit_categoria">
+                                        <option value="Abarrotes">Abarrotes</option>
+                                        <option value="Aderezos">Aderezos</option>
+                                        <option value="Anchetas">Anchetas</option>
+                                        <option value="Bebidas">Bebidas</option>
+                                        <option value="Cereales">Cereales</option>
+                                        <option value="Cigarrillos">Cigarrillos</option>
+                                        <option value="Comidas prep">Comidas prep.</option>
+                                        <option value="Congelados">Congelados</option>
+                                        <option value="Degustacion">Degustacion</option>
+                                        <option value="Desechables">Desechables</option>
+                                        <option value="Dinero">Dinero</option>
+                                        <option value="Dulces">Dulces</option>
+                                        <option value="Embutidos">Embutidos</option>
+                                        <option value="Enlatados">Enlatados</option>
+                                        <option value="Frutos secos">Frutos secos</option>
+                                        <option value="Harina">Harina</option>
+                                        <option value="Insumos cr">Insumos cr</option>
+                                        <option value="Jamones">Jamones</option>
+                                        <option value="Lacteos">Lacteos</option>
+                                        <option value="Panaderia">Panaderia</option>
+                                        <option value="Pasabocas">Pasabocas</option>
+                                        <option value="Queso">Queso</option>
+                                        <option value="Reposteria">Reposteria</option>
+                                        <option value="Retales">Retales</option>
+                                        <option value="Salsas">Salsas</option>
+                                        <option value="Sandwichs y cr">Sandwichs y cr</option>
+                                        <option value="Tablas y anchetas">Tablas y anchetas</option>
+                                        <option value="Licores">Licores</option>
+                                        <option value="Vencidos">Vencidos</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_id_proveedor">Id Proveedor </label>
+                                    <input type="text" id="edit_id_proveedor" name="edit_id_proveedor">
+                                </div>
+                            </div>
+                            <div class="caja1">
+                                <div class="form-group">
+                                    <label for="edit_nombre_proveedor">Nombre Proveedor </label>
+                                    <input type="text" id="edit_nombre_proveedor" name="edit_nombre_proveedor">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_valor_unitario">Valor unitario:</label>
+                                    <input type="text" id="edit_valor_unitario" name="edit_valor_unitario">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_unidad_medida">Unidad medida: </label>
+                                    <select id="edit_unidad_medida" name="edit_unidad_medida">
+                                        <option value="Unidad">Unidad</option>
+                                        <option value="Libra">Libra</option>
+                                        <option value="Gramo">Gramo</option>
+                                        <option value="Mililitro">Mililitro</option>
+                                        <option value="Centimetro">Centimetro</option>       
+                                    </select>
+                                </div>    
+                                <div class="form-group">
+                                    <label for="edit_stock">Stock</label>
+                                    <input type="text" id="edit_stock" name="edit_stock">
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="edit_descripcion">Descripcion:</label>
-                            <input type="text" id="edit_descripcion" name="descripcion">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_categoria">Categoria:</label>
-                            <input type="text" id="edit_categoria" name="categoria">
-                        </div>
-                        <div class="form-group">
-        
-                            <input type="hidden" id="edit_id_proveedor" name="id_proveedor">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_valor_unitario">valor_unitario:</label>
-                            <input type="text" id="edit_valor_unitario" name="valor_unitario">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_unidad_medida">unidad_medida:</label>
-                            <input type="text" id="edit_unidad_medida" name="unidad_medida">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_stock">stock:</label>
-                            <input type="text" id="edit_stock" name="stock">
-                        </div>
-                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" onclick="closeModal2()">Cancelar</button>
                         <button type="button" class="btn btn-default" onclick="submitForm()">Guardar cambios</button>
@@ -296,6 +337,7 @@
             document.getElementById("edit_descripcion").value = descripcion;
             document.getElementById("edit_categoria").value = categoria;
             document.getElementById("edit_id_proveedor").value = id_proveedor;
+            document.getElementById("edit_nombre_proveedor").value = nombre_proveedor;
             document.getElementById("edit_valor_unitario").value = valor_unitario;
             document.getElementById("edit_unidad_medida").value = unidad_medida;
             document.getElementById("edit_stock").value = stock;
