@@ -1,9 +1,33 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, session, url_for
+from venta import obtener_detalles_de_venta
+from flask import jsonify
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://usuario:contraseña@localhost/nombre_base_de_datos'
+db = SQLAlchemy(app)
 
 import database as db
 
-app = Flask(__name__, template_folder="C:\\Users\\lenovo\\OneDrive\\Desktop\\UNIAGUSTINIANA\\Proyecto\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
-# Ruta para la página de inicio
+app = Flask(__name__, template_folder="C:\\Users\\cindy\\OneDrive\\Escritorio\\Proyecto de GRADO\\Proyecto_web\\aplicativo_pos_hc\\aplicativo_pos_hc\\templates")
+
+from flask import Flask
+from usuarios import usuarios
+from productos import productos
+from proveedores import proveedores
+from registro import ventas
+from auth import auth
+
+app = Flask(__name__)
+
+# Registrar los blueprints de los diferentes módulos
+app.register_blueprint(usuarios)
+app.register_blueprint(productos)
+app.register_blueprint(proveedores)
+app.register_blueprint(ventas)
+app.register_blueprint(auth)
+"""# Ruta para la página de inicio
 @app.route("/")
 def index():
     return render_template("home.html")
@@ -17,7 +41,7 @@ def login():
     try:
         db_connection, cursor = db.conectar_bd()
         # Consulta SQL para verificar las credenciales de inicio de sesión
-        query = "SELECT * FROM usuarios WHERE Usuario = %s AND Contrasenia = %s"
+        query = "SELECT * FROM usuario WHERE Usuario = %s AND Contrasenia = %s"
         cursor.execute(query, (username, password))
         # Leer y procesar los resultados de la consulta
         user = cursor.fetchone()
@@ -43,197 +67,163 @@ def principal():
 # Ruta para cerrar sesión
 @app.route("/logout")
 def logout():
-    return redirect(url_for("index"))
+    return redirect(url_for("index"))"""
 
-@app.route("/caja")
+
+"""@app.route("/caja")
 def caja():
     try:
         db_connection, cursor = db.conectar_bd()
-
+        
         # Obtener el próximo valor autoincremental de id_venta
         cursor.execute("SHOW TABLE STATUS LIKE 'venta'")
         table_status = cursor.fetchone()
         if table_status is not None:
-            next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
+            next_id = table_status[10] if table_status[10] else 1
             
-            # Contar la cantidad de registros
-            cursor.execute("SELECT COUNT(*) FROM venta")
-            count = cursor.fetchone()[0]
-            if count == 0:
-                next_id = 1  # Si no hay registros, comenzar desde 1
-            else:
-                # Obtener el último ID y ajustar para el siguiente ID
-                cursor.execute("SELECT MAX(id_venta) FROM venta")
-                last_id = cursor.fetchone()[0]
-                next_id = last_id + 1
-                
             # Generar el nuevo código de factura
             cursor.execute("SELECT MAX(id_factura) FROM venta")
             last_code = cursor.fetchone()[0]
-            if last_code is not None:
-                new_code = str(int(last_code) + 1).zfill(7)  # Incrementar el último código y rellenar con ceros
-            else:
-                new_code = "0000001"  # Si no hay códigos en la base de datos, iniciar desde "0000001"
+            new_code = str(int(last_code) + 1).zfill(7) if last_code else "0000001"
 
-            
             # Obtener los productos existentes
             cursor.execute("SELECT * FROM venta")
-            myresult = cursor.fetchall()
-            
-            # Convertir datos a diccionario
-            insertObjects = []
-            columnNames = [column[0] for column in cursor.description]
-            for record in myresult:
-                insertObjects.append(dict(zip(columnNames, record)))
-                
+            insertObjects = [dict(zip([column[0] for column in cursor.description], record)) for record in cursor.fetchall()]
+
             cursor.close()
             return render_template("caja.html", data=insertObjects, next_id=next_id, new_code=new_code)
         else:
             return "No se pudo obtener información de la tabla 'venta'"
     except Exception as e:
         return f"Error: {str(e)}"
-        
+
 @app.route('/guardarVenta', methods=['POST'])
-def addGuardarVenta():    
-    id_venta = request.form['id_venta']
-    id_factura = request.form['id_factura']  
-    medio_pago = request.form['medio_pago']
-    descuento = request.form['descuento']
-    iva = request.form['iva']
-    fecha_registro = request.form['fecha_registro']
-    total_a_pagar = request.form['total_a_pagar']
-    
-    # Corrige la cantidad de parámetros y la consulta SQL para la inserción de la venta
-    if id_venta and id_factura and medio_pago and descuento and iva and fecha_registro and total_a_pagar:
-        try:
+def add_guardar_venta():    
+    try:
+        id_venta = request.form['id_venta']
+        id_factura = request.form['id_factura']  
+        medio_pago = request.form['medio_pago']
+        descuento = request.form['descuento']
+        iva = request.form['iva']
+        fecha_registro = request.form['fecha_registro']
+        total_a_pagar = request.form['total_a_pagar']
+        id_cliente = request.form['id_cliente']
+        
+        if id_venta and id_factura and medio_pago and descuento and iva and fecha_registro and total_a_pagar and id_cliente:
             db_connection, cursor = db.conectar_bd()
-            sql_venta = "INSERT INTO venta (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, total_a_pagar) VALUES (%s,  %s, %s, %s, %s, %s, %s)"
-            data_venta = (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro,total_a_pagar)
+            sql_venta = "INSERT INTO venta (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, total_a_pagar, id_cliente) VALUES (%s,  %s, %s, %s, %s, %s,%s,  %s)"
+            data_venta = (id_venta, id_factura, medio_pago, descuento, iva, fecha_registro, total_a_pagar, id_cliente)
             cursor.execute(sql_venta, data_venta)
             
             db_connection.commit()
             cursor.close()
             db_connection.close()
             return redirect(url_for('caja'))
-        except Exception as e:
-            return f"Error al guardar la venta: {str(e)}"
-    else:
-        return "Por favor, complete todos los campos."
-
-
-
-@app.route('/deleteVenta/<string:id_venta>')
-def deleteVenta(id_venta):
-    try:
-        # Conectar a la base de datos y crear un cursor
-        db_connection, cursor = db.conectar_bd()
-
-        # Definir la consulta SQL para eliminar la venta por su ID
-        sql = "DELETE FROM venta WHERE id_venta = %s"
-
-        # Ejecutar la consulta SQL con los datos proporcionados
-        cursor.execute(sql, (id_venta,))
-
-        # Confirmar los cambios en la base de datos
-        db_connection.commit()
-
-        # Cerrar el cursor y la conexión
-        cursor.close()
-        db_connection.close()
-
-        # Redirigir al usuario de vuelta a la página de caja después de eliminar la venta
-        return redirect(url_for('caja'))
-
+        else:
+            return "Por favor, complete todos los campos."
     except Exception as e:
-        # Manejar cualquier excepción que ocurra durante el proceso
-        # Imprimir el error para fines de depuración
-        print("Error al eliminar la venta:", e)
-        # Si hay un error, deshacer cualquier cambio pendiente y cerrar la conexión
-        db_connection.rollback()
+        return f"Error al guardar la venta: {str(e)}"
+
+@app.route('/delete_venta/<string:id_venta>')
+def delete_venta(id_venta):
+    try:
+        db_connection, cursor = db.conectar_bd()
+        sql = "DELETE FROM venta WHERE id_venta = %s"
+        cursor.execute(sql, (id_venta,))
+        db_connection.commit()
         cursor.close()
         db_connection.close()
-        # Redirigir al usuario a una página de error o volver a cargar la página actual
-        # Puedes personalizar esta parte según tu aplicación
+        return redirect(url_for('caja'))
+    except Exception as e:
+        print("Error al eliminar la venta:", e)
         return "Error al eliminar la venta. Por favor, inténtalo de nuevo más tarde."
 
-@app.route("/generar_ticket/<int:id_venta>")
-def generar_ticket(id_venta):
+@app.route('/agregar_producto', methods=['POST'])
+def agregar_producto():
     try:
-        # Conectar a la base de datos y crear un cursor
-        db_connection, cursor = db.conectar_bd()
+        descripcion = request.form['descripcion']
+        cantidad = request.form['cantidad']
+        valor_unitario = request.form['precio']
 
-        # Ejecutar la consulta SQL para seleccionar los detalles de venta
-        cursor.execute("SELECT dv.cantidad, dv.descripcion, dv.valor_unitario, v.id_factura, v.fecha_registro FROM detalle_venta dv INNER JOIN venta v ON dv.id_venta = v.id_venta WHERE dv.id_venta = %s", (id_venta,))
-        
-        
-        # Obtener los resultados de la consulta
-        venta_data = cursor.fetchall()
+        success = db.actualizar_detalle_venta(1, descripcion, cantidad, valor_unitario, 1, 1)  
 
-        # Cerrar el cursor y la conexión
-        cursor.close()
-        db_connection.close()
-        
-        # Renderizar la plantilla HTML con los datos recuperados
-        return render_template("factura.html", productos=venta_data)
+        if success:
+            return jsonify({'success': True, 'message': 'Producto agregado correctamente.'})
+        else:
+            return jsonify({'success': False, 'message': 'Error al agregar el producto.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': f'Error: {str(e)}'})
+    # Esta función simula la obtención de datos de venta desde alguna fuente
+# Esta función simula la obtención de datos de venta desde alguna fuente
+
+
+@app.route('/ruta_para_mostrar_detalle_de_venta')
+def mostrar_detalle_de_venta():
+    venta = obtener_datos_de_venta()  # Obtener los datos de venta
+    return render_template('caja.html', venta=venta)
+
+def obtener_detalles_de_venta_desde_la_base_de_datos(id_venta):
+    try:
+        # Consulta la venta por su ID utilizando SQLAlchemy
+        venta = venta.query.get(id_venta)
+        return venta
+    except Exception as e:
+        print(f"Error al obtener los detalles de la venta: {str(e)}")
+        return None
+
+@app.route('/detalle_venta/<int:id_venta>')
+def detalle_venta(id_venta):
+    venta = obtener_datos_de_venta(id_venta)
     
-    except Exception as e:
-        return f"Error al generar el ticket: {str(e)}"
+    if venta:
+        return render_template('detalle_venta.html', venta=venta)
+    else:
+        return render_template('venta_no_encontrada.html')
 
-
-
-@app.route('/agregar_producto/<int:id_venta>', methods=['POST'])
-def agregar_producto_venta(id_venta):
+def obtener_datos_de_venta(id_venta):
     try:
-        if request.method == 'POST':
-            # Obtener los datos del formulario
-            codigo = request.form.get('codigo')
-            descripcion = request.form.get('descripcion')
-            cantidad = request.form.get('cantidad')
-            valor_unitario = request.form.get('valor_unitario')
-           
-            # Verificar si todos los campos están presentes
-            if None in (codigo, descripcion, cantidad, valor_unitario):
-                return "Todos los campos son requeridos."
-
-            # Id_factura predefinida
-            id_factura = 1  # Reemplaza esto con el valor real de la factura
-
-            # Corrige la consulta SQL para la inserción de productos en la venta
-            db_connection, cursor = db.conectar_bd()
-            sql = "INSERT INTO detalle_venta (id_venta, codigo, descripcion, cantidad, valor_unitario) VALUES (%s, %s, %s, %s,%s)"
-            data = (id_venta, codigo, descripcion, cantidad, valor_unitario)
-            cursor.execute(sql, data)
-            db_connection.commit()
-            cursor.close()
-            db_connection.close()
-
-            return "Producto agregado correctamente a la venta."
+        # Lógica para obtener los detalles de la venta con el ID proporcionado
+        venta = ...  # Implementa aquí tu lógica para obtener los detalles de la venta
+        return venta
     except Exception as e:
-        print("Error no esperado:", e)
-        return f"Error no esperado al agregar el producto a la venta: {str(e)}"
- 
+        print(f"Error al obtener los detalles de la venta: {str(e)}")
+        return None
+@app.route('/guardar_detalles_venta', methods=['POST'])
+def guardar_detalles_venta():
+    try:
+        return redirect(url_for('caja'))
+    except Exception as e:
+        print(f"Error al guardar los detalles de la venta: {str(e)}")
+        return redirect(url_for('error_page'))
+
+@app.route('/generar_ticket/<id_venta>')
+def generar_ticket(id_venta):
+    # Lógica para generar el ticket
+    return render_template('factura.html', id_venta=id_venta)"""
+
+"""
 @app.route("/clientes")
 def clientes():
     db_connection, cursor = db.conectar_bd()
     
     # Obtener el próximo valor autoincremental de id_producto
-    cursor.execute("SHOW TABLE STATUS LIKE 'clientes'")
+    cursor.execute("SHOW TABLE STATUS LIKE 'cliente'")
     table_status = cursor.fetchone()
     next_id = table_status[10]  # El índice 10 corresponde a la columna Auto_increment
     
     # Contar la cantidad de registros
-    cursor.execute("SELECT COUNT(*) FROM clientes")
+    cursor.execute("SELECT COUNT(*) FROM cliente")
     count = cursor.fetchone()[0]
     if count == 0:
         next_id = 1  # Si no hay registros, comenzar desde 1
     else:
         # Obtener el último ID y ajustar para el siguiente ID
-        cursor.execute("SELECT MAX(id_cliente) FROM clientes")
+        cursor.execute("SELECT MAX(id_cliente) FROM cliente")
         last_id = cursor.fetchone()[0]
         next_id = last_id + 1
     
     # Obtener los productos existentes
-    cursor.execute("SELECT * FROM clientes")
+    cursor.execute("SELECT * FROM cliente")
     myresult = cursor.fetchall()
     # Convertir datos a diccionario
     insertObjec = []
@@ -267,15 +257,15 @@ def addGuardarClientes():
 @app.route('/deleteCliente/<string:id_cliente>')
 def deleteCliente (id_cliente):
         db_connection, cursor = db.conectar_bd()
-        sql = "DELETE FROM clientes WHERE id_cliente=%s"
+        sql = "DELETE FROM cliente WHERE id_cliente=%s"
         data = (id_cliente,)
         cursor.execute(sql, data)
         db_connection.commit()
         cursor.close()
         db_connection.close()
-        return redirect(url_for('clientes'))
+        return redirect(url_for('clientes'))"""
 
-@app.route("/proveedores")
+"""@app.route("/proveedores")
 def proveedores():
     db_connection, cursor = db.conectar_bd()
     
@@ -361,11 +351,11 @@ def editar_proveedor():
             else:
                 return 'Proveedor no encontrado'
         else:
-            return 'Todos los campos son obligatorios'
+            return 'Todos los campos son obligatorios'"""
 
 
 
-#Ruta para guardar PRODUCTOS
+"""#Ruta para guardar PRODUCTOS
 @app.route("/productos")
 def productos():
     db_connection, cursor = db.conectar_bd()
@@ -409,15 +399,15 @@ def addGuardar():
      codigo = request.form['codigo']
      descripcion = request.form['descripcion']
      categoria = request.form['categoria']
-     nombre_proveedor = request.form['nombre_proveedor']
+     id_proveedor = request.form['id_proveedor']
      stock = request.form['stock']
      valorUnitario = request.form['valor_unitario']
      unidadMedida = request.form['unidad_medida']
 
-     if codigo and descripcion and categoria and nombre_proveedor and stock and valorUnitario and unidadMedida:
+     if codigo and descripcion and categoria and id_proveedor and stock and valorUnitario and unidadMedida:
         db_connection, cursor = db.conectar_bd()
-        sql = "INSERT INTO producto (codigo,descripcion,categoria,nombre_proveedor,stock,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s,%s)"
-        data = (codigo,descripcion,categoria,nombre_proveedor,stock,valorUnitario,unidadMedida)
+        sql = "INSERT INTO producto (codigo,descripcion,categoria,id_proveedor,stock,valor_unitario,unidad_medida) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        data = (codigo,descripcion,categoria,id_proveedor,stock,valorUnitario,unidadMedida)
         cursor.execute(sql, data)
         db_connection.commit()
     
@@ -470,27 +460,26 @@ def editar_producto():
         descripcion = request.form['descripcion']
         categoria = request.form['categoria']
         id_proveedor = request.form['id_proveedor']
-        nombre_proveedor = request.form['nombre_proveedor']
         valor_unitario = request.form['valor_unitario']
         unidad_medida = request.form['unidad_medida']
         stock = request.form['stock']
 
-        if id_producto and codigo and descripcion and categoria and id_proveedor and nombre_proveedor and valor_unitario and unidad_medida and stock:
-            if db.actualizar_producto(id_producto, codigo, descripcion, categoria, id_proveedor, nombre_proveedor, valor_unitario, unidad_medida, stock):
+        if id_producto and codigo and descripcion and categoria and id_proveedor  and valor_unitario and unidad_medida and stock:
+            if db.actualizar_producto(id_producto, codigo, descripcion, categoria, id_proveedor, valor_unitario, unidad_medida, stock):
                 return 'Producto editado exitosamente', 200
             else:
                 return 'Producto no encontrado', 404
         else:
-            return 'Todos los campos son obligatorios', 400
+            return 'Todos los campos son obligatorios', 400"""
 
 
-# Ruta para mostrar usuarios
-@app.route("/usuarios")
+"""# Ruta para mostrar usuarios
+@app.route("/usuario")
 def usuarios():
     db_connection, cursor = db.conectar_bd()
     
     # Obtener el último ID insertado antes de eliminar registros
-    cursor.execute("SELECT MAX(id_usuario) FROM usuarios")
+    cursor.execute("SELECT MAX(id_usuario) FROM usuario")
     last_id = cursor.fetchone()[0]
 
     # Calcular el próximo ID
@@ -500,7 +489,7 @@ def usuarios():
         next_id = last_id + 1
     
     # Obtener los usuarios existentes
-    cursor.execute("SELECT * FROM usuarios")
+    cursor.execute("SELECT * FROM usuario")
     myresult = cursor.fetchall()
     
     # Convertir datos a diccionario
@@ -530,7 +519,7 @@ def addGuardarUsuario():
         db_connection, cursor = db.conectar_bd()
 
         # Obtener el último ID insertado antes de eliminar registros
-        cursor.execute("SELECT MAX(id_usuario) FROM usuarios")
+        cursor.execute("SELECT MAX(id_usuario) FROM usuario")
         last_id = cursor.fetchone()[0]
 
         # Calcular el próximo ID
@@ -540,7 +529,7 @@ def addGuardarUsuario():
             next_id = last_id + 1
 
         # Insertar el nuevo usuario en la tabla usuarios
-        sql = "INSERT INTO usuarios (id_usuario, nombre, tipo_Identificacion, numero_identificacion, telefono, email, usuario, contrasenia, tipo_usuario) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO usuario (id_usuario, nombre, tipo_Identificacion, numero_identificacion, telefono, email, usuario, contrasenia, tipo_usuario) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         data = (next_id, nombre, tipo_Identificacion, numero_identificacion, telefono, email, usuario, contrasenia, tipo_usuario)
         cursor.execute(sql, data)
         db_connection.commit()
@@ -554,7 +543,7 @@ def addGuardarUsuario():
 @app.route('/deleteUsuarios/<string:id_usuario>')
 def deleteUsuarios(id_usuario):
         db_connection, cursor = db.conectar_bd()
-        sql = "DELETE FROM usuarios WHERE id_usuario=%s"
+        sql = "DELETE FROM usuario WHERE id_usuario=%s"
         data = (id_usuario,)
         cursor.execute(sql, data)
         db_connection.commit()
@@ -584,7 +573,7 @@ def editar_usuario():
             else:
                 return 'Usuario no encontrado'
         else:
-            return 'Todos los campos son obligatorios'
+            return 'Todos los campos son obligatorios'"""
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,4 +1,6 @@
 import mysql.connector
+from database import obtener_datos_de_venta
+
 
 
 # Función para conectar a la base de datos y crear un cursor
@@ -6,7 +8,7 @@ def conectar_bd():
     database = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="SQLMARCE2022.",
+        password="",
         database="Aplicativo_POS_final"
     )
     cursor = database.cursor()
@@ -56,3 +58,5 @@ def actualizar_usuario(id_usuario, nombre, tipo_Identificacion, numero_identific
     except Exception as e:
         print("Error al actualizar usuario:", e)
         return False
+    
+
